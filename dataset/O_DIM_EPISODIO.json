@@ -1,0 +1,178 @@
+{
+	"name": "O_DIM_EPISODIO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "EPISODIO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CENTRO_HOSPITALARIO",
+				"type": "varchar"
+			},
+			{
+				"name": "DENOMINACION_CLASE_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_HOSPITALIZACION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_INICIO",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "HORA_INGRESO",
+				"type": "varchar"
+			},
+			{
+				"name": "CONVENIO",
+				"type": "varchar"
+			},
+			{
+				"name": "EVENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CATEGORIA_TRATAMIENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "HABITACION",
+				"type": "varchar"
+			},
+			{
+				"name": "MOTIVO_DEL_INGRESO",
+				"type": "varchar"
+			},
+			{
+				"name": "ID_ASEGURADORA",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CONTRATO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_AFILIADO_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "EPISODIO_CREADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "EPISODIO_CREADO_EL",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "STATUS_FACTURACION",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTADO_ANULACION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ANULACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ANULADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_ADMISION",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_HOSPITALIZACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CENTRO_QUE_HOSPITALIZA",
+				"type": "varchar"
+			},
+			{
+				"name": "MOTIVO_ADMISION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "LEY_URGENCIA",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_FACTURACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_HOSPITALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "HORA_HOSPITALIZACION",
+				"type": "varchar"
+			},
+			{
+				"name": "EDAD_ATENCION",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DETALLE_EDAD_ATENCION",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CONTRATO_EXTERNO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_EPISODIO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,121 @@
+{
+	"name": "TMP_CUA_AGENDAMIENTO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_us2_asmi_data_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [
+			{
+				"name": "ID_CITA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_CITA",
+				"type": "date"
+			},
+			{
+				"name": "HORA_CITA",
+				"type": "time",
+				"scale": 7
+			},
+			{
+				"name": "ESTADO_CITA",
+				"type": "varchar"
+			},
+			{
+				"name": "CITA_CONFIRMADA",
+				"type": "varchar"
+			},
+			{
+				"name": "USUARIO",
+				"type": "varchar"
+			},
+			{
+				"name": "USUARIO_NOMBRE",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_CREACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FECHA_MODIFICACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ANULADO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADO_EL",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ANULADO_POR_USUARIO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "MOTIVO_ANULACION",
+				"type": "varchar"
+			},
+			{
+				"name": "MEDICO_TRATANTE",
+				"type": "varchar"
+			},
+			{
+				"name": "ESPECIALIDAD",
+				"type": "varchar"
+			},
+			{
+				"name": "RUT_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRE_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "CAT_TRATAMIENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "DETALLE_TRATAMIENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_MOVIMIENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CANAL",
+				"type": "varchar"
+			},
+			{
+				"name": "MOTIVO_MODIFICACION",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TMP_CUA_AGENDAMIENTO_TC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

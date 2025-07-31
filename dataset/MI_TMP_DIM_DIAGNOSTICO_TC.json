@@ -1,0 +1,64 @@
+{
+	"name": "MI_TMP_DIM_DIAGNOSTICO_TC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_us2_asmi_data_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [
+			{
+				"name": "DIAGNOSTICO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "GLOSA_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "Descripcion_Larga",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_TIPO_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "CATALOGO_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "Fecha_Actualizacion",
+				"type": "date"
+			},
+			{
+				"name": "Hora_Actulizacion",
+				"type": "time",
+				"scale": 7
+			},
+			{
+				"name": "Actualizado_Por",
+				"type": "varchar"
+			},
+			{
+				"name": "Medico",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TMP_DIM_DIAGNOSTICO_TC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

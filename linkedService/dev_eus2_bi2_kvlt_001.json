@@ -1,0 +1,12 @@
+{
+	"name": "dev_eus2_bi2_kvlt_001",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "dev-eus2-bi2-kvlt-001\nRG-DEVTEST-EU2-BI2-001",
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://dev-eus2-bi2-kvlt-001.vault.azure.net/"
+		}
+	}
+}

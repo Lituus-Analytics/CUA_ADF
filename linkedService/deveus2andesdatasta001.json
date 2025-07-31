@@ -1,0 +1,12 @@
+{
+	"name": "deveus2andesdatasta001",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "RG-DEVTEST-EUS2-ANDESDATA-001",
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://deveus2andesdatasta001.dfs.core.windows.net/"
+		}
+	}
+}

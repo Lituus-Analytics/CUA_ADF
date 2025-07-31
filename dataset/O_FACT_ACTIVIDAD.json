@@ -1,0 +1,331 @@
+{
+	"name": "O_FACT_ACTIVIDAD",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "BI2.0"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "FECHA_INGRESO_EPISODIO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EPISODIO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PACIENTE_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UBI_GEOGRAFICA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PRESTACION_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EMPRESA_PRES_CLINICA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FACTURA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FECHA_FACTURACION_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EMPRESA_PRES_FACTURADA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PROF_MEDICO_TRATANTE_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DIAGNOSTICO_INGRESO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DIAGNOSTICO_EGRESO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UNIDAD_SOLI_PRESTACION_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UNIDAD_CARGA_PRESTACION_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UNIDAD_ADMISION_EPISODIO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FECHA_CARGA_PRESTACION_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "C_HRA_CARGA_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "C_PRESTACION_CARGADA_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "C_CANTIDAD_PRESTACIONES",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 0
+			},
+			{
+				"name": "C_TIPO_DE_RECARGO",
+				"type": "varchar"
+			},
+			{
+				"name": "C_PRECIO_PRESTACION",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "C_PRECIO_BASICO_PRESTACION",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "C_FACTOR_MULTIPLICADOR",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 3
+			},
+			{
+				"name": "F_PRECIO_BASICO_PRES_FACT",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "F_PRECIO_SUBTOTAL_PRES_FACT",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "F_PRECIO_NETO_PRES",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "F_FACTOR_MULTIPLICADOR",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 3
+			},
+			{
+				"name": "F_CANT_PRES_FACT",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "F_PORCENTAJE_COBERTURA_PRES",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "F_RECARGO_HORARIO_PRES",
+				"type": "varchar"
+			},
+			{
+				"name": "FACTURA_ACTIVA",
+				"type": "varchar"
+			},
+			{
+				"name": "MEDICO_QUE_DIAGNOSTICA",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_DESCUENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_MOVIMIENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_MOVIMIENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CONTRATO_CONVENIDO",
+				"type": "varchar"
+			},
+			{
+				"name": "CONTEO",
+				"type": "decimal",
+				"precision": 1,
+				"scale": 0
+			},
+			{
+				"name": "CORRELATIVO",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "CLASE_ALTA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ALTA_MEDICA",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "HORA_ALTA_MEDICA",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTADO_ALTA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADO_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "MARCA_CONTABILIZACION_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "NRO_ACTUAL_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "NRO_MOVIMIENTO",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_FACTURA",
+				"type": "varchar"
+			},
+			{
+				"name": "ORDEN_CLINICA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "KEY_FACTACT_EPIDOC",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ALTA_ADMINISTRATIVA",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "HORA_ALTA_ADMINISTRATIVA",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_MOV_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_ENF_SOL",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_MED_SOL",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_GESTORA",
+				"type": "varchar"
+			},
+			{
+				"name": "CECO_UN_ENF_SOL",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPCION_CECO",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_MEDIDA",
+				"type": "varchar"
+			},
+			{
+				"name": "FACTOR_CONVERSION_UN",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 4
+			},
+			{
+				"name": "CAMA",
+				"type": "varchar"
+			},
+			{
+				"name": "HABITACION_BOX",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "FACT_ACTIVIDAD"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

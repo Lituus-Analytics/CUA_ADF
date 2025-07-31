@@ -1,0 +1,25 @@
+{
+	"name": "O_LISTA_TABLAS_MIGRACION",
+	"properties": {
+		"description": "Contiene el nombre de las tablas que se migrarán en BI2.0",
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"NombreTabla": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"table": {
+				"value": "@dataset().NombreTabla",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

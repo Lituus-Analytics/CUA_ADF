@@ -1,0 +1,231 @@
+{
+	"name": "Indaga_FileServer1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "FileServer_Indaga_01",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Directory": {
+				"type": "string"
+			},
+			"File": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": {
+					"value": "@dataset().File",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().Directory",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Fecha",
+				"type": "String"
+			},
+			{
+				"name": "Fecha Contestado",
+				"type": "String"
+			},
+			{
+				"name": "Fecha Enviado",
+				"type": "String"
+			},
+			{
+				"name": "E-mail",
+				"type": "String"
+			},
+			{
+				"name": "Especialidad",
+				"type": "String"
+			},
+			{
+				"name": "Doctor",
+				"type": "String"
+			},
+			{
+				"name": "Tipo de identificación (CC, CE, TI, RC, NUIP):",
+				"type": "String"
+			},
+			{
+				"name": "Nombre",
+				"type": "String"
+			},
+			{
+				"name": "Apellido paterno",
+				"type": "String"
+			},
+			{
+				"name": "Apellido materno",
+				"type": "String"
+			},
+			{
+				"name": "Historia Clínica",
+				"type": "String"
+			},
+			{
+				"name": "Nombre completo",
+				"type": "String"
+			},
+			{
+				"name": "Teléfono",
+				"type": "String"
+			},
+			{
+				"name": "Edad del paciente",
+				"type": "String"
+			},
+			{
+				"name": "Sexo del paciente",
+				"type": "String"
+			},
+			{
+				"name": "Comuna",
+				"type": "String"
+			},
+			{
+				"name": "Previsión",
+				"type": "String"
+			},
+			{
+				"name": "Mot Movimiento",
+				"type": "String"
+			},
+			{
+				"name": "Disponibilidad de horas",
+				"type": "String"
+			},
+			{
+				"name": "Canal que utilizó para agendar su cita",
+				"type": "String"
+			},
+			{
+				"name": "Resolución de sus inquietudes cuando programó su hora",
+				"type": "String"
+			},
+			{
+				"name": "Amabilidad y claridad de la información entregada cuando programó su hora",
+				"type": "String"
+			},
+			{
+				"name": "Facilidad de acceso a la web para agendar la hora",
+				"type": "String"
+			},
+			{
+				"name": "Amabilidad y cordialidad del recepcionista",
+				"type": "String"
+			},
+			{
+				"name": "Satisfacción con el tiempo de espera para ser atendido por el recepcionista",
+				"type": "String"
+			},
+			{
+				"name": "Facilidad en el proceso de pago",
+				"type": "String"
+			},
+			{
+				"name": "Información entregada sobre retrasos y espera para ser atendido",
+				"type": "String"
+			},
+			{
+				"name": "Ofrecimiento para reagendar, en caso de dificultad con su hora médica",
+				"type": "String"
+			},
+			{
+				"name": "Amabilidad y cordialidad del médico",
+				"type": "String"
+			},
+			{
+				"name": "Puntualidad del médico",
+				"type": "String"
+			},
+			{
+				"name": "Eficacia y resolución de su problema de salud que motivó su consulta",
+				"type": "String"
+			},
+			{
+				"name": "Probabilidad de recomendar a su médico",
+				"type": "String"
+			},
+			{
+				"name": "Orden y limpieza general del Centro Médico",
+				"type": "String"
+			},
+			{
+				"name": "Comodidad en la sala de espera (asientos disponibles, amplitud, luminosidad, climatización, calefacción)",
+				"type": "String"
+			},
+			{
+				"name": "¿Usted recomendaría Clínica Universidad de los Andes a un familiar o amigo?",
+				"type": "String"
+			},
+			{
+				"name": "¿Volvería a elegir Clínica Universidad de los Andes?",
+				"type": "String"
+			},
+			{
+				"name": "¿Cuán satisfecho está con la experiencia en Clínica Universidad de los Andes?",
+				"type": "String"
+			},
+			{
+				"name": "¿Ha sido tratado con amabilidad y respetando su privacidad?",
+				"type": "String"
+			},
+			{
+				"name": "¿Recibió información oportuna y comprensible sobre su estado de salud?",
+				"type": "String"
+			},
+			{
+				"name": "¿Recibió información de los costos previo a su atención de salud?",
+				"type": "String"
+			},
+			{
+				"name": "En caso de participación de estudiantes de la salud en su atención ¿Se le pidió autorización?",
+				"type": "String"
+			},
+			{
+				"name": "En caso de hospitalización o atención en el servicio de Urgencias ¿su médico le entregó un informe o epicrisis sobre la atención recibida?",
+				"type": "String"
+			},
+			{
+				"name": "¿Se respetó la confidencialidad de su información médica?",
+				"type": "String"
+			},
+			{
+				"name": "¿Se le permitió estar acompañado por familiares y/o amigos durante su atención?",
+				"type": "String"
+			},
+			{
+				"name": "En caso de necesitar asistencia espiritual ¿tuvo acceso?",
+				"type": "String"
+			},
+			{
+				"name": "En caso de necesitar realizar algún reclamo, solicitud o sugerencia, ¿pudo hacerlo?",
+				"type": "String"
+			},
+			{
+				"name": "Comentarios",
+				"type": "String"
+			},
+			{
+				"name": "Clasificación comentario",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

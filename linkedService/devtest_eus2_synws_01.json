@@ -1,0 +1,20 @@
+{
+	"name": "devtest_eus2_synws_01",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Dedicated SQL Pool\nRG-DEVTEST-EUS2-SYNAPSE-01",
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"server": "devtest-eus2-analituus-adf-01.sql.azuresynapse.net",
+			"database": "Dedicated",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SystemAssignedManagedIdentity"
+		},
+		"connectVia": {
+			"referenceName": "MPVE-AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

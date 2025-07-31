@@ -1,0 +1,126 @@
+{
+	"name": "O_DIM_DOC_FICHA_MATERNA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "DOC_FICHA_MATERNA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NUM_DOCUMENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_DOCUMENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_DOCUMENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "VERSION_DOCUMENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "SERVICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CAMA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_INGRESO",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "DIAS_HOSPITALIZACION",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "TIPO_PARTO",
+				"type": "varchar"
+			},
+			{
+				"name": "PRESENTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "LUGAR",
+				"type": "varchar"
+			},
+			{
+				"name": "GESTACIONES",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "PARTOS",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "CESAREA",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "NACIDOS_VIVOS",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "NACIDOS_MUERTOS",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "FUR",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "FPP",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "SEMANAS_GESTACION",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "DIAS_GESTACION",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "PACIENTE_MADRE_SK",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_DOC_FICHA_MATERNA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

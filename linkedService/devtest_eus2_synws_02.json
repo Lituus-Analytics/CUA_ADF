@@ -1,0 +1,12 @@
+{
+	"name": "devtest_eus2_synws_02",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "devtest-eus2-synws-01.sql.azuresynapse.net\nRG-DEVTEST-EUS2-SYNAPSE-01",
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=devtest-eus2-synws-01.sql.azuresynapse.net;Initial Catalog=Dedicated"
+		}
+	}
+}

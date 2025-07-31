@@ -1,0 +1,12 @@
+{
+	"name": "dev_eus2_alt_kvlt_001",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "RG-DEVTEST-EUS2-ANALITUUS-001",
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://dev-eus2-alt-kvlt-001.vault.azure.net/"
+		}
+	}
+}

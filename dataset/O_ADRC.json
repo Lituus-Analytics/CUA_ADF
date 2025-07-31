@@ -1,0 +1,54 @@
+{
+	"name": "O_ADRC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ADDRNUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "CITY1",
+				"type": "varchar"
+			},
+			{
+				"name": "CITY2",
+				"type": "varchar"
+			},
+			{
+				"name": "STREET",
+				"type": "varchar"
+			},
+			{
+				"name": "STR_SUPPL1",
+				"type": "varchar"
+			},
+			{
+				"name": "STR_SUPPL2",
+				"type": "varchar"
+			},
+			{
+				"name": "STR_SUPPL3",
+				"type": "varchar"
+			},
+			{
+				"name": "COUNTRY",
+				"type": "varchar"
+			},
+			{
+				"name": "REGION",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ADRC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

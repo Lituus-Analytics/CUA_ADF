@@ -1,0 +1,159 @@
+{
+	"name": "O_DIM_PACIENTE",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "PACIENTE_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INTERLOCUTOR_COMERCIAL",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRES_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "APELLIDO_PATERNO_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "APELLIDO_MATERNO_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_NACIMIENTO",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "SEXO",
+				"type": "varchar"
+			},
+			{
+				"name": "EDAD",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "GRUPO_ETNICO",
+				"type": "varchar"
+			},
+			{
+				"name": "RELIGION",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_DOCUMENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "NRO_EXTERNO",
+				"type": "varchar"
+			},
+			{
+				"name": "NRO_DOCUMENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "TELEFONO_DOMICILIO",
+				"type": "varchar"
+			},
+			{
+				"name": "TELEFONO_CELULAR",
+				"type": "varchar"
+			},
+			{
+				"name": "TELEFONO_OFICINA",
+				"type": "varchar"
+			},
+			{
+				"name": "TELEFONO_OTRO",
+				"type": "varchar"
+			},
+			{
+				"name": "CORREO_ELECTRONICO",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTADO_CIVIL",
+				"type": "varchar"
+			},
+			{
+				"name": "PAIS_NACIMIENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "NACIONALIDAD",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTADO_ANULACION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ANULACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ANULADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "CALLE",
+				"type": "varchar"
+			},
+			{
+				"name": "COMUNA",
+				"type": "varchar"
+			},
+			{
+				"name": "CIUDAD",
+				"type": "varchar"
+			},
+			{
+				"name": "REGION",
+				"type": "varchar"
+			},
+			{
+				"name": "PAIS",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_PACIENTE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

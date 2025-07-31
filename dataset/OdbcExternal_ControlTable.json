@@ -1,0 +1,19 @@
+{
+	"name": "OdbcExternal_ControlTable",
+	"properties": {
+		"description": "The external control table is used to store the partition list of data source tables.",
+		"linkedServiceName": {
+			"referenceName": "IRIS_ODBC",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TableName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "OdbcTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

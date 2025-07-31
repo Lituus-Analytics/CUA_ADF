@@ -1,0 +1,197 @@
+{
+	"name": "O_DIM_FECHA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "FECHA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FECHA",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FECHA_DDMMYYYY",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_YYYYMMDD",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_NUMERO",
+				"type": "decimal",
+				"precision": 8,
+				"scale": 0
+			},
+			{
+				"name": "FERIADO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANIO",
+				"type": "decimal",
+				"precision": 4,
+				"scale": 0
+			},
+			{
+				"name": "ANIO_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "MES",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "MES_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "MES_TEXTO_CORTO",
+				"type": "varchar"
+			},
+			{
+				"name": "MES_TEXTO_LARGO",
+				"type": "varchar"
+			},
+			{
+				"name": "DIA",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "DIA_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "DIA_TEXTO_CORTO",
+				"type": "varchar"
+			},
+			{
+				"name": "DIA_TEXTO_LARGO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANIO_MES",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "ANIO_MES_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANIO_MES_25",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "ANIO_MES_25_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANIO_MES_12",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "ANIO_MES_12_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANIO_MES_6",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "ANIO_MES_6_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANIO_MES_3",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "ANIO_MES_3_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "NUM_DIAS_ANIO",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "NUM_DIAS_HABILES_ANIO",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "NUM_DIAS_MES",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "NUM_DIAS_HABILES_MES",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "DIA_HABIL",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "INICIO_DE_LA_SEMANA",
+				"type": "date"
+			},
+			{
+				"name": "PERIODO_TEXTO_LARGO",
+				"type": "varchar"
+			},
+			{
+				"name": "PERIODO_TEXTO_CORTO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_FECHA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

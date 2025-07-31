@@ -1,0 +1,75 @@
+{
+	"name": "ORQUESTADOR",
+	"properties": {
+		"activities": [
+			{
+				"name": "CITA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CITA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "HORARIO INDISPONIBILIDAD",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CITA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "HORARIO_INDISPONIBILIDAD",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DENTISTA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "HORARIO INDISPONIBILIDAD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DENTISTA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "DentaLink/Migracion"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-07-29T20:57:09Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

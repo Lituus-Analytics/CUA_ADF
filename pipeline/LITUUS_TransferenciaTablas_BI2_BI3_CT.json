@@ -1,0 +1,8948 @@
+{
+	"name": "LITUUS_TransferenciaTablas_BI2_BI3_CT",
+	"properties": {
+		"description": "\nDesarrollado por: Lituus (Felipe)\nFecha Desarrollo:",
+		"activities": [
+			{
+				"name": "ADR2",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"CLIENT"
+							]
+						},
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CLIENT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "CLIENT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ADDRNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "ADDRNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PERSNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "PERSNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DATE_FROM",
+									"type": "DateTime",
+									"physicalType": "date"
+								},
+								"sink": {
+									"name": "DATE_FROM",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							},
+							{
+								"source": {
+									"name": "CONSNUMBER",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 3
+								},
+								"sink": {
+									"name": "CONSNUMBER",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 3
+								}
+							},
+							{
+								"source": {
+									"name": "COUNTRY",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "COUNTRY",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FLGDEFAULT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "FLGDEFAULT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FLG_NOUSE",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "FLG_NOUSE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HOME_FLAG",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "HOME_FLAG",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TEL_NUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "TEL_NUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TEL_EXTENS",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "TEL_EXTENS",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELNR_LONG",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "TELNR_LONG",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELNR_CALL",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "TELNR_CALL",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DFT_RECEIV",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "DFT_RECEIV",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "R3_USER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "R3_USER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "VALID_FROM",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "VALID_FROM",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "VALID_TO",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "VALID_TO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_ADR2",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "D_MI_MIGRACION_TABLAS",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "ADR2"
+						}
+					}
+				]
+			},
+			{
+				"name": "ADR6",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "ADR2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"CLIENT"
+							]
+						},
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CLIENT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "CLIENT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ADDRNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "ADDRNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PERSNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "PERSNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DATE_FROM",
+									"type": "DateTime",
+									"physicalType": "date"
+								},
+								"sink": {
+									"name": "DATE_FROM",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							},
+							{
+								"source": {
+									"name": "CONSNUMBER",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 3
+								},
+								"sink": {
+									"name": "CONSNUMBER",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 3
+								}
+							},
+							{
+								"source": {
+									"name": "FLGDEFAULT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "FLGDEFAULT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FLG_NOUSE",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "FLG_NOUSE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HOME_FLAG",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "HOME_FLAG",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SMTP_ADDR",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "SMTP_ADDR",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SMTP_SRCH",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "SMTP_SRCH",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DFT_RECEIV",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "DFT_RECEIV",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "R3_USER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "R3_USER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ENCODE",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "ENCODE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TNEF",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "TNEF",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "VALID_FROM",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "VALID_FROM",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "VALID_TO",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "VALID_TO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_ADR6",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "D_MI_MIGRACION_TABLAS",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "ADR6"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_DIAGNOSTICO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_DIAGNOSTICO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_DOC_FICHA_MATERNA",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_DOC_FICHA_MATERNA",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_EMPRESA",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_EMPRESA",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_EPISODIO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_EPISODIO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_FACTURA",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_FACTURA",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_FECHA",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_FECHA",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_ORDEN_CLINICA",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_ORDEN_CLINICA",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_PACIENTE",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_PACIENTE",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_PACIENTE_RFM",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_PACIENTE_RFM",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_PRESTACION",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_PRESTACION",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_PROF_MEDICO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_PROF_MEDICO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_UBI_GEOGRAFICA",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_PROF_MEDICO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DIM_UNIDAD",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_DIM_UNIDAD",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "FACT_ACTIVIDAD",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_FACT_ACTIVIDAD",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_AGENDAMIENTO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_AGENDAMIENTO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_DATOS_EXTRA_CX",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_DATOS_EXTRA_CX",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_DETALLE_DOCUMENTO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_DETALLE_DOCUMENTO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_EQUIPO_MEDICO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_EQUIPO_MEDICO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_ID_ORDEN_MEDICA",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_ID_ORDEN_MEDICA",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_IDENTIFICAR_PROTOCOLO_OPERATORIO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_IDENTIFICAR_PROTOCOLO_OPERATORIO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_PRESTACIONES_AGENDADAS",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_PRESTACIONES_AGENDADAS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_PROTOCOLO_OPERATORIO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_PROTOCOLO_OPERATORIO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_PAB_TIEMPOS_QUIRURGICOS",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_PAB_TIEMPOS_QUIRURGICOS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CUA_LITUUS_TPO_PTA_DOCTOR",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_CUA_LITUUS_TPO_PTA_DOCTOR",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "HISTORIA_DOTACION_CAMAS",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_HISTORIA_DOTACION_CAMAS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "ML_AUDITORIA_SEGMENTACION",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_ML_AUDITORIA_SEGMENTACION",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "NTPK",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_NTPK",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "REL_PRESTACION_PRECIO",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_REL_PRESTACION_PRECIO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "TB_IM_EPISODIO_IMAGEN",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_TB_IM_EPISODIO_IMAGEN",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "TMP_NLEI_PASO_1",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_TMP_NLEI_PASO_1",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "TMP_PA0001",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_TMP_PA0001",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "TMP_TBL_900",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_TMP_TBL_900",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "TMP_VBRK_VBRP",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_TMP_VBRK_VBRP",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "ZVBRP",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "UNIDAD_SK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDICA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_ENFER_TRAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_HABITACION_BOX",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_CAMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_UNIDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_CENTRO_COSTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CENTRO_BENEFICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_SERVICIO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_ZVBRP",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "ADRC",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "ADR6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"ADDRNUMBER"
+							]
+						},
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ADDRNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "ADDRNUMBER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CITY1",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "CITY1",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CITY2",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "CITY2",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "STREET",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "STREET",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "STR_SUPPL1",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "STR_SUPPL1",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "STR_SUPPL2",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "STR_SUPPL2",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "STR_SUPPL3",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "STR_SUPPL3",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "COUNTRY",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "COUNTRY",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "REGION",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "REGION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_ADRC",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "D_MI_MIGRACION_TABLAS",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "ADRC"
+						}
+					}
+				]
+			},
+			{
+				"name": "BUT000",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "ADRC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"PARTNER"
+							]
+						},
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "PARTNER",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "PARTNER",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BPEXT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "BPEXT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "XBLCK",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "XBLCK",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NAME_ORG1",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "NAME_ORG1",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NAME_FIRST",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "NAME_FIRST",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NAME_LAST",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "NAME_LAST",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NAMEMIDDLE",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "NAMEMIDDLE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NAME_LAST2",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "NAME_LAST2",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "XSEXM",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "XSEXM",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "XSEXF",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "XSEXF",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MARST",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "MARST",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NATIO",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "NATIO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BIRTHDT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "BIRTHDT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CRDAT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "CRDAT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CHDAT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "CHDAT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "VALID_FROM",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 15
+								},
+								"sink": {
+									"name": "VALID_FROM",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 15
+								}
+							},
+							{
+								"source": {
+									"name": "VALID_TO",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 15
+								},
+								"sink": {
+									"name": "VALID_TO",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 15
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "O_BUT000",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "D_MI_MIGRACION_TABLAS",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "BUT000"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "MIG_BI20_TO_BI30"
+		},
+		"annotations": [
+			"BI 2.0",
+			"Migracion"
+		],
+		"lastPublishTime": "2025-07-31T19:59:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

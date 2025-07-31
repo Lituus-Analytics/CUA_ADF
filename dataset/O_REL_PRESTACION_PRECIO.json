@@ -1,0 +1,61 @@
+{
+	"name": "O_REL_PRESTACION_PRECIO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "PRESTACION_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_FIN_VIG_PRECIO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_INICIO_VIG_PRECIO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CONTRATO",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_FACTURACION",
+				"type": "varchar"
+			},
+			{
+				"name": "EMPRESA_ASEGURADORA",
+				"type": "varchar"
+			},
+			{
+				"name": "HORARIO_INHABIL",
+				"type": "varchar"
+			},
+			{
+				"name": "VALOR_PRESTACION",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 2
+			},
+			{
+				"name": "TABLA_ORIGEN",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "REL_PRESTACION_PRECIO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

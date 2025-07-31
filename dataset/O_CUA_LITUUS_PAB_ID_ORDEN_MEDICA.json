@@ -1,0 +1,32 @@
+{
+	"name": "O_CUA_LITUUS_PAB_ID_ORDEN_MEDICA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "NUM_PREADMISION",
+				"type": "decimal",
+				"precision": 8,
+				"scale": 0
+			},
+			{
+				"name": "ID_ORDEN_CLINICA",
+				"type": "varchar"
+			},
+			{
+				"name": "OBSERVACION",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_PAB_ID_ORDEN_MEDICA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

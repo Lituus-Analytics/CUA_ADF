@@ -1,0 +1,16 @@
+{
+	"name": "O_DENTALINK_HORIOS_INDISPONIBILIDAD",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "dentalink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "`horario_indisponibilidad`"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

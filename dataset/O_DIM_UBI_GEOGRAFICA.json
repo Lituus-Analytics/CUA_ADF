@@ -1,0 +1,68 @@
+{
+	"name": "O_DIM_UBI_GEOGRAFICA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "BI2.0"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "UBI_GEOGRAFICA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "COD_COMUNA",
+				"type": "varchar"
+			},
+			{
+				"name": "COMUNA",
+				"type": "varchar"
+			},
+			{
+				"name": "COD_PROVINCIA",
+				"type": "varchar"
+			},
+			{
+				"name": "PROVINCIA",
+				"type": "varchar"
+			},
+			{
+				"name": "COD_REGION",
+				"type": "varchar"
+			},
+			{
+				"name": "REGION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "COMUNA_UPPER",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_UBI_GEOGRAFICA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

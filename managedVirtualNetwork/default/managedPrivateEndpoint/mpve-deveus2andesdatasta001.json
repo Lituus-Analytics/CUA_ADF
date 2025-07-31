@@ -1,0 +1,10 @@
+{
+	"name": "mpve-deveus2andesdatasta001",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/876ed042-c404-4a02-aadd-bab45de35c82/resourceGroups/RG-DEVTEST-EUS2-ANDESDATA-001/providers/Microsoft.Storage/storageAccounts/deveus2andesdatasta001",
+		"groupId": "file",
+		"fqdns": [
+			"deveus2andesdatasta001.file.core.windows.net"
+		]
+	}
+}

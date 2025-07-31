@@ -1,0 +1,88 @@
+{
+	"name": "O_CUA_LITUUS_PAB_DETALLE_DOCUMENTO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "DOCUMENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "VERSION_DOCUMENTO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA",
+				"type": "varchar"
+			},
+			{
+				"name": "TIEMPO_ACTO_QUIRURGICO",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASIFICACION_HERIDA",
+				"type": "varchar"
+			},
+			{
+				"name": "PERDIDA_SANGUINEA",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 0
+			},
+			{
+				"name": "GENERAL",
+				"type": "varchar"
+			},
+			{
+				"name": "RAQUIDEA",
+				"type": "varchar"
+			},
+			{
+				"name": "PLEXO_BRAQUIAL",
+				"type": "varchar"
+			},
+			{
+				"name": "LOCAL",
+				"type": "varchar"
+			},
+			{
+				"name": "SEDACION",
+				"type": "varchar"
+			},
+			{
+				"name": "TIVA",
+				"type": "varchar"
+			},
+			{
+				"name": "OTRA",
+				"type": "varchar"
+			},
+			{
+				"name": "TEXTO_OTRA_ANESTESIA_UTILIZADA",
+				"type": "varchar"
+			},
+			{
+				"name": "TEXTO_REINTERVENCION",
+				"type": "varchar"
+			},
+			{
+				"name": "REINTERVENCION",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CIRUGIA",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_PAB_DETALLE_DOCUMENTO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

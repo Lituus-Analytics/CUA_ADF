@@ -1,0 +1,17 @@
+{
+	"name": "AzureSynapseAnalyticsTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_eus2_synws_01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "LITUUS_PA_ADMIN_TRAKCARE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

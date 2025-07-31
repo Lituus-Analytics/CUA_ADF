@@ -1,0 +1,30 @@
+{
+	"name": "O_CUA_LITUUS_PAB_DATOS_EXTRA_CX",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ID_ORDEN_CLINICA",
+				"type": "varchar"
+			},
+			{
+				"name": "CIR_MAYOR_AMBULATORIA",
+				"type": "varchar"
+			},
+			{
+				"name": "CIR_ROBOTICA",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_PAB_DATOS_EXTRA_CX"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

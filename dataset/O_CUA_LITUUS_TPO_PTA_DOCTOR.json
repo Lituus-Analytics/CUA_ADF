@@ -1,0 +1,45 @@
+{
+	"name": "O_CUA_LITUUS_TPO_PTA_DOCTOR",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA EPISODIO",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "PERSONA ASIGNADA",
+				"type": "varchar"
+			},
+			{
+				"name": "USR_MOD_CREACION",
+				"type": "varchar"
+			},
+			{
+				"name": "DIA_ MODIF",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "HORA_MODIF",
+				"type": "time",
+				"scale": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_TPO_PTA_DOCTOR"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

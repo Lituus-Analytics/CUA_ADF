@@ -1,0 +1,90 @@
+{
+	"name": "O_BUT000",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "PARTNER",
+				"type": "varchar"
+			},
+			{
+				"name": "BPEXT",
+				"type": "varchar"
+			},
+			{
+				"name": "XBLCK",
+				"type": "varchar"
+			},
+			{
+				"name": "NAME_ORG1",
+				"type": "varchar"
+			},
+			{
+				"name": "NAME_FIRST",
+				"type": "varchar"
+			},
+			{
+				"name": "NAME_LAST",
+				"type": "varchar"
+			},
+			{
+				"name": "NAMEMIDDLE",
+				"type": "varchar"
+			},
+			{
+				"name": "NAME_LAST2",
+				"type": "varchar"
+			},
+			{
+				"name": "XSEXM",
+				"type": "varchar"
+			},
+			{
+				"name": "XSEXF",
+				"type": "varchar"
+			},
+			{
+				"name": "MARST",
+				"type": "varchar"
+			},
+			{
+				"name": "NATIO",
+				"type": "varchar"
+			},
+			{
+				"name": "BIRTHDT",
+				"type": "varchar"
+			},
+			{
+				"name": "CRDAT",
+				"type": "varchar"
+			},
+			{
+				"name": "CHDAT",
+				"type": "varchar"
+			},
+			{
+				"name": "VALID_FROM",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 0
+			},
+			{
+				"name": "VALID_TO",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "BUT000"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

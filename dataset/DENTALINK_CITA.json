@@ -1,0 +1,16 @@
+{
+	"name": "DENTALINK_CITA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "dentalink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "`cita`"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

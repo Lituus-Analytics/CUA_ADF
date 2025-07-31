@@ -1,0 +1,130 @@
+{
+	"name": "O_NTPK",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "EINRI",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TARIF",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TALST",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BEGDT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EXTNR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TGRKZ",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TAGRU",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ABRKZ",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LEINH",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ABTXT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ERDAT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "UPDAT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "N1ADMLEI",
+				"type": "nvarchar"
+			},
+			{
+				"name": "N1ANFOR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "N1ERBRI",
+				"type": "nvarchar"
+			},
+			{
+				"name": "N1MEDLEI",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ENTGA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ABRAM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NOERF",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EXPGR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PRICHG",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TAKAT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TAGR2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USER0",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USER2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ENDDT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LOEKZ",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ERUSR",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "NTPK"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

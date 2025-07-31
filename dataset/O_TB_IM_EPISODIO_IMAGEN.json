@@ -1,0 +1,114 @@
+{
+	"name": "O_TB_IM_EPISODIO_IMAGEN",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "CODIGO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "DENOMINACION_CLASE_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_HOSPITALIZACION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_INICIO",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "HORA_INGRESO",
+				"type": "varchar"
+			},
+			{
+				"name": "MOTIVO_DEL_INGRESO",
+				"type": "varchar"
+			},
+			{
+				"name": "MOTIVO_ADMISION",
+				"type": "varchar"
+			},
+			{
+				"name": "ID_ASEGURADORA",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CONTRATO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTADO_ANULACION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ANULACION",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "TIPO_CONTRATO_CONVENIDO",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPCION_AGRUPACION_SUPERIOR",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_PRESTACION1",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_PRESTACION2",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_PRESTACION3",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPCION_SUBGRUPO1_TIPO_PRESTACION3",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPCION_SUBGRUPO2_TIPO_PRESTACION3",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRE_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "EDAD",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "SEXO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TB_IM_EPISODIO_IMAGEN"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

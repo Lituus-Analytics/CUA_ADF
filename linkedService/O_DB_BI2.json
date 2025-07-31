@@ -1,0 +1,17 @@
+{
+	"name": "O_DB_BI2",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Servicio vinculado a la BD DWH_BI18_CUA_PRD (BI 2.0)",
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=10.60.9.4;initial catalog=DWH_BI18_CUA_PRD;user id=cualocalad",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJkZTcyNzg4OC0wM2M3LTQ5ODAtYmJmNC1jMDE4ZTg4ZTNlMzQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "IR-CUAZGATEVM1",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

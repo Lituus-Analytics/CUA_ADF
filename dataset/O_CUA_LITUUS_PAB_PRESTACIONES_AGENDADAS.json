@@ -1,0 +1,80 @@
+{
+	"name": "O_CUA_LITUUS_PAB_PRESTACIONES_AGENDADAS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ID_CITACION",
+				"type": "varchar"
+			},
+			{
+				"name": "NUM_ACTUAL_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "NUM_PREADMISION",
+				"type": "decimal",
+				"precision": 8,
+				"scale": 0
+			},
+			{
+				"name": "PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "STATUS_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "ORDEN_PRESTACIONES",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "PREST_DUMMY",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADO",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRES_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "APELLIDO_PATERNO_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "APELLIDO_MATERNO_PACIENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "EDAD",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "NRO_DOCUMENTO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_PAB_PRESTACIONES_AGENDADAS"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

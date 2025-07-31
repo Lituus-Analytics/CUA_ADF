@@ -1,0 +1,42 @@
+{
+	"name": "O_CUA_LITUUS_PAB_EQUIPO_MEDICO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "NUM_ACTUAL_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "TAREA",
+				"type": "varchar"
+			},
+			{
+				"name": "PERSONA_REALIZADORA",
+				"type": "varchar"
+			},
+			{
+				"name": "CREADO_EL",
+				"type": "varchar"
+			},
+			{
+				"name": "CREADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_PAB_EQUIPO_MEDICO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

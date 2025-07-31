@@ -1,0 +1,145 @@
+{
+	"name": "O_DIM_FACTURA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "FACTURA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_FACTURA",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_FACTURA",
+				"type": "varchar"
+			},
+			{
+				"name": "MONEDA_FACTURA",
+				"type": "varchar"
+			},
+			{
+				"name": "ORG_VENTA",
+				"type": "varchar"
+			},
+			{
+				"name": "CANAL_DIST",
+				"type": "varchar"
+			},
+			{
+				"name": "SECTOR",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_FACTURA",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "EJERCICIO",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "ESTADO_CONTABILIZACION",
+				"type": "varchar"
+			},
+			{
+				"name": "VALOR_TOTAL_FACTURA",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "CREADA_EL",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "HORA_CREACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CREADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "REFERENCIA",
+				"type": "varchar"
+			},
+			{
+				"name": "ASIGNACION",
+				"type": "varchar"
+			},
+			{
+				"name": "NRO_PREFACTURA",
+				"type": "varchar"
+			},
+			{
+				"name": "DOC_FACTUR_ANULADO",
+				"type": "varchar"
+			},
+			{
+				"name": "CUENTA_PAQUETIZADA",
+				"type": "varchar"
+			},
+			{
+				"name": "CONVENIO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADA",
+				"type": "varchar"
+			},
+			{
+				"name": "MOTIVO_ANULACION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "EPISODIO_SK",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_ASEGURADORA",
+				"type": "varchar"
+			},
+			{
+				"name": "RESPONSABLE_DE_PAGO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_FACTURA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

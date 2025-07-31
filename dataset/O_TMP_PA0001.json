@@ -1,0 +1,50 @@
+{
+	"name": "O_TMP_PA0001",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ACCNT",
+				"type": "varchar"
+			},
+			{
+				"name": "BNAME",
+				"type": "varchar"
+			},
+			{
+				"name": "ICNUM",
+				"type": "varchar"
+			},
+			{
+				"name": "PERNR",
+				"type": "decimal",
+				"precision": 8,
+				"scale": 0
+			},
+			{
+				"name": "PLANS",
+				"type": "decimal",
+				"precision": 8,
+				"scale": 0
+			},
+			{
+				"name": "PERSG",
+				"type": "varchar"
+			},
+			{
+				"name": "WERKS",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TMP_PA0001"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

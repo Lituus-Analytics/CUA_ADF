@@ -1,0 +1,23 @@
+{
+	"name": "devtest_us2_asmi_data_001",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Hacia recurso: devtest-eus2-asmi-data-001\nMI",
+		"annotations": [],
+		"type": "AzureSqlMI",
+		"typeProperties": {
+			"server": "devtest-eus2-asmi-data-001.13034f0130dc.database.windows.net",
+			"database": "DWH_BI18_CUA_PRD",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SystemAssignedManagedIdentity",
+			"alwaysEncryptedSettings": {
+				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+			}
+		},
+		"connectVia": {
+			"referenceName": "MPVE-AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

@@ -1,0 +1,108 @@
+{
+	"name": "O_ZVBRP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "MANDT",
+				"type": "varchar"
+			},
+			{
+				"name": "VBELN",
+				"type": "varchar"
+			},
+			{
+				"name": "POSNR",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "ERDAT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ISHABART",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHTARAS",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 3
+			},
+			{
+				"name": "ISHUSERSIGN1",
+				"type": "varchar"
+			},
+			{
+				"name": "FKIMG",
+				"type": "decimal",
+				"precision": 13,
+				"scale": 3
+			},
+			{
+				"name": "NETWR",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 2
+			},
+			{
+				"name": "KOSTL",
+				"type": "varchar"
+			},
+			{
+				"name": "PPRCTR",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHABTAR",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHABLST",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHVPROZF",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 2
+			},
+			{
+				"name": "ISHGPRS",
+				"type": "decimal",
+				"precision": 11,
+				"scale": 2
+			},
+			{
+				"name": "ISHBEGZT",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHENDZT",
+				"type": "varchar"
+			},
+			{
+				"name": "VGBEL",
+				"type": "varchar"
+			},
+			{
+				"name": "KZWI1",
+				"type": "decimal",
+				"precision": 13,
+				"scale": 2
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ZVBRP"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

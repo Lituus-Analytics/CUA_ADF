@@ -1,0 +1,13 @@
+{
+	"name": "IR-CUAZGATEVM1",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "Compartido por ADF 'prd-eus2-bi2-adf-001'",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/33d92605-f21e-4123-bdac-00f0791a7297/resourcegroups/rg-prd-eu2-bi2-001/providers/Microsoft.DataFactory/factories/prd-eus2-bi2-adf-001/integrationruntimes/IR-CUAZGATEVM1",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}

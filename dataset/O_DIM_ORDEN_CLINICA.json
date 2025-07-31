@@ -1,0 +1,72 @@
+{
+	"name": "O_DIM_ORDEN_CLINICA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ORDEN_CLINICA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_ORDEN_CLINICA",
+				"type": "varchar"
+			},
+			{
+				"name": "TITULO_ORDEN",
+				"type": "varchar"
+			},
+			{
+				"name": "UO_ORDENANTE",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_CREACION",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "CREADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ID_ETL",
+				"type": "varchar"
+			},
+			{
+				"name": "PROF_MEDICO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PACIENTE_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SERVICIO_ORDENANTE",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_ORDEN_CLINICA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

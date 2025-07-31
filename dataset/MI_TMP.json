@@ -1,0 +1,17 @@
+{
+	"name": "MI_TMP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_us2_asmi_data_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DENTALINK_CITA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

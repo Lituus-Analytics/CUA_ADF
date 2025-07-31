@@ -1,0 +1,209 @@
+{
+	"name": "O_DIM_PRESTACION",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "PRESTACION_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRE_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_INI_VIG_PRESTACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FECHA_FIN_VIG_PRESTACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "TIPO_PRESTACION1",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_PRESTACION2",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_PRESTACION3",
+				"type": "varchar"
+			},
+			{
+				"name": "TEXTO_DIVERGENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "GRUPO_PRESTACIONES",
+				"type": "varchar"
+			},
+			{
+				"name": "DESGLOSAR_GRUPO",
+				"type": "varchar"
+			},
+			{
+				"name": "FACTURACION_HOSP",
+				"type": "varchar"
+			},
+			{
+				"name": "FACTURACION_AMB",
+				"type": "varchar"
+			},
+			{
+				"name": "CLAVE_COMPRESION",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_REMUNERACION",
+				"type": "varchar"
+			},
+			{
+				"name": "PRESTACION_MEDICA",
+				"type": "varchar"
+			},
+			{
+				"name": "PRESTACION_GESTIONABLE",
+				"type": "varchar"
+			},
+			{
+				"name": "PRESTACION_ADMINISTRATIVA",
+				"type": "varchar"
+			},
+			{
+				"name": "PRESTACION_SOLICITABLE",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_POSICION",
+				"type": "varchar"
+			},
+			{
+				"name": "BLOQUEO_DE_ENTRADA",
+				"type": "varchar"
+			},
+			{
+				"name": "COLUMNAS_DEL_CATALOGO",
+				"type": "varchar"
+			},
+			{
+				"name": "EXISTENCIA_FONASA_MLE",
+				"type": "varchar"
+			},
+			{
+				"name": "CREADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "CREADO_EL",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "MODIFICADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "MODIFICADO_EL",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "UNIDAD_DE_MEDIDA",
+				"type": "varchar"
+			},
+			{
+				"name": "PRECIO_DIVERGENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "CATALOGO_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_COSTO",
+				"type": "varchar"
+			},
+			{
+				"name": "DENOMINACION_CLASE_COSTO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CLASE_COSTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CUENTA_PROVISIONES",
+				"type": "varchar"
+			},
+			{
+				"name": "DENOMINACION_CUENTA_PROVISIONES",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "FLAG_BORRADO_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "SUBGRUPO1_TIPO_PRESTACION3",
+				"type": "varchar"
+			},
+			{
+				"name": "AGRUPACION_SUPERIOR",
+				"type": "varchar"
+			},
+			{
+				"name": "SUBGRUPO2_TIPO_PRESTACION3",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPCION_SUBGRUPO1_TIPO_PRESTACION3",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPCION_AGRUPACION_SUPERIOR",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPCION_SUBGRUPO2_TIPO_PRESTACION3",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_PRESTACION"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

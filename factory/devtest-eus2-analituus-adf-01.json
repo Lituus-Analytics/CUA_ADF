@@ -1,0 +1,9 @@
+{
+	"name": "devtest-eus2-analituus-adf-01",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "c6ffa8a6-f41f-424b-ba0a-b25df6e514d5",
+		"tenantId": "b91e1a9b-4718-4623-882e-6fb655d96bf0"
+	}
+}

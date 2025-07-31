@@ -1,0 +1,84 @@
+{
+	"name": "D_TABLE_TEST",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "CLIENT",
+				"type": "varchar"
+			},
+			{
+				"name": "ADDRNUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "PERSNUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "DATE_FROM",
+				"type": "date"
+			},
+			{
+				"name": "CONSNUMBER",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "FLGDEFAULT",
+				"type": "varchar"
+			},
+			{
+				"name": "FLG_NOUSE",
+				"type": "varchar"
+			},
+			{
+				"name": "HOME_FLAG",
+				"type": "varchar"
+			},
+			{
+				"name": "SMTP_ADDR",
+				"type": "varchar"
+			},
+			{
+				"name": "SMTP_SRCH",
+				"type": "varchar"
+			},
+			{
+				"name": "DFT_RECEIV",
+				"type": "varchar"
+			},
+			{
+				"name": "R3_USER",
+				"type": "varchar"
+			},
+			{
+				"name": "ENCODE",
+				"type": "varchar"
+			},
+			{
+				"name": "TNEF",
+				"type": "varchar"
+			},
+			{
+				"name": "VALID_FROM",
+				"type": "varchar"
+			},
+			{
+				"name": "VALID_TO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "D_TABLE_TEST"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,205 @@
+{
+	"name": "DIM_DIAGNOSTICO",
+	"properties": {
+		"activities": [
+			{
+				"name": "TRUNCATE  TMP",
+				"description": "TRUNCATE TABLE TMP_DIM_DIAGNOSTICO_TC",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "devtest_us2_asmi_data_001",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE TABLE TMP_DIM_PACIENTE_TC"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "INSERT TMP",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "TRUNCATE  TMP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"query": "SELECT DISTINCT\n    dg.MRCID_Code AS CODIGO_DIAGNOSTICO,\n    dg.MRCID_Desc AS GLOSA_DIAGNOSTICO,\n    dg.MRCID_LongDescription  AS Descripcion_Larga,\n    dt.DTYP_Code AS CODIGO_TIPO_DIAGNOSTICO,\n    dt.DTYP_Desc AS TIPO_DIAGNOSTICO,\n    dg.MRCID_AlternateDesc AS CATALOGO_DIAGNOSTICO,\n    md.MRDIA_UpdateDate as Fecha_Actualizacion,\n    md.MRDIA_UpdateTime as Hora_Actulizacion,\n    md.MRDIA_UpdateUser_DR as Actualizado_Por,\n    md.MRDIA_DocCode_DR as Medico\nFROM\n    MR_Diagnos md\nINNER JOIN\n    MRC_ICDDx dg ON md.MRDIA_ICDCode_DR = dg.MRCID_Rowid\nLEFT JOIN\n    MRC_DiagnosType dt ON md.MRDIA_DiagnosisType_DR = dt.DTYP_Rowid;\n",
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CODIGO_DIAGNOSTICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GLOSA_DIAGNOSTICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GLOSA_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Descripcion_Larga",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Descripcion_Larga",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_TIPO_DIAGNOSTICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_TIPO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_DIAGNOSTICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CATALOGO_DIAGNOSTICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CATALOGO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Fecha_Actualizacion",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "Fecha_Actualizacion",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							},
+							{
+								"source": {
+									"name": "Hora_Actulizacion",
+									"type": "TimeSpan"
+								},
+								"sink": {
+									"name": "Hora_Actulizacion",
+									"type": "TimeSpan",
+									"physicalType": "time"
+								}
+							},
+							{
+								"source": {
+									"name": "Actualizado_Por",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "Actualizado_Por",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Medico",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Medico",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OdbcTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_TMP_DIM_DIAGNOSTICO_TC",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "TrakCare"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-07-30T22:19:26Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,101 @@
+{
+	"name": "O_DIM_UNIDAD",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "UNIDAD_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UNIDAD_MEDICA",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_UNIDAD_MEDICA",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_ENFER_TRAT",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_UNIDAD_ENFER_TRAT",
+				"type": "varchar"
+			},
+			{
+				"name": "HABITACION_BOX",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_HABITACION_BOX",
+				"type": "varchar"
+			},
+			{
+				"name": "CAMA",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_CAMA",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_UNIDAD",
+				"type": "varchar"
+			},
+			{
+				"name": "CENTRO_COSTO",
+				"type": "varchar"
+			},
+			{
+				"name": "DENOMINACION_CENTRO_COSTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_CENTRO_COSTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CENTRO_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "DENOMINACION_CENTRO_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_SERVICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_UNIDAD_SERVICIO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_UNIDAD"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

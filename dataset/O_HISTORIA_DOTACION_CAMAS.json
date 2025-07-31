@@ -1,0 +1,42 @@
+{
+	"name": "O_HISTORIA_DOTACION_CAMAS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "SERVICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANIO_MES",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CANTIDAD_CAMAS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FORMA_CARGA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "HISTORIA_DOTACION_CAMAS"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,72 @@
+{
+	"name": "O_TMP_TBL_900",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "KNUMH",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHABLST",
+				"type": "varchar"
+			},
+			{
+				"name": "DATBI",
+				"type": "varchar"
+			},
+			{
+				"name": "DATAB",
+				"type": "varchar"
+			},
+			{
+				"name": "ZZVTRTY",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHABART",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHKOSTR",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHUSERSIGN1",
+				"type": "varchar"
+			},
+			{
+				"name": "KBETR",
+				"type": "decimal",
+				"precision": 11,
+				"scale": 2
+			},
+			{
+				"name": "TABLA",
+				"type": "varchar"
+			},
+			{
+				"name": "DATBI_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "DATAB_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TMP_TBL_900"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

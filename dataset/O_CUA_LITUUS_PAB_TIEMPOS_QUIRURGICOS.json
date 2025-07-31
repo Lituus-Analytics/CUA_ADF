@@ -1,0 +1,42 @@
+{
+	"name": "O_CUA_LITUUS_PAB_TIEMPOS_QUIRURGICOS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "NUM_ACTUAL_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRE_HORA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA",
+				"type": "varchar"
+			},
+			{
+				"name": "HORA_CRONOMARCADOR",
+				"type": "varchar"
+			},
+			{
+				"name": "CREADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "CREADO_EL",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_PAB_TIEMPOS_QUIRURGICOS"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

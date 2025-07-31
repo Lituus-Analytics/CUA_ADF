@@ -1,0 +1,25 @@
+{
+	"name": "FileServer_Indaga_01",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "RG-DEVTEST-EUS2-ANDESDATA-001\ndeveus2andesdatasta001",
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "\\\\deveus2andesdatasta001.file.core.windows.net/indaga",
+			"userId": "deveus2andesdatasta001",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "dev_eus2_bi2_kvlt_001",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "deveus2andesdatasta001"
+			}
+		},
+		"connectVia": {
+			"referenceName": "MPVE-AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

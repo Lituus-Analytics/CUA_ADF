@@ -1,0 +1,53 @@
+{
+	"name": "O_DIM_DIAGNOSTICO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "DIAGNOSTICO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "GLOSA_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "CATALOGO_DIAGNOSTICO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_DIAGNOSTICO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

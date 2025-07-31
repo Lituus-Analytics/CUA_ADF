@@ -1,0 +1,88 @@
+{
+	"name": "O_ADR2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "CLIENT",
+				"type": "varchar"
+			},
+			{
+				"name": "ADDRNUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "PERSNUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "DATE_FROM",
+				"type": "date"
+			},
+			{
+				"name": "CONSNUMBER",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "COUNTRY",
+				"type": "varchar"
+			},
+			{
+				"name": "FLGDEFAULT",
+				"type": "varchar"
+			},
+			{
+				"name": "FLG_NOUSE",
+				"type": "varchar"
+			},
+			{
+				"name": "HOME_FLAG",
+				"type": "varchar"
+			},
+			{
+				"name": "TEL_NUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "TEL_EXTENS",
+				"type": "varchar"
+			},
+			{
+				"name": "TELNR_LONG",
+				"type": "varchar"
+			},
+			{
+				"name": "TELNR_CALL",
+				"type": "varchar"
+			},
+			{
+				"name": "DFT_RECEIV",
+				"type": "varchar"
+			},
+			{
+				"name": "R3_USER",
+				"type": "varchar"
+			},
+			{
+				"name": "VALID_FROM",
+				"type": "varchar"
+			},
+			{
+				"name": "VALID_TO",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ADR2"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

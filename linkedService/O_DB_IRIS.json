@@ -1,0 +1,24 @@
+{
+	"name": "O_DB_IRIS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Odbc",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "dev_eus2_alt_kvlt_001",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "ConnStringODBC"
+			},
+			"authenticationType": "Anonymous"
+		},
+		"connectVia": {
+			"referenceName": "IR-CUAZGATEVM1",
+			"type": "IntegrationRuntimeReference"
+		},
+		"description": "Servicio vinculado a la BD DWH_BI18_CUA_PRD (BI 2.0)"
+	}
+}

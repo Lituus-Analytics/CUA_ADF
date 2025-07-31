@@ -1,0 +1,100 @@
+{
+	"name": "O_TMP_NLEI_PASO_1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "LNRLS",
+				"type": "varchar"
+			},
+			{
+				"name": "ANFOE",
+				"type": "varchar"
+			},
+			{
+				"name": "ERBOE",
+				"type": "varchar"
+			},
+			{
+				"name": "IBGDT",
+				"type": "varchar"
+			},
+			{
+				"name": "IBZT",
+				"type": "varchar"
+			},
+			{
+				"name": "ERUSR",
+				"type": "varchar"
+			},
+			{
+				"name": "IMENG",
+				"type": "decimal",
+				"precision": 4,
+				"scale": 0
+			},
+			{
+				"name": "USERSIGN1",
+				"type": "varchar"
+			},
+			{
+				"name": "LEIST",
+				"type": "varchar"
+			},
+			{
+				"name": "STORN_NLEI",
+				"type": "varchar"
+			},
+			{
+				"name": "ABRKZ_NLEI",
+				"type": "varchar"
+			},
+			{
+				"name": "TARAS",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 3
+			},
+			{
+				"name": "EINRI",
+				"type": "varchar"
+			},
+			{
+				"name": "FALNR",
+				"type": "varchar"
+			},
+			{
+				"name": "LFDBEW",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 0
+			},
+			{
+				"name": "ANPOE",
+				"type": "varchar"
+			},
+			{
+				"name": "MEINS",
+				"type": "varchar"
+			},
+			{
+				"name": "MATNR",
+				"type": "varchar"
+			},
+			{
+				"name": "LEINH",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TMP_NLEI_PASO_1"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,30 @@
+{
+	"name": "dentalink",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "datawarehouse.healthatom.com\nData Warehouse de Dentalink",
+		"annotations": [],
+		"type": "MySql",
+		"typeProperties": {
+			"server": "datawarehouse.healthatom.com",
+			"port": 3306,
+			"database": "uandes",
+			"username": "uandes",
+			"sslMode": 1,
+			"useSystemTrustStore": 0,
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "dev_eus2_alt_kvlt_001",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "PassDentalink"
+			},
+			"driverVersion": "v2"
+		},
+		"connectVia": {
+			"referenceName": "IR-CUAZGATEVM1",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

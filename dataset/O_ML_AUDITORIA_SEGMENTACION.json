@@ -1,0 +1,140 @@
+{
+	"name": "O_ML_AUDITORIA_SEGMENTACION",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "CODIGO_RFM",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_EXT_RFM",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "FECHA_RFM",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "SEGMENTOS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_MAX_EPISODIOS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_MAX_EPISODIOS_FH",
+				"type": "varchar"
+			},
+			{
+				"name": "NRO_MAX_EPISODIOS_FA",
+				"type": "varchar"
+			},
+			{
+				"name": "NRO_MAX_EPISODIOS_FU",
+				"type": "varchar"
+			},
+			{
+				"name": "NRO_MAX_AGR_SUP_PREST",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_MAX_DIAS_TRANSCURRIDOS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_MAX_MESES_TRANSCURRIDOS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FRECUENCIA_PROMEDIO_MAX",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INGRESO_PRESTACION_MAX",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 4
+			},
+			{
+				"name": "INGRESO_FACTURACION_MAX",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 4
+			},
+			{
+				"name": "INGRESO_AJUSTADO_MAX",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 4
+			},
+			{
+				"name": "SEGMENTO_RECENCIA_DIAS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SEGMENTO_RECENCIA_MESES",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SEGMENTO_RECENCIA_DIAS_2STDDEV",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SEGMENTO_RECENCIA_MESES_2STDDEV",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SEGMENTO_FRECUENCIA",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "SEGMENTO_FRECUENCIA_STDDEV",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "SEGMENTO_MONEY_AJUSTADO",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 4
+			},
+			{
+				"name": "SEGMENTO_MONEY_AJUSTADO_1STD",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 4
+			},
+			{
+				"name": "TIPO_EJECUCION",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ML_AUDITORIA_SEGMENTACION"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

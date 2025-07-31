@@ -1,0 +1,13 @@
+{
+	"name": "API_HUBSPOT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "API_HUBSPOT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,16 @@
+{
+	"name": "O_MR_Diagnos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_IRIS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "OdbcTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "MR_Diagnos"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

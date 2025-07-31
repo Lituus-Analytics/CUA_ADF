@@ -1,0 +1,16 @@
+{
+	"name": "O_DENTALINK_DENTISTA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "dentalink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "`dentista`"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

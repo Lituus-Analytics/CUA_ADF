@@ -1,0 +1,432 @@
+{
+	"name": "TMP_PA_PatMas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_us2_asmi_data_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [
+			{
+				"name": "PAPMI_RowId1",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_No",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Name",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Name2",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Alias",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_ForeignPhoneNo",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_IPNo",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_OPNo",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_DOB",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_EstAgeYear",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PAPMI_EstAgeMonth",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PAPMI_EstAgeTmStmp",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_Sex_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_Soundex",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_LangPrim_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_Active",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_PatCategory_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_HomeClinicNo",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_NxtOPAdmNo",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PAPMI_LangPrintDR",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Remark",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_LangSecondDR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_Deceased",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Deceased_Date",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_LookupDisplay",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_DeceasedTime",
+				"type": "time",
+				"scale": 7
+			},
+			{
+				"name": "PAPMI_SurName",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_IndexMark",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_PAPER_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_BlackList",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Mother_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_RefDoc_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_Medicare",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Name3",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Refund",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_MedicareString",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_UserUpdate",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_TraceStatus_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_MedicareSuffix_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_MedicareCode",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Allergy",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_EPRDescription",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_ConcessionCardNo",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_ConcessionCardExpDate",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_SafetyNetCardNo",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_SafetyNetCardExpDate",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_DVAnumber",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_CardType_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_MedicareExpDate",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_CHCPatient",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_EstimatedDeathDate",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Batallion",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_HealthFundNo",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_CountryOfBirth_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_Title_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_PrefLanguage_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_CT_Region_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_CT_Province_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_GovernCardNo",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_InsuranceCardHolder",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_CityArea_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_ResponsibleForPayment",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_SecondPhone",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Email",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_MobPhone",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_AuxInsType_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_IndigStat_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_GPText",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Dentist_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_DentistClinic_DR",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_VIPFlag",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_GPOrgAddress",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_CityBirth_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_CT_HCA_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_RequireAssistanceMeal",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_RequireAssistanceMenu",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_PensionType_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_Mother1_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_HealthCardExpiryDate",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_Name4",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Name5",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Name6",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Name7",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_Name8",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_PatientFundUPI",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PAPMI_CheckMedicare",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_CheckFund",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_CheckEPV",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_PayorVerifiedDate",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_RowId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_MedicareCardType_DR",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PAPMI_CheckConcession",
+				"type": "varchar"
+			},
+			{
+				"name": "PAPMI_ConcessionVerifiedDate",
+				"type": "date"
+			},
+			{
+				"name": "PAPMI_EmailValidationStatus_DR",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TMP_DIM_PACIENTE_TC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

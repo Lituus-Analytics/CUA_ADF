@@ -1,0 +1,19 @@
+{
+	"name": "RestResource_buk_areas",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://clinicauandes.buk.cl/api/v1/chile/organization/areas/?status=both",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous",
+			"authHeaders": {
+				"auth_token": {
+					"type": "SecureString",
+					"value": "**********"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"name": "mpve-devtest-eus2-asmi-data-001",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/876ed042-c404-4a02-aadd-bab45de35c82/resourceGroups/RG-DEVTEST-EUS2-DATAANALYTICS-001/providers/Microsoft.Sql/managedInstances/devtest-eus2-asmi-data-001",
+		"groupId": "managedInstance",
+		"fqdns": [
+			"devtest-eus2-asmi-data-001.13034f0130dc.database.windows.net"
+		]
+	}
+}

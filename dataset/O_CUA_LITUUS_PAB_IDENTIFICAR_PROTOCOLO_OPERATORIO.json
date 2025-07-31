@@ -1,0 +1,26 @@
+{
+	"name": "O_CUA_LITUUS_PAB_IDENTIFICAR_PROTOCOLO_OPERATORIO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "NUM_ACTUAL_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_PRESTACION",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_PAB_IDENTIFICAR_PROTOCOLO_OPERATORIO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

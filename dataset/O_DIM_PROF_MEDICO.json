@@ -1,0 +1,85 @@
+{
+	"name": "O_DIM_PROF_MEDICO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "PROF_MEDICO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INTERLOCUTOR_COMERCIAL",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_MEDICO",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRES_MEDICO",
+				"type": "varchar"
+			},
+			{
+				"name": "APELLIDO_PATERNO_MEDICO",
+				"type": "varchar"
+			},
+			{
+				"name": "APELLIDO_MATERNO_MEDICO",
+				"type": "varchar"
+			},
+			{
+				"name": "RUT_MEDICO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_MEDICO",
+				"type": "varchar"
+			},
+			{
+				"name": "CATEGORIA_MEDICA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_NACIMIENTO",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "EDAD",
+				"type": "decimal",
+				"precision": 3,
+				"scale": 0
+			},
+			{
+				"name": "CONVENIOS",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_PROF_MEDICO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

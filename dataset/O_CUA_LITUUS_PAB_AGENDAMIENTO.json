@@ -1,0 +1,73 @@
+{
+	"name": "O_CUA_LITUUS_PAB_AGENDAMIENTO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ID_CITACION",
+				"type": "varchar"
+			},
+			{
+				"name": "EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA",
+				"type": "date"
+			},
+			{
+				"name": "HORA",
+				"type": "time",
+				"scale": 7
+			},
+			{
+				"name": "ASIGN_ENFERMERIA",
+				"type": "varchar"
+			},
+			{
+				"name": "HABIT",
+				"type": "varchar"
+			},
+			{
+				"name": "DURACION",
+				"type": "decimal",
+				"precision": 4,
+				"scale": 0
+			},
+			{
+				"name": "CREADO_EL",
+				"type": "date"
+			},
+			{
+				"name": "MOTIVO_ANULACION",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADO",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADO_POR",
+				"type": "varchar"
+			},
+			{
+				"name": "ANULADO_EL",
+				"type": "date"
+			},
+			{
+				"name": "CREADO_POR",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CUA_LITUUS_PAB_AGENDAMIENTO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

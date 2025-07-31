@@ -1,0 +1,515 @@
+{
+	"name": "O_DIM_PACIENTE_RFM",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "PACIENTE_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FECHA_RFM",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "CODIGO_PRIMER_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_MEDICO_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRES_MEDICO_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "APELLIDO_PATERNO_MEDICO_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRE_APELLIDO_MEDICO_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_FACTURACION_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_EPISODIO_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_HOSPITALIZACION_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_ADMISION_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_CARGA_PRIM_PRESTACION",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "HORARIO_CARGA_PRIM_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "HORA_CARGA_PRIM_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CONTRATO_CON_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "TIP_EMP_ASEG_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "EMPRESA_ASEG_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_MED_SOL_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_ENF_SOL_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "SERVICIO_PRIM_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "CANAL_ADMISION_PRIMER_EP",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_ULTIMO_EPISODIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_MEDICO_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRES_MEDICO_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "APELLIDO_PATERNO_MEDICO_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRE_APELLIDO_MEDICO_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_FACTURACION_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "CLASE_EPISODIO_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_HOSPITALIZACION_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_ADMISION_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_CARGA_ULT_PRESTACION",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "HORARIO_CARGA_ULT_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "HORA_CARGA_ULT_PRESTACION",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CONTRATO_CON_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_EMP_ASEG_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "EMPRESA_ASEG_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_MED_SOL_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIDAD_ENF_SOL_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "SERVICIO_ULT_EPI",
+				"type": "varchar"
+			},
+			{
+				"name": "CANAL_ADMISION_ULT_EP",
+				"type": "varchar"
+			},
+			{
+				"name": "FLAG_CAMBIO_ASEGURADORA",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FLAG_CAMBIO_TIPO_CONTRATO",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_EPISODIOS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_EPISODIOS_FH",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_EPISODIOS_FA",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_EPISODIOS_FU",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_PRESTACIONES_CONSU",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_PRESTACIONES_DISTINT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_TIPO_PRES1_DISTINT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_TIPO_PRES2_DISTINT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_TIPO_PRES3_DISTINT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_AGRUP_SUP_DISTINT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_SUBGRUP1_TIP3_DIST",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NRO_SUBGRUP2_TIP3_DIST",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INGRESO_PRESTACION",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 4
+			},
+			{
+				"name": "INGRESO_FACTURACION",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 4
+			},
+			{
+				"name": "INGRESO_AJUSTADO",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 4
+			},
+			{
+				"name": "MESES_TRANSCURRIDOS_EPI_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DIAS_TRANSCURRIDOS_RFM_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MESES_TRANSCURRIDOS_RFM_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FRECUENCIA_PROMEDIO_ACT",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "RECENCIA_DIAS_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RECENCIA_MESES_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RECENCIA_DIAS_STDDEV_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DESC_RECENCIA_DIAS_STDDEV",
+				"type": "varchar"
+			},
+			{
+				"name": "RECENCIA_MESES_STDDEV_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DESC_RECENCIA_MESES_STDDEV",
+				"type": "varchar"
+			},
+			{
+				"name": "FRECUENCIA",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FRECUENCIA_STDDEV",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DESC_FRECUENCIA_STDDEV",
+				"type": "varchar"
+			},
+			{
+				"name": "MONEY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MONEY_STDDEV",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DESC_MONEY_STDDEV",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_DIAS_ACT",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_MESES_ACT",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_DIAS_STDDEV_ACT",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_MESES_STDDEV_ACT",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_NUMERICO_DIAS_STDDEV_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RFM_NUMERICO_MESES_STDDEV_ACT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MESES_TRANSCURRIDOS_EPI_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DIAS_TRANSCURRIDOS_RFM_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MESES_TRANSCURRIDOS_RFM_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FRECUENCIA_PROMEDIO_PEN",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "RECENCIA_DIAS_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RECENCIA_MESES_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RECENCIA_DIAS_STDDEV_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RECENCIA_MESES_STDDEV_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RFM_TEXTO_DIAS_PEN",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_MESES_PEN",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_DIAS_STDDEV_PEN",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_MESES_STDDEV_PEN",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_NUMERICO_DIAS_STDDEV_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RFM_NUMERICO_MESES_STDDEV_PEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MESES_TRANSCURRIDOS_EPI_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DIAS_TRANSCURRIDOS_RFM_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MESES_TRANSCURRIDOS_RFM_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FRECUENCIA_PROMEDIO_APEN",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "RECENCIA_DIAS_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RECENCIA_MESES_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RECENCIA_DIAS_STDDEV_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RECENCIA_MESES_STDDEV_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RFM_TEXTO_DIAS_APEN",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_MESES_APEN",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_DIAS_STDDEV_APEN",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_TEXTO_MESES_STDDEV_APEN",
+				"type": "varchar"
+			},
+			{
+				"name": "RFM_NUMERICO_DIAS_STDDEV_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RFM_NUMERICO_MESES_STDDEV_APEN",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "VERSUS_PERIODO_ANTERIOR",
+				"type": "varchar"
+			},
+			{
+				"name": "VERSUS_PRIMER_PERIODO_MOVI_DISP",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_PACIENTE_RFM"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

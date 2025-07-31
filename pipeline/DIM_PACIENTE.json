@@ -1,0 +1,513 @@
+{
+	"name": "DIM_PACIENTE",
+	"properties": {
+		"activities": [
+			{
+				"name": "INSERT TMP",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "TRUNCATE  TMP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"query": "SELECT\n  CAST(COALESCE(PM.PAPMI_RowId, -1) AS VARCHAR)                  AS PACIENTE_SK,\n  COALESCE(PM.PAPMI_No, '?')                                     AS CODIGO_PACIENTE,\n  COALESCE(PM.PAPMI_Name2, '?')                                  AS NOMBRES_PACIENTE,\n  COALESCE(PM.PAPMI_Name, '?')                                   AS APELLIDO_PATERNO_PACIENTE,\n  COALESCE(PM.PAPMI_Name3, '?')                                  AS APELLIDO_MATERNO_PACIENTE,\n  COALESCE(TO_CHAR(PP.PAPER_Dob, 'YYYY-MM-DD'), '?')             AS FECHA_NACIMIENTO,\n  CAST(COALESCE(SX.CTSEX_RowId, -1) AS VARCHAR)                  AS ID_SEXO,\n  COALESCE(SX.CTSEX_Desc, '?')                                   AS SEXO,\n  COALESCE(SX.CTSEX_Gender, '?')                                 AS GENERO,\n  COALESCE(SX.CTSEX_HL7Code, '?')                                AS GENERO_HL7,\n  COALESCE(PP.PAPER_AgeYr, '?')                                  AS EDAD,\n  CAST(COALESCE(PM.PAPMI_IndigStat_DR, -1) AS VARCHAR)           AS GRUPO_ETNICO,\n  CAST(COALESCE(PP.PAPER_Religion_DR, -1) AS VARCHAR)            AS RELIGION,\n  COALESCE(PP.PAPER_DonatedOrgansOnDeath, '?')                   AS ES_DONANTE,\n  CAST(COALESCE(PP.PAPER_BloodGroup_DR, -1) AS VARCHAR)          AS GRUPO_SANGUINEO,\n  COALESCE(PM.PAPMI_Allergy, '?')                                AS ALERGIAS,\n  CAST(COALESCE(PP.PAPER_PatType_DR, -1) AS VARCHAR)             AS TIPO_DOCUMENTO,\n  COALESCE(PP.PAPER_ID, '?')                                     AS NRO_DOCUMENTO,\n  CAST(COALESCE(PM.PAPMI_PatCategory_DR, -1) AS VARCHAR)         AS CATEGORIA_PACIENTE,\n  COALESCE(PP.PAPER_TelH, '?')                                   AS TELEFONO_DOMICILIO,\n  COALESCE(PP.PAPER_MobPhone, '?')                               AS TELEFONO_CELULAR,\n  COALESCE(PP.PAPER_TelO, '?')                                   AS TELEFONO_OFICINA,\n  COALESCE(PP.PAPER_Email, '?')                                  AS CORREO_ELECTRONICO,\n  CAST(COALESCE(PP.PAPER_Marital_DR, -1) AS VARCHAR)             AS ESTADO_CIVIL,\n  CAST(COALESCE(PP.PAPER_Country_Birth_DR, -1) AS VARCHAR)       AS PAIS_NACIMIENTO,\n  CAST(COALESCE(N.CTNAT_RowId, -1) AS VARCHAR)                   AS ID_NACIONALIDAD,\n  COALESCE(N.CTNAT_Desc, '?')                                    AS NACIONALIDAD,\n  COALESCE(PM.PAPMI_Deceased, '?')                               AS FALLECIDO,\n  CASE \n    WHEN PM.PAPMI_Deceased_Date IS NOT NULL AND PM.PAPMI_Deceased_Date <> '?' \n    THEN TO_CHAR(PM.PAPMI_Deceased_Date, 'YYYY-MM-DD')\n    ELSE NULL\n  END AS FECHA_FALLECIMIENTO,\n  COALESCE(PM.PAPMI_Active, '?')                                 AS ESTADO_ANULACION,\n  COALESCE(TO_CHAR(PP.PAPER_UpdateDate, 'YYYY-MM-DD'), '?')     AS FECHA_ANULACION,\n  COALESCE(PP.PAPER_ReversedBy, '?')                             AS ANULADO_POR,\n  CAST(COALESCE(PM.PAPMI_UserUpdate, -1) AS VARCHAR)             AS ACTUALIZADO_POR,\n  COALESCE(PP.PAPER_StName, '?')                                 AS CALLE,\n  CAST(COALESCE(R.CTRG_RowId, -1) AS VARCHAR)                    AS ID_REGION,\n  COALESCE(R.CTRG_Desc, '?')                                     AS REGION,\n  CAST(COALESCE(C.CTCOU_RowId, -1) AS VARCHAR)                   AS ID_PAIS,\n  COALESCE(C.CTCOU_Desc, '?')                                    AS PAIS\nFROM \n  PA_PatMas PM\nLEFT JOIN PA_Person PP ON PM.PAPMI_RowId = PP.PAPER_RowId\nLEFT JOIN CT_Sex SX ON SX.CTSEX_RowId = PP.PAPER_Sex_DR\nLEFT JOIN CT_Region R ON R.CTRG_RowId = PM.PAPMI_CT_Region_DR\nLEFT JOIN CT_Province P ON P.PROV_RowId = PM.PAPMI_CT_Province_DR\nLEFT JOIN CT_Country C ON C.CTCOU_RowId = R.CTRG_Country_DR\nLEFT JOIN CT_Nation N ON N.CTNAT_RowId = PP.PAPER_Nation_DR;\n",
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "PACIENTE_SK",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PACIENTE_SK",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_PACIENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_PACIENTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NOMBRES_PACIENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NOMBRES_PACIENTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "APELLIDO_PATERNO_PACIENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "APELLIDO_PATERNO_PACIENTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "APELLIDO_MATERNO_PACIENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "APELLIDO_MATERNO_PACIENTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_NACIMIENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FECHA_NACIMIENTO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ID_SEXO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_SEXO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SEXO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SEXO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GENERO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GENERO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GENERO_HL7",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GENERO_HL7",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EDAD",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "GRUPO_ETNICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GRUPO_ETNICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "RELIGION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RELIGION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_DONANTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_DONANTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GRUPO_SANGUINEO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GRUPO_SANGUINEO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ALERGIAS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ALERGIAS",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_DOCUMENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_DOCUMENTO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NRO_DOCUMENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NRO_DOCUMENTO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CATEGORIA_PACIENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CATEGORIA_PACIENTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_DOMICILIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TELEFONO_DOMICILIO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_CELULAR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TELEFONO_CELULAR",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_OFICINA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TELEFONO_OFICINA",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CORREO_ELECTRONICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CORREO_ELECTRONICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESTADO_CIVIL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ESTADO_CIVIL",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PAIS_NACIMIENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PAIS_NACIMIENTO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ID_NACIONALIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_NACIONALIDAD",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NACIONALIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NACIONALIDAD",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FALLECIDO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FALLECIDO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_FALLECIMIENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FECHA_FALLECIMIENTO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESTADO_ANULACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ESTADO_ANULACION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ANULACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FECHA_ANULACION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ANULADO_POR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ANULADO_POR",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ACTUALIZADO_POR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ACTUALIZADO_POR",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CALLE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CALLE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ID_REGION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_REGION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "REGION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REGION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ID_PAIS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_PAIS",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PAIS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PAIS",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OdbcTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "TMP_PA_PatMas",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "TRUNCATE  TMP",
+				"description": "TRUNCATE TABLE TMP_DIM_PACIENTE_TC",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "devtest_us2_asmi_data_001",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE TABLE TMP_DIM_PACIENTE_TC"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"folder": {
+			"name": "TrakCare"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-07-30T22:19:26Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

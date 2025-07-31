@@ -1,0 +1,73 @@
+{
+	"name": "O_DIM_EMPRESA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "O_DB_BI2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "EMPRESA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "INTERLOCUTOR_COMERCIAL",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_EMPRESA",
+				"type": "varchar"
+			},
+			{
+				"name": "NOMBRE_EMPRESA",
+				"type": "varchar"
+			},
+			{
+				"name": "RUT_EMPRESA",
+				"type": "varchar"
+			},
+			{
+				"name": "CATEGORIA_EMPRESA",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_FINANCIADOR",
+				"type": "char"
+			},
+			{
+				"name": "BLOQUEO_CENTRAL",
+				"type": "varchar"
+			},
+			{
+				"name": "INDICADOR_BORRADO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_EMPRESA",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_EMPRESA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

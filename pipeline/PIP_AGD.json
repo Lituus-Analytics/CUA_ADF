@@ -1,0 +1,360 @@
+{
+	"name": "PIP_AGD",
+	"properties": {
+		"activities": [
+			{
+				"name": "INSERT TMP",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "TRUNCATE  TMP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"query": "select \nRB_Appointment.APPT_RowId\tID_CITA\t,\nRB_Appointment.APPT_BookedDate\tFECHA_CITA,\nRB_Appointment.APPT_BookedTime\tHORA_CITA,\nCASE\n\t\tWHEN RB_Appointment.APPT_Status = 'P' THEN 'Reservado'\n\t\tWHEN RB_Appointment.APPT_Status = 'A' THEN 'Llegado'\n\t\tWHEN RB_Appointment.APPT_Status = 'X' THEN 'Cancelado'\n\t\tWHEN RB_Appointment.APPT_Status = 'I' THEN 'Insertado'\n\t\tWHEN RB_Appointment.APPT_Status = 'N' THEN 'No Atendido'\n\t\tWHEN RB_Appointment.APPT_Status = 'T' THEN 'Transferido'\n\t\tWHEN RB_Appointment.APPT_Status = 'H' THEN 'En Espera'\n\t\tWHEN RB_Appointment.APPT_Status = 'C' THEN 'Cerrado'\n\t\tWHEN RB_Appointment.APPT_Status = 'S' THEN 'Llegó'\n\t\tWHEN RB_Appointment.APPT_Status = 'D' THEN 'Alta'\n\tELSE 'Sin Estado' END AS ESTADO_CITA,\ncase \n\twhen RB_Appointment.APPT_Confirmation ='N' then 'NO'\n\twhen RB_Appointment.APPT_Confirmation ='Y' then 'SI'\n\telse 'No Informado' end CITA_CONFIRMADA,\nSS_User2.SSUSR_Initials  USUARIO,\nSS_User2.SSUSR_Name USUARIO_NOMBRE,\nRB_Appointment.APPT_TransDate\tFECHA_CREACION,\nRB_Appointment.APPT_LastUpdateDate\tFECHA_MODIFICACION,\ncase when RB_Appointment.APPT_Status = 'X' then 'SI' \n\telse 'NO'\tend ANULADO,\nRB_Appointment.APPT_CancelDate\tANULADO_EL,\nSS_User.SSUSR_Initials \tANULADO_POR_USUARIO,\nSS_User.SSUSR_Name  ANULADO_POR,\nRB_Appointment.APPT_ReasonForCancellation\tMOTIVO_ANULACION,\nCT_CareProv.CTPCP_Desc MEDICO_TRATANTE,\nCT_CarPrvTp.CTCPT_Desc ESPECIALIDAD,\nPA_PatMas.PAPMI_ID RUT_PACIENTE,\nPA_Adm.PAADM_ADMNo\tCODIGO_EPISODIO,\n{fn concat( {fn concat({fn concat({fn concat(PA_PatMas.PAPMI_Name, ' ')}, PA_PatMas.PAPMI_Name2 )} , ' ')} , PA_PatMas.PAPMI_Name3)}\tNOMBRE_PACIENTE,\nRBC_ServiceGroup.SG_Desc CAT_TRATAMIENTO,\nRBC_Services.ser_desctranslated\tDETALLE_TRATAMIENTO,\nOEC_ConsultCateg.CONS_Desc CLASE_MOVIMIENTO,\nRBC_AppointMethod.APTM_Desc CANAL,\nRB_Appointment.APPT_FreeTextReasonTTG MOTIVO_MODIFICACION\nfrom RB_Appointment\nLEFT  JOIN CT_CareProv on RB_Appointment.APPT_Adm_DR  = CT_CareProv.CTPCP_RowId1\nLEFT JOIN CT_CarPrvTp ON CT_CareProv.CTPCP_CarPrvTp_DR = CT_CarPrvTp.CTCPT_RowId \nLEFT JOIN PA_PatMas ON RB_Appointment.APPT_PAPMI_DR = PA_PatMas.PAPMI_RowId \nleft join PA_Adm on RB_Appointment.APPT_Adm_DR =PA_Adm.PAADM_RowID\nleft join RBC_Services on RB_Appointment.APPT_RBCServ_DR = RBC_Services.SER_RowId\nleft join RBC_ServiceGroup on RBC_Services.SER_ServGroup_DR = RBC_ServiceGroup.SG_RowId\nleft join SS_User on RB_Appointment.APPT_CancelledBy_DR = SS_User.SSUSR_RowId \nleft join SS_User SS_User2  on RB_Appointment.APPT_TransUser_DR = SS_User.SSUSR_RowId \nleft join RBC_AppointMethod on RB_Appointment.APPT_Method_DR  = RBC_AppointMethod.APTM_RowId\nleft join OEC_ConsultCateg on RB_Appointment.APPT_ConsultCateg_DR = OEC_ConsultCateg.CONS_RowId",
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ID_CITA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_CITA",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_CITA",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_CITA",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							},
+							{
+								"source": {
+									"name": "HORA_CITA",
+									"type": "TimeSpan"
+								},
+								"sink": {
+									"name": "HORA_CITA",
+									"type": "TimeSpan",
+									"physicalType": "time"
+								}
+							},
+							{
+								"source": {
+									"name": "ESTADO_CITA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ESTADO_CITA",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CITA_CONFIRMADA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CITA_CONFIRMADA",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "USUARIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "USUARIO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "USUARIO_NOMBRE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "USUARIO_NOMBRE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_CREACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_CREACION",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_MODIFICACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_MODIFICACION",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "ANULADO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ANULADO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ANULADO_EL",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "ANULADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "ANULADO_POR_USUARIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ANULADO_POR_USUARIO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ANULADO_POR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ANULADO_POR",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MOTIVO_ANULACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MOTIVO_ANULACION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MEDICO_TRATANTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MEDICO_TRATANTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESPECIALIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ESPECIALIDAD",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "RUT_PACIENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RUT_PACIENTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_EPISODIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_EPISODIO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NOMBRE_PACIENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NOMBRE_PACIENTE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CAT_TRATAMIENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAT_TRATAMIENTO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DETALLE_TRATAMIENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DETALLE_TRATAMIENTO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_MOVIMIENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_MOVIMIENTO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CANAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CANAL",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MOTIVO_MODIFICACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MOTIVO_MODIFICACION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OdbcTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "TMP_CUA_AGENDAMIENTO",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "TRUNCATE  TMP",
+				"description": "TRUNCATE TABLE TMP_CUA_AGENDAMIENTO_TC ",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "devtest_us2_asmi_data_001",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE TABLE TMP_DIM_PACIENTE_TC"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"folder": {
+			"name": "Agendamiento"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-07-30T22:25:52Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

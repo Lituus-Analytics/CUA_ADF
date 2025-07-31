@@ -1,0 +1,652 @@
+{
+	"name": "SqlPoolTable1_copy1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_eus2_synws_01",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Schema": {
+				"type": "string"
+			},
+			"Table": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "person_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "picture_url",
+				"type": "nvarchar"
+			},
+			{
+				"name": "first_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "surname",
+				"type": "nvarchar"
+			},
+			{
+				"name": "second_surname",
+				"type": "nvarchar"
+			},
+			{
+				"name": "full_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "rut",
+				"type": "nvarchar"
+			},
+			{
+				"name": "code_sheet",
+				"type": "nvarchar"
+			},
+			{
+				"name": "email",
+				"type": "nvarchar"
+			},
+			{
+				"name": "personal_email",
+				"type": "nvarchar"
+			},
+			{
+				"name": "address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "street",
+				"type": "nvarchar"
+			},
+			{
+				"name": "street_number",
+				"type": "nvarchar"
+			},
+			{
+				"name": "office_number",
+				"type": "nvarchar"
+			},
+			{
+				"name": "city",
+				"type": "nvarchar"
+			},
+			{
+				"name": "district",
+				"type": "nvarchar"
+			},
+			{
+				"name": "location_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "region",
+				"type": "nvarchar"
+			},
+			{
+				"name": "office_phone",
+				"type": "nvarchar"
+			},
+			{
+				"name": "phone",
+				"type": "nvarchar"
+			},
+			{
+				"name": "gender",
+				"type": "nvarchar"
+			},
+			{
+				"name": "birthday",
+				"type": "nvarchar"
+			},
+			{
+				"name": "university",
+				"type": "nvarchar"
+			},
+			{
+				"name": "degree",
+				"type": "nvarchar"
+			},
+			{
+				"name": "active_since",
+				"type": "nvarchar"
+			},
+			{
+				"name": "status",
+				"type": "nvarchar"
+			},
+			{
+				"name": "payment_method",
+				"type": "nvarchar"
+			},
+			{
+				"name": "payment_period",
+				"type": "nvarchar"
+			},
+			{
+				"name": "advance_payment",
+				"type": "nvarchar"
+			},
+			{
+				"name": "bank",
+				"type": "nvarchar"
+			},
+			{
+				"name": "account_type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "account_number",
+				"type": "nvarchar"
+			},
+			{
+				"name": "private_role",
+				"type": "nvarchar"
+			},
+			{
+				"name": "progressive_vacations_start",
+				"type": "nvarchar"
+			},
+			{
+				"name": "nationality",
+				"type": "nvarchar"
+			},
+			{
+				"name": "country_code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "civil_status",
+				"type": "nvarchar"
+			},
+			{
+				"name": "health_company",
+				"type": "nvarchar"
+			},
+			{
+				"name": "pension_regime",
+				"type": "nvarchar"
+			},
+			{
+				"name": "pension_fund",
+				"type": "nvarchar"
+			},
+			{
+				"name": "afc",
+				"type": "nvarchar"
+			},
+			{
+				"name": "retired",
+				"type": "nvarchar"
+			},
+			{
+				"name": "retirement_regime",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Beneficio_cantidad",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Beneficio_detalle",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Beneficio_nombre",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Código Registro SIS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Especialidad",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Inclusión",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Lugar Trabajo",
+				"type": "nvarchar"
+			},
+			{
+				"name": "N Secuencia",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Número de personal",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Orden",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HHMM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Rotativa de Ingreso",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Saldo adelanto de progresivos",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Saldo compensatorio 4° turno",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Saldo compensatorio 4° turno modificado",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Saldo días de capacitación",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Saldo vacaciones de invierno",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Vacuna Hepatitis B - 1° Dosis",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Vacuna Hepatitis B - 2° Dosis",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Vacuna Hepatitis B - 3° Dosis",
+				"type": "nvarchar"
+			},
+			{
+				"name": "data'][0]['active_until",
+				"type": "nvarchar"
+			},
+			{
+				"name": "termination_reason",
+				"type": "nvarchar"
+			},
+			{
+				"name": "periodicity",
+				"type": "nvarchar"
+			},
+			{
+				"name": "frequency",
+				"type": "nvarchar"
+			},
+			{
+				"name": "working_schedule_type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "zone_assignment",
+				"type": "nvarchar"
+			},
+			{
+				"name": "union",
+				"type": "nvarchar"
+			},
+			{
+				"name": "previous_job_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "company_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "area_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "contract_type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_start_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_end_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "contract_finishing_date_1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "contract_finishing_date_2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "weekly_hours",
+				"type": "nvarchar"
+			},
+			{
+				"name": "cost_center",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_active_until",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_location_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "without_wage",
+				"type": "nvarchar"
+			},
+			{
+				"name": "contract_subscription_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_boss_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_boss_rut",
+				"type": "nvarchar"
+			},
+			{
+				"name": "currency_code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "reward_concept",
+				"type": "nvarchar"
+			},
+			{
+				"name": "reward_payment_period",
+				"type": "nvarchar"
+			},
+			{
+				"name": "reward_description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "grado_sector_publico_chile",
+				"type": "nvarchar"
+			},
+			{
+				"name": "estamento_sector_publico_chile",
+				"type": "nvarchar"
+			},
+			{
+				"name": "base_wage",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_role_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "'current_job_role_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "requirements",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_role_role_family_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_role_role_family_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "quantity_of_roles",
+				"type": "nvarchar"
+			},
+			{
+				"name": "XC Familia",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_role_custom_attributes_Nivel KF",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Turno",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Requerimiento de Equipo",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Cod.Cargo Ppto",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Cod. posición SAP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Estamento Banco Central",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Extensión de Beneficios",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Homologación XC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Horas CUA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Horas UANDES",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_custom_attributes_Nivel KF",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Reajuste",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Tipo de Vacante",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Usuario SAP (ISH)",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_role_area_ids'][",
+				"type": "nvarchar"
+			},
+			{
+				"name": "data'][0]['family_responsabilities'][0]['id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "family_allowance_section",
+				"type": "nvarchar"
+			},
+			{
+				"name": "simple_family_responsability",
+				"type": "nvarchar"
+			},
+			{
+				"name": "maternity_family_responsability",
+				"type": "nvarchar"
+			},
+			{
+				"name": "invalid_family_responsability",
+				"type": "nvarchar"
+			},
+			{
+				"name": "family_responsabilities_start_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "family_responsabilities_end_date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "family_responsabilities_responsability_details",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Codigo_Registro_SIS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "N_Secuencia",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Numero_personal",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ROTATIVA_INGRESO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SALDO_ADELANTO_PROGRESIVOS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SALDO_COMPENSATORIO_4_TURNO_MODIFICADO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SALDO_DIAS_CAPACITACION",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SALDO_VACACIONES_INVIERNO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Vacuna_hepatitis_b_1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Vacuna_hepatitis_b_2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Vacuna_hepatitis_b_3",
+				"type": "nvarchar"
+			},
+			{
+				"name": "active_until",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_currency_code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_reward_concept",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_reward_payment_period",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_reward_description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_role_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_requirements",
+				"type": "nvarchar"
+			},
+			{
+				"name": "XC_Familia",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Requerimiento_Equipo",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Cod_Cargo_Ppto",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Cod_posicion_SAP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Estamento_Banco_Centrall",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Tipo_Vacante",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Usuario_SAP_ISH",
+				"type": "nvarchar"
+			},
+			{
+				"name": "current_job_role_area_ids",
+				"type": "nvarchar"
+			},
+			{
+				"name": "family_responsabilities_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "columna1",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().Schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().Table",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
