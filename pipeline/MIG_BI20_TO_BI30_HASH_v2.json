@@ -1,0 +1,512 @@
+{
+	"name": "MIG_BI20_TO_BI30_HASH_v2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Cargar_tablas",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.ListaTablas",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Carga",
+							"description": "Si el count y fecha del origen es diferente al destino realiza la carga, de lo contrario no la realiza y",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Obtener Hash",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('Obtener Hash').output.firstRow.Resultado, 'No')",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Copiar_data_tablas",
+										"description": "Copia los datos de las tablas definido en ListaTablas para la migración de BI2 a BI3",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Obtener Columnas",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n    'SELECT * FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"writeBehavior": "upsert",
+												"upsertSettings": {
+													"useTempDB": false,
+													"keys": {
+														"value": "@split(activity('Obtener Columnas').output.firstRow.ColumnList, ',')\n",
+														"type": "Expression"
+													},
+													"interimSchemaName": ""
+												},
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "Obtener Columnas",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlMISource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n  'SELECT STRING_AGG(c.name, '','') AS ColumnList FROM sys.indexes i ',\n  'INNER JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id ',\n  'INNER JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id ',\n  'INNER JOIN sys.tables t ON i.object_id = t.object_id ',\n  'INNER JOIN sys.schemas s ON t.schema_id = s.schema_id ',\n  'WHERE t.name = ''', item(), ''' AND s.name = ''dbo'' ',\n  'AND (i.is_primary_key = 1 OR i.is_unique = 1)'\n)\n",
+													"type": "Expression"
+												},
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Origen 2",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Carga",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'SELECT CONVERT(VARCHAR, COUNT(1)) + '' '' + CONVERT(VARCHAR, MAX(fecha_actualizacion)) FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"type": "DatasetReference",
+									"parameters": {
+										"NombreTabla": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Destino 2",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Carga",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'SELECT CONVERT(VARCHAR, COUNT(1)) + '' '' + CONVERT(VARCHAR, MAX(fecha_actualizacion)) FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "@item()"
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [
+								{
+									"activity": "Obtener Count y Fecha Origen 2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Obtener Count y Fecha Destino 2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greater(activity('Obtener Count y Fecha Destino 2').output.firstRow[''], activity('Obtener Count y Fecha Origen 2').output.firstRow[''])\n",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Eliminar datos adicionales del destino",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "Obtener Columnas PK",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "devtest_us2_asmi_data_001",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": "DELETE FA\nFROM FACT_ACTIVIDAD FA\nJOIN (\n    SELECT \n        d.FECHA_INGRESO_EPISODIO_SK, d.EPISODIO_SK, d.PACIENTE_SK, d.UBI_GEOGRAFICA_SK, \n        d.PRESTACION_SK, d.EMPRESA_PRES_CLINICA_SK, d.FACTURA_SK, d.FECHA_FACTURACION_SK, \n        d.EMPRESA_PRES_FACTURADA_SK, d.PROF_MEDICO_TRATANTE_SK, d.DIAGNOSTICO_INGRESO_SK, \n        d.DIAGNOSTICO_EGRESO_SK, d.UNIDAD_SOLI_PRESTACION_SK, d.UNIDAD_CARGA_PRESTACION_SK, \n        d.UNIDAD_ADMISION_EPISODIO_SK, d.FECHA_CARGA_PRESTACION_SK, d.ORDEN_CLINICA_SK, \n        d.NRO_ACTUAL_PRESTACION\n    FROM TMP_HASHFILAS_DESTINO d\n    LEFT JOIN TMP_HASHFILAS t ON d.FilaHash = t.FilaHash\n    WHERE t.FilaHash IS NULL\n) AS sub\nON FA.FECHA_INGRESO_EPISODIO_SK = sub.FECHA_INGRESO_EPISODIO_SK\n   AND FA.EPISODIO_SK = sub.EPISODIO_SK\n   AND FA.PACIENTE_SK = sub.PACIENTE_SK\n   AND FA.UBI_GEOGRAFICA_SK = sub.UBI_GEOGRAFICA_SK\n   AND FA.PRESTACION_SK = sub.PRESTACION_SK\n   AND FA.EMPRESA_PRES_CLINICA_SK = sub.EMPRESA_PRES_CLINICA_SK\n   AND FA.FACTURA_SK = sub.FACTURA_SK\n   AND FA.FECHA_FACTURACION_SK = sub.FECHA_FACTURACION_SK\n   AND FA.EMPRESA_PRES_FACTURADA_SK = sub.EMPRESA_PRES_FACTURADA_SK\n   AND FA.PROF_MEDICO_TRATANTE_SK = sub.PROF_MEDICO_TRATANTE_SK\n   AND FA.DIAGNOSTICO_INGRESO_SK = sub.DIAGNOSTICO_INGRESO_SK\n   AND FA.DIAGNOSTICO_EGRESO_SK = sub.DIAGNOSTICO_EGRESO_SK\n   AND FA.UNIDAD_SOLI_PRESTACION_SK = sub.UNIDAD_SOLI_PRESTACION_SK\n   AND FA.UNIDAD_CARGA_PRESTACION_SK = sub.UNIDAD_CARGA_PRESTACION_SK\n   AND FA.UNIDAD_ADMISION_EPISODIO_SK = sub.UNIDAD_ADMISION_EPISODIO_SK\n   AND FA.FECHA_CARGA_PRESTACION_SK = sub.FECHA_CARGA_PRESTACION_SK\n   AND FA.ORDEN_CLINICA_SK = sub.ORDEN_CLINICA_SK\n   AND FA.NRO_ACTUAL_PRESTACION = sub.NRO_ACTUAL_PRESTACION;\n"
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									},
+									{
+										"name": "Obtener Columnas PK",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n  'SELECT STRING_AGG(c.name, '','') AS ColumnList FROM sys.indexes i ',\n  'INNER JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id ',\n  'INNER JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id ',\n  'INNER JOIN sys.tables t ON i.object_id = t.object_id ',\n  'INNER JOIN sys.schemas s ON t.schema_id = s.schema_id ',\n  'WHERE t.name = ''', item(), ''' AND s.name = ''dbo'' ',\n  'AND (i.is_primary_key = 1 OR i.is_unique = 1)'\n)\n",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "Obtener hash Origen",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": "DECLARE @TableName sysname = 'DIM_PACIENTE';\nDECLARE @SchemaName sysname = 'dbo';\nDECLARE @PrimaryKeyColumn sysname = 'PACIENTE_SK'; -- Asume que 'ID_PACIENTE' es la PK\nDECLARE @ColumnList NVARCHAR(MAX);\nDECLARE @DynamicSQL NVARCHAR(MAX);\n\n-- Paso 1: Generar la lista de columnas\nSELECT @ColumnList = STUFF(\n    (SELECT ' + ISNULL(CAST(' + QUOTENAME(c.name) + ' AS NVARCHAR(MAX)), '''')'\n     FROM sys.columns AS c\n     WHERE c.object_id = OBJECT_ID(@SchemaName + '.' + @TableName)\n     ORDER BY c.column_id\n     FOR XML PATH('')\n    ), 1, 3, ''\n);\n\n-- Paso 2: Construir la consulta SQL\nSET @DynamicSQL = N'\n    SELECT\n        ' + QUOTENAME(@PrimaryKeyColumn) + ' AS SK,\n        CONVERT(VARCHAR(32), HASHBYTES(''MD5'', ' + @ColumnList + '), 2) AS FilaHash\n    FROM ' + QUOTENAME(@SchemaName) + '.' + QUOTENAME(@TableName) + '\n    WHERE fecha_actualizacion BETWEEN @fecha_inicio AND @fecha_fin\n';\n\n-- Paso 3: Asignar valores fijos a las variables de fecha\nDECLARE @fecha_inicio DATETIME = '2025-08-01'; -- Reemplaza con la fecha de inicio\nDECLARE @fecha_fin DATETIME = '2025-08-31';   -- Reemplaza con la fecha de fin\n\n-- Paso 4: Ejecutar la consulta dinámica\nEXEC sp_executesql\n    @DynamicSQL,\n    N'@fecha_inicio DATETIME, @fecha_fin DATETIME',\n    @fecha_inicio = @fecha_inicio,\n    @fecha_fin = @fecha_fin;",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "SqlMISink",
+									"preCopyScript": "truncate table TMP_HASHFILAS_SK",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"type": "DatasetReference",
+									"parameters": {
+										"NombreTabla": "DIM_PACIENTE"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "TMP_HASHFILAS_SK"
+									}
+								}
+							]
+						},
+						{
+							"name": "Obtener Hash Destino",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": {
+										"value": "DECLARE @TableName sysname = 'DIM_PACIENTE';\nDECLARE @SchemaName sysname = 'dbo';\nDECLARE @PrimaryKeyColumn sysname = 'PACIENTE_SK'; -- Asume que 'ID_PACIENTE' es la PK\nDECLARE @ColumnList NVARCHAR(MAX);\nDECLARE @DynamicSQL NVARCHAR(MAX);\n\n-- Paso 1: Generar la lista de columnas\nSELECT @ColumnList = STUFF(\n    (SELECT ' + ISNULL(CAST(' + QUOTENAME(c.name) + ' AS NVARCHAR(MAX)), '''')'\n     FROM sys.columns AS c\n     WHERE c.object_id = OBJECT_ID(@SchemaName + '.' + @TableName)\n     ORDER BY c.column_id\n     FOR XML PATH('')\n    ), 1, 3, ''\n);\n\n-- Paso 2: Construir la consulta SQL\nSET @DynamicSQL = N'\n    SELECT\n        ' + QUOTENAME(@PrimaryKeyColumn) + ' AS SK,\n        CONVERT(VARCHAR(32), HASHBYTES(''MD5'', ' + @ColumnList + '), 2) AS FilaHash\n    FROM ' + QUOTENAME(@SchemaName) + '.' + QUOTENAME(@TableName) + '\n    WHERE fecha_actualizacion BETWEEN @fecha_inicio AND @fecha_fin\n';\n\n-- Paso 3: Asignar valores fijos a las variables de fecha\nDECLARE @fecha_inicio DATETIME = '2025-08-01'; -- Reemplaza con la fecha de inicio\nDECLARE @fecha_fin DATETIME = '2025-08-31';   -- Reemplaza con la fecha de fin\n\n-- Paso 4: Ejecutar la consulta dinámica\nEXEC sp_executesql\n    @DynamicSQL,\n    N'@fecha_inicio DATETIME, @fecha_fin DATETIME',\n    @fecha_inicio = @fecha_inicio,\n    @fecha_fin = @fecha_fin;",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "SqlMISink",
+									"preCopyScript": "Truncate table TMP_HASHFILAS_DESTINO_SK",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "DIM_PACIENTE"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "TMP_HASHFILAS_DESTINO_SK"
+									}
+								}
+							]
+						},
+						{
+							"name": "Obtener Hash",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Obtener hash Origen",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Obtener Hash Destino",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": {
+										"value": "SELECT\n    CASE\n        WHEN T1.FilaHash IS NULL OR T2.FilaHash IS NULL THEN 'Si'\n        ELSE 'No'\n    END AS Resultado\nFROM\n    TMP_HASHFILAS_SK AS T1\nFULL OUTER JOIN\n    TMP_HASHFILAS_DESTINO_SK AS T2\nON\n    T1.FilaHash = T2.FilaHash AND T1.SK = T2.SK;",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "TMP_HASHFILAS_DESTINO"
+									}
+								},
+								"firstRowOnly": true
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"ListaTablas": {
+				"type": "array",
+				"defaultValue": [
+					"DIM_PACIENTE"
+				]
+			},
+			"fecha_inicio": {
+				"type": "string",
+				"defaultValue": "2025-08-01"
+			},
+			"fecha_fin": {
+				"type": "string",
+				"defaultValue": "2025-09-01"
+			}
+		},
+		"variables": {
+			"COMPRACION_HASH": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "MIG_BI20_TO_BI30/Subflows"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-12T14:52:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

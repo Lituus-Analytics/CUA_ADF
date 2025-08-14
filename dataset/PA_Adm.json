@@ -1,0 +1,16 @@
+{
+	"name": "PA_Adm",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "IRIS_ODBC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "OdbcTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "\"SQLUser\".\"PA_Adm\""
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

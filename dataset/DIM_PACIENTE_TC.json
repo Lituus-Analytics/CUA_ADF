@@ -1,0 +1,191 @@
+{
+	"name": "DIM_PACIENTE_TC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_us2_asmi_data_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "CODIGO_PACIENTE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NOMBRES_PACIENTE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APELLIDO_PATERNO_PACIENTE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "APELLIDO_MATERNO_PACIENTE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FECHA_NACIMIENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID_SEXO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SEXO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "GENERO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "GENERO_HL7",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EDAD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "GRUPO_ETNICO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "RELIGION",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ES_DONANTE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "GRUPO_SANGUINEO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ALERGIAS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TIPO_DOCUMENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NRO_DOCUMENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CATEGORIA_PACIENTE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TELEFONO_DOMICILIO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TELEFONO_CELULAR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TELEFONO_OFICINA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CORREO_ELECTRONICO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ESTADO_CIVIL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PAIS_NACIMIENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID_NACIONALIDAD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NACIONALIDAD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FALLECIDO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FECHA_FALLECIMIENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ESTADO_ANULACION",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FECHA_ANULACION",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ANULADO_POR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CALLE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID_REGION",
+				"type": "nvarchar"
+			},
+			{
+				"name": "REGION",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID_PAIS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PAIS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "HORA_ACTUALIZACION",
+				"type": "time",
+				"scale": 0
+			},
+			{
+				"name": "USUARIO_ACTUALIZACION",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "FECHA_CREACION",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "HashTotal",
+				"type": "varbinary"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_PACIENTE_TC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

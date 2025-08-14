@@ -1,0 +1,356 @@
+{
+	"name": "PAM_PIP_DIM_BENEFICIO",
+	"properties": {
+		"description": "Proceso ETL encargado obtener el listado de los beneficios a los que puede optar un postulante/alumno",
+		"activities": [
+			{
+				"name": "IFX to Parquet",
+				"description": "Extracción de datos asociados al listado de beneficios, desde la base de datos Informix (on premise) hacia Azure Data Lake 2 Gen en formato Parquet",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set FECHA_HASTA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "InformixSource",
+						"query": {
+							"value": "select \n\tadticb.ticb_codi as CODIGO_BENEFICIO,\n\tltrim(adticb.ticb_desc) as DESCRIPCION_BENEFICIO,\n\t--\n\tcase \n\t\twhen  adticb.ticb_tipo is null or adticb.ticb_tipo=' ' then '?'\n\t\telse  adticb.ticb_tipo \n\tend as CODIGO_TIPO_BENEFICIO,\n\t/*case \n\t\twhen  adticb.ticb_tipo is null or adticb.ticb_tipo=' ' then 'Sin Información'\n\t\telse coalesce(tipo_beneficio.codi_desc, 'Sin Información')\n\tend as TIPO_BENEFICIO,*/\n\tcoalesce(tipo_beneficio.codi_desc, 'Sin Información') as TIPO_BENEFICIO,\n\t--\n\tcase \n\t\twhen  adticb.ticb_desc like '%CONVENIO%'  and ( adticb.ticb_tipo is null or adticb.ticb_tipo=' ') then 'C'\n\t\twhen  adticb.ticb_desc like '%DESCUENTO%' and ( adticb.ticb_tipo is null or adticb.ticb_tipo=' ') then 'C'\n\t\twhen  adticb.ticb_desc like '%GRATUIDAD%' and ( adticb.ticb_tipo is null or adticb.ticb_tipo=' ') then 'R'\n\t\twhen  adticb.ticb_tipo is null or adticb.ticb_tipo=' ' then '?'\n\t\telse  adticb.ticb_tipo\n\tend as CODIGO_GRUPO_BENEFICIO,\n\tcase \n\t\twhen  adticb.ticb_desc like '%CONVENIO%'  and tipo_beneficio.codi_desc is null then 'Convenio'\n\t\twhen  adticb.ticb_desc like '%DESCUENTO%' and tipo_beneficio.codi_desc is null then 'Descuento'\n\t\twhen  adticb.ticb_desc like '%GRATUIDAD%' and tipo_beneficio.codi_desc is null then 'Gratuidad'\n\t\t--when  adticb.ticb_tipo is null or adticb.ticb_tipo=' ' then 'Sin Información'\n\t\telse coalesce(tipo_beneficio.codi_desc, 'Sin Información')\n\tend as GRUPO_BENEFICIO,\n\t--\n\tcase \n\t\twhen  adticb.ticb_orig is null or adticb.ticb_orig=' ' then '?'\n\t\telse  adticb.ticb_orig \n\tend as CODIGO_ORIGEN_BENEFICIO,\n\tcase \n\t\t--when  adticb.ticb_orig is null or adticb.ticb_orig=' ' then 'Sin información'\n\t\twhen  adticb.ticb_orig ='E' then 'Externo'\n\t\twhen  adticb.ticb_orig ='I' then 'Interno'\n\t\telse 'Sin Información'\n\tend as ORIGEN_BENEFICIO,\n\t--\n\tcase \n\t\twhen  adticb.ticb_moti is null or adticb.ticb_moti=' ' then '?'\n\t\telse  adticb.ticb_moti \n\tend as CODIGO_MOTIVO_ASIGNACION_BENEFICIO, -- Motivo o asignación de beneficio. A: por asignación  D: Por derecho\n\tcase \n\t\t--when  adticb.ticb_moti is null or adticb.ticb_moti=' ' then 'Sin información'\n\t\twhen  adticb.ticb_moti='A' then 'Por Asignación'\n\t\twhen  adticb.ticb_moti='D' then 'Por Derecho'\n\t\telse  'Sin Información' \n\tend as MOTIVO_ASIGNACION_BENEFICIO,\n\t--\n\tcase \n\t\twhen  adticb.ticb_acce is null or adticb.ticb_acce=' ' then '?'\n\t\telse  adticb.ticb_acce \n\tend as CODIGO_ACCESO_ASIGNAR_BENEFICIO, -- A ADMISION, M MATRICULA, B UNIDAD DE G. DE BECAS\n\tcase \n\t\t--when  adticb.ticb_acce is null or adticb.ticb_acce=' ' then 'Sin información'\n\t\twhen  adticb.ticb_acce='A' then 'Unidad de Admisión'\n\t\twhen  adticb.ticb_acce='M' then 'Unidad de Matrícula '\n\t\twhen  adticb.ticb_acce='B' then 'Unidad de Gestión de Becas '\n\t\telse  'Sin Información' \n\tend as ACCESO_ASIGNAR_BENEFICIO,\n\t--\n\tcase \n\t\twhen  adticb.ticb_vige is null or adticb.ticb_acce=' ' then '?'\n\t\telse  adticb.ticb_vige \n\tend as CODIGO_VIGENCIA_BENEFICIO, -- --Vigencia de beneficio (N: No vigente S: Vigente)\n\tcase \n\t\t--when  adticb.ticb_vige is null or adticb.ticb_acce=' ' then 'Sin Información'\n\t\twhen  adticb.ticb_vige='N' then 'No Vigente'\n\t\twhen  adticb.ticb_vige='S' then 'Vigente'\n\t\telse  'Sin Información'\n\tend as VIGENCIA_BENEFICIO,\n\t--\n\tcoalesce(adticb.ticb_fing, date(to_date('1900/01/01' , '%Y/%m/%d' ))) as FECHA_CREACION_BENEFICIO, --Fecha de ingreso o creación del beneficio, \n\t--\n\tcase \n\t\twhen  adticb.ticb_cond is null or adticb.ticb_cond=' ' then '?'\n\t\telse  adticb.ticb_cond \n\tend as CODIGO_APLICACION_BENEFICIO,  -- T TOTAL, P PARCIAL, F MONTO FLEXIBLE\n\tcase \n\t\t--when  adticb.ticb_cond is null or adticb.ticb_cond=' ' then 'Sin información'\n\t\twhen  adticb.ticb_cond='T' then 'Total'\n\t\twhen  adticb.ticb_cond='P' then 'Parcial'\n\t\twhen  adticb.ticb_cond='F' then 'Monto Flexible'\n\t\telse  'Sin Información'\n\tend as APLICACION_BENEFICIO,  \n\t--\n\tcase \n\t\twhen  adticb.ticb_grad is null or adticb.ticb_grad=' ' then '?'\n\t\telse  adticb.ticb_grad \n\tend as CODIGO_TIPO_PROGRAMA_ASOCIADO_BENEFICIO,  --1  Pregrado, 2 Postgrado, 3  Formación Continua\n\tcase \n\t\twhen  adticb.ticb_grad =1 then 'Pregrado'\n\t\twhen  adticb.ticb_grad =2 then 'Postgrado'\n\t\twhen  adticb.ticb_grad =3 then 'Educación Continua'\n\t\telse  'Sin Información' \n\tend as TIPO_PROGRAMA_ASOCIADO_BENEFICIO,  \n\t--\n\tcoalesce(adticb.ticb_fref,  date(to_date('1900/01/01' , '%Y/%m/%d' ))) as FECHA_REFERENCIA_APLICAR_BENEFICIO, --Fecha de referencia para aplicar beneficio\n\t--\n\tcase \n\t\twhen  adticb.ticb_cobe is null or adticb.ticb_cobe=' ' then '?'\n\t\telse  adticb.ticb_cobe \n\tend as CODIGO_COBERTURA_BENEFICIO, \n\tcoalesce(cobertura.codi_desc, 'Sin Información') as COBERTURA_BENEFICIO,\n\t--\n\tcase \n\t\twhen  adticb.ticb_coes is null or adticb.ticb_coes=' ' then '?'\n\t\telse  adticb.ticb_coes \n\tend as CODIGO_NIVEL_APLICACION, \n\tcoalesce(niveles.codi_desc,'Sin Información') as NIVEL_APLICACION,\n\t--\n\tcase \n\t\twhen  adticb.ticb_copg is null or adticb.ticb_copg=' ' then '?'\n\t\telse  adticb.ticb_copg \n\tend as CODIGO_TIPO_GRADO_BENEFICIO,\n\tcoalesce(por_grado.codi_desc,'Sin Información') as TIPO_GRADO_BENEFICIO,\n\t--adticb.ticb_pgra as PORCENTAJE_GRATUIDAD,\n\t'ADTICB;ADCODI' as ORIGEN\nfrom  adticb \nleft outer join adcodi as tipo_beneficio \ton (substr(adticb.ticb_codi ,1,1)=tipo_beneficio.codi_codi and tipo_beneficio.codi_id ='ticb_inte' and tipo_beneficio.codi_sign = '1') -- Tipo desde parametría Informix\nleft outer join adcodi as cobertura \t\ton (adticb.ticb_cobe=cobertura.codi_codi and cobertura.codi_id ='ticb_cobe') -- Cobertura Beneficio\nleft outer join adcodi as niveles   \t\ton (adticb.ticb_coes=niveles.codi_codi   and niveles.codi_id   ='ticb_coes') -- Niveles de aplicación\nleft outer join adcodi as por_grado \t\ton (adticb.ticb_copg=por_grado.codi_codi and por_grado.codi_id ='ticb_copg') -- Por grado\n--Parte delta variable, esto lo generará Data Factory\n @{variables('QUERY_EXIST')}",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": true,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "QY_PARQUET_BENEFICIO",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "STG_BENEFICIO_PQT",
+						"type": "DatasetReference",
+						"parameters": {
+							"AzureKeyVaultEndpoint": {
+								"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+								"type": "Expression"
+							},
+							"AzureDataLakeG2Endpoint": {
+								"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Lookup Ultima Fecha Procesada",
+				"description": "Obtención de la fecha asociada a la última ejecución de Beneficios con éxito.\nSi no han sido procesado los beneficios previamente, se realizará una carga full o first, en caso contrario, se filtrará desde la última fecha procesada con éxito generando una carga delta",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT \n\t FECHA_HASTA_TEXTO \nFROM LK_AUDITORIA_DELTA_TRIGGER\nWHERE \n\tPIPELINE\t\t\t= '@{pipeline().Pipeline}'\nAND CONCEPTO_ASOCIADO\t= 'DIM_BENEFICIO'\nAND ES_ULTIMA_EJECUCION = 1",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "LK_AUDITORIA_DELTA_TRIGGER",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Hay cambios",
+				"description": "Hay cambios, si y solo si, la query realizada en el objeto \"Copy data IFX to Parquet\" encontró registros según los criterios de extracción, en caso contrario, no es necesario seguir procesando ya que no hay novedades.",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "IFX to Parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('IFX to Parquet').output.rowsRead,0)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "UPDATE_ULTIMA_EJECUCION_OK",
+							"description": "Se actualiza la última ejecución exitosa previa a la ejecución de este pipeline, al valor 0.  Luego se inserta un nuevo registro indicando una nueva ejecución exitosa y actualizando a la vez la fecha ejecución hasta.\nLa idea es identificar fácilmente cual fue la última ejecución exitosa.",
+							"type": "Script",
+							"dependsOn": [
+								{
+									"activity": "PAM_DF_D_BENEFICIO",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "devtest_eus2_synws_02",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "NonQuery",
+										"text": {
+											"value": "UPDATE LK_AUDITORIA_DELTA_TRIGGER SET ES_ULTIMA_EJECUCION=0 \nWHERE ES_ULTIMA_EJECUCION=1 AND PIPELINE='@{pipeline().Pipeline}' AND CONCEPTO_ASOCIADO='DIM_BENEFICIO';\n\n\nINSERT INTO LK_AUDITORIA_DELTA_TRIGGER VALUES \n('@{pipeline().Pipeline}','DIM_BENEFICIO', 'Tabla Auditoría IFX', '@{variables('TIPO_CARGA')}', '@{convertFromUtc(utcnow(), 'Pacific SA Standard Time', 'yyyy-MM-dd HH:mm:ss')}', '@{variables('FECHA_DESDE')}', \n'@{variables('FECHA_HASTA')}', @{activity('IFX to Parquet').output.rowsRead}, 1);",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "PAM_DF_D_BENEFICIO",
+							"description": "Dataflow encargado de cargar y/o actualizar los registros de la DIM_BENEFICIO en el Data Warehouse disponible en Azure SQL DB",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "PAM_DF_D_BENEFICIO",
+									"type": "DataFlowReference",
+									"parameters": {
+										"pipeline_run_id": {
+											"value": "'@{pipeline().RunId}'",
+											"type": "Expression"
+										}
+									},
+									"datasetParameters": {
+										"StgbeneficioParquet": {
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											},
+											"AzureDataLakeG2Endpoint": {
+												"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+												"type": "Expression"
+											}
+										},
+										"QYDimBeneficio": {
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											}
+										},
+										"DestinoDimBeneficio": {
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Dynamic Query - Where Exist",
+				"description": "Si la carga es First se realizará la query sin usar la tabla auditoría, en caso contrario, la carga será de tipo delta (solo novedades).\nPara este ETL en concreto, dado que Informix mantiene tablas de auditorías con los cambios realizados al maestro de beneficios (novedades), se agregará al final de la query un where que retorne todos los registros modificados desde la última ejecución del ETL, siempre y cuando la ejecución sea Delta.",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup Ultima Fecha Procesada",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "QUERY_EXIST",
+					"value": {
+						"value": "@if(equals(activity('Lookup Ultima Fecha Procesada').output.count,0), ' ', \nconcat('where exists  (select ticb_codi from ucsh.adticb_audit  where adticb.ticb_codi=adticb_audit.ticb_codi and adticb_audit.audi_fech >=to_date('\n        , ''''\n        ,activity('Lookup Ultima Fecha Procesada').output.value[0].FECHA_HASTA_TEXTO\n        ,''''\n        , ', ''%Y/%m/%d''))' \n    )\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set TIPO_CARGA",
+				"description": "Se determina si la carga será de tipo Full (Primera vez) o Delta. Este variable se usará para guardar un registro en la tabla de auditoría, en el campo TIPO_CARGA.",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Dynamic Query - Where Exist",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "TIPO_CARGA",
+					"value": {
+						"value": "@if(equals(activity('Lookup Ultima Fecha Procesada').output.count,0),'Full', 'Delta')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set FECHA_DESDE",
+				"description": "Se determina si la carga será de tipo Full (Primera vez) o Delta. Este variable se usará para guardar un registro en la tabla de auditoría con la FECHA_DESDE, la cual se usó para obtener los registros.\nEn caso de que sea una carga Full o First, se ignorará esta variable para los filtros, pero se registrará como NO APLICA en la tabla auditoría",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set TIPO_CARGA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FECHA_DESDE",
+					"value": {
+						"value": "@if(equals(activity('Lookup Ultima Fecha Procesada').output.count,0),'NO APLICA', \n    if(equals(activity('Lookup Ultima Fecha Procesada').output.value[0].FECHA_HASTA_TEXTO,'NO APLICA'), convertFromUtc(utcnow(), 'Pacific SA Standard Time', 'yyyy/MM/dd') , activity('Lookup Ultima Fecha Procesada').output.value[0].FECHA_HASTA_TEXTO)\n)\n\n\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set FECHA_HASTA",
+				"description": "Se determina si la carga será de tipo Full (Primera vez) o Delta. Este variable se usará para guardar un registro en la tabla de auditoría con la FECHA_HASTA, la cual se usa para indicar hasta que día se consideró como filtro para obtener los registros.\nEn caso de que sea una carga Full o First, se ignorará esta variable para los filtros, pero se registrará como NO APLICA en la tabla auditoría",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set FECHA_DESDE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FECHA_HASTA",
+					"value": {
+						"value": "@convertFromUtc(utcnow(), 'Pacific SA Standard Time', 'yyyy/MM/dd')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "string"
+			},
+			"AzureDataLakeG2Endpoint": {
+				"type": "String"
+			}
+		},
+		"variables": {
+			"QUERY_EXIST": {
+				"type": "String"
+			},
+			"TIPO_CARGA": {
+				"type": "String"
+			},
+			"FECHA_DESDE": {
+				"type": "String"
+			},
+			"FECHA_HASTA": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "(PAM) Prospección, Admisión y Matrícula/Dimensiones"
+		},
+		"annotations": [
+			"Azure SQL DB",
+			"Informix",
+			"Dimensión",
+			"SCD1"
+		],
+		"lastPublishTime": "2025-08-12T14:52:38Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

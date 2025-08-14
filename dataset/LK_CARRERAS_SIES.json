@@ -1,0 +1,25 @@
+{
+	"name": "LK_CARRERAS_SIES",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_eus2_synws_02",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Enterprise Data Warehouse"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "LK_CARRERAS_SIES"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

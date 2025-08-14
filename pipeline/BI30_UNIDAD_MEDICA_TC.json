@@ -1,0 +1,121 @@
+{
+	"name": "BI30_UNIDAD_MEDICA_TC",
+	"properties": {
+		"activities": [
+			{
+				"name": "INSERT TMP",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"query": "SELECT\n    NULL                                                     UNIDAD_MEDICA,\n    NULL                                                     CODIGO_UNIDAD_MEDICA,\n    NULL                                                     UNIDAD_ENFER_TRAT,\n    NULL                                                     CODIGO_UNIDAD_ENFER_TRAT,\n    PAC_Room.ROOM_Desc                                       HABITACION_BOX,\n    PAC_Room.ROOM_Code                                       CODIGO_HABITACION_BOX,\n    CAST(PAC_Bed.BED_WARD_ParRef AS VARCHAR) || '|' || CAST(PAC_Bed.BED_Childsub AS VARCHAR)           CAMA,\n\n    PAC_Bed.BED_Code                                         CODIGO_CAMA,\n    NULL                                                     TIPO_UNIDAD,\n\n    NULL                                                     CENTRO_COSTO,\n    NULL                                                     DENOMINACION_CENTRO_COSTO,\n\n    NULL                                                     CLASE_CENTRO_COSTO,\n    NULL                                                     CENTRO_BENEFICIO,\n    NULL                                                     DENOMINACION_CENTRO_BENEFICIO,\n    NULL                                                     UNIDAD_SERVICIO,\n    NULL                                                     CODIGO_UNIDAD_SERVICIO,\n    PAC_Ward.WARD_Desc                                       PABELLON,\n    PAC_Ward.WARD_Code                                       CODIGO_PABELLON,\n    CT_Loc.CTLOC_Code                                        LOCACION,\n    CT_Loc.CTLOC_Desc                                        CODIGO_LOCACION\n\nFROM PAC_Bed\nLEFT JOIN PAC_Room ON PAC_Bed.BED_Room_DR = PAC_Room.ROOM_RowID\nLEFT JOIN PAC_Ward ON PAC_Bed.BED_WARD_ParRef = PAC_Ward.WARD_RowID\nLEFT JOIN CT_Loc   ON PAC_Ward.WARD_LocationDR = CT_Loc.CTLOC_RowID;",
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "PA_PATMAS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_UNIDAD_MEDICA_TC"
+						}
+					}
+				]
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "INSERT TMP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_UNIDAD_MEDICA_TC"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "DIM_UNIDAD_MEDICA_TC"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "TrakCare/SubFlujos"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-11T22:07:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

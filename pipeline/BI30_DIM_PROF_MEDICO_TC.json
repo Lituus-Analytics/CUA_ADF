@@ -1,0 +1,1101 @@
+{
+	"name": "BI30_DIM_PROF_MEDICO_TC",
+	"properties": {
+		"activities": [
+			{
+				"name": "INSERT TMP_DIM_PROFESIONAL_MEDICO_TC",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "TRUNCATE  TMP_DIM_PROFESIONAL_MEDICO_TC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"query": {
+							"value": "select \nCT_CareProv.CTPCP_Code\tRUT_PROFESIONAL,\nCT_CareProv.CTPCP_Desc\tNOMBRE_COMPLETO_MEDICO,\ncase when CT_CareProv.CTPCP_CarPrvTp_DR is not null then CT_CareProv.CTPCP_CarPrvTp_DR else  CT_CareProv.CTPCP_CPGroup_DR  end\tTIPO_MEDICO_REFERENCIA,\nCT_CareProv.CTPCP_Category\tCATEGORIA_MEDICO,\nCT_CareProv.CTPCP_DOB\tFECHA_NACIMIENTO,\nCT_Spec.CTSPC_Desc\tESPECIALIDAD_MEDICO,\nCT_CareProv.CTPCP_Spec_DR\tESPECIALIDAD,\nCT_CareProv.CTPCP_SubSpec_DR\tSUBESPECIALIDAD,\nCT_CareProv.CTPCP_SpecialistYN\tES_ESPECIALISTA ,\nCT_CareProv.CTPCP_Surgeon\tES_CIRUJANO ,\nCT_CareProv.CTPCP_Anaesthetist\tES_ANESTESISTA ,\nCT_CareProv.CTPCP_Radiologist\tES_RADIOLOGO ,\nCT_CareProv.CTPCP_OTConsultant\tCONSULTOR_OT,\nCT_CareProv.CTPCP_WLOutpatientRights\tDERECHOS_ATENCION_AMBULATORIA,\nCT_CareProv.CTPCP_WLTriageRights\tDERECHOS_TRIAJE,\nCT_CareProv.CTPCP_AdmittingRights\tDERECHOS_ADMISION_HOSPITAL,\nCT_CareProv.CTPCP_Hosp_DR\tHOSPITAL_ASOCIADO,\nCT_CareProv.CTPCP_CTLOC_DR\tUBICACION,\nCT_CareProv.CTPCP_RespUnit_DR\tUNIDAD_RESPONSABLE,\nCT_CareProv.CTPCP_AddrType_DR\tTIPO_DIRECCION,\ncase when CT_CareProv.CTPCP_Blk is not null or CT_CareProv.CTPCP_StName is not null or CT_CareProv.CTPCP_Level is not null or CT_CareProv.CTPCP_Unit is not null then  COALESCE(CT_CareProv.CTPCP_Blk, '')  || ' ' || COALESCE(CT_CareProv.CTPCP_StName, '')  || ' ' || COALESCE(CT_CareProv.CTPCP_Level, '')  || ' ' || COALESCE(CT_CareProv.CTPCP_Unit, '') else null end\tDIRECCION_DETALLADA,\ncase when CT_CareProv.CTPCP_City_DR is not null or CT_CareProv.CTPCP_Zip_DR is not null or CT_CareProv.CTPCP_Province_DR is not null or CT_CareProv.CTPCP_Region_DR is not null then CT_CareProv.CTPCP_City_DR  || ' ' || CT_CareProv.CTPCP_Zip_DR  || ' ' || CT_CareProv.CTPCP_Province_DR  || ' ' || CT_CareProv.CTPCP_Region_DR else null end\tDIRECCION,\nCT_CareProv.CTPCP_TelO || CT_CareProv.CTPCP_TelOExt\tTELEFONO_EXTERNO,\nCT_CareProv.CTPCP_TelH\tTELEFONO_CASA,\nCT_CareProv.CTPCP_MobilePhone\tTELEFONO_MOVIL,\nCT_CareProv.CTPCP_Fax\tFAX,\nCT_CareProv.CTPCP_ConfidentialFax\tFAX_CONFIDENCIAL,\nCT_CareProv.CTPCP_Email\tCORREO_ELECTRONICO,\nCT_CareProv.CTPCP_PrefConMethod\tMETODO_CONTACTO_PREFERIDO,\nCT_CareProv.CTPCP_BestContactTime\tMEJOR_HORARIO_CONTACTO,\nCT_CareProv.CTPCP_SMCNo\tNUMERO_REGISTRO_MEDICO,\ncase when CT_CareProv.CTPCP_PrescriberNumber is not null then CT_CareProv.CTPCP_PrescriberNumber else CT_CareProv.CTPCP_SecondaryPrescriberNumber end\tNUMEROS_PRESCRIPCION,\nCT_CareProv.CTPCP_HICApproved\tAPROBADO_POR_HIC,\nCT_CareProv.CTPCP_RegIssuer\tENTIDAD_EMISORA_REGISTRO,\nCT_CareProv.CTPCP_PBSProviderType\tTIPO_PROVEEDOR_PBS\t\n\nfrom CT_CareProv\n LEFT JOIN CT_Spec ON CT_CareProv.CTPCP_Spec_DR = CT_Spec.CTSPC_RowId\n where\n    (CT_CareProv.CTPCP_createdDate >= '@{variables('fecha_inicio')}' and  CT_CareProv.CTPCP_createdDate <= '@{variables('fecha_termino')}' )\nor  (CT_CareProv.CTPCP_UpdateDate  >= '@{variables('fecha_inicio')}' and CT_CareProv.CTPCP_UpdateDate  <= '@{variables('fecha_termino')}' )\n\n\n\n",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "RUT_PROFESIONAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RUT_PROFESIONAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NOMBRE_COMPLETO_MEDICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NOMBRE_COMPLETO_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_MEDICO_REFERENCIA",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "TIPO_MEDICO_REFERENCIA",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CATEGORIA_MEDICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CATEGORIA_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_NACIMIENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FECHA_NACIMIENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESPECIALIDAD_MEDICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ESPECIALIDAD_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESPECIALIDAD",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "ESPECIALIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBESPECIALIDAD",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "SUBESPECIALIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_ESPECIALISTA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_ESPECIALISTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_CIRUJANO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_CIRUJANO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_ANESTESISTA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_ANESTESISTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_RADIOLOGO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_RADIOLOGO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CONSULTOR_OT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CONSULTOR_OT",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DERECHOS_ATENCION_AMBULATORIA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DERECHOS_ATENCION_AMBULATORIA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DERECHOS_TRIAJE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DERECHOS_TRIAJE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DERECHOS_ADMISION_HOSPITAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DERECHOS_ADMISION_HOSPITAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HOSPITAL_ASOCIADO",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "HOSPITAL_ASOCIADO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "UBICACION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "UBICACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_RESPONSABLE",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "UNIDAD_RESPONSABLE",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_DIRECCION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "TIPO_DIRECCION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "DIRECCION_DETALLADA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIRECCION_DETALLADA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DIRECCION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIRECCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_EXTERNO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TELEFONO_EXTERNO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_CASA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TELEFONO_CASA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_MOVIL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TELEFONO_MOVIL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FAX",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FAX",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FAX_CONFIDENCIAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FAX_CONFIDENCIAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CORREO_ELECTRONICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CORREO_ELECTRONICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "METODO_CONTACTO_PREFERIDO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "METODO_CONTACTO_PREFERIDO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MEJOR_HORARIO_CONTACTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MEJOR_HORARIO_CONTACTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NUMERO_REGISTRO_MEDICO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NUMERO_REGISTRO_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NUMEROS_PRESCRIPCION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NUMEROS_PRESCRIPCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "APROBADO_POR_HIC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "APROBADO_POR_HIC",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ENTIDAD_EMISORA_REGISTRO",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "ENTIDAD_EMISORA_REGISTRO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_PROVEEDOR_PBS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_PROVEEDOR_PBS",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "CT_CareProv",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_PROFESIONAL_MEDICO_TC"
+						}
+					}
+				]
+			},
+			{
+				"name": "TRUNCATE  TMP_DIM_PROFESIONAL_MEDICO_TC",
+				"description": "TRUNCATE TABLE TMP_DIM_PROFESIONAL_MEDICO_TC",
+				"type": "Script",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "Establecer fecha_termino",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Establecer  fecha_inicio",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "devtest_us2_asmi_data_001",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE TABLE TMP_DIM_PROFESIONAL_MEDICO_TC"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Establecer fecha_termino",
+				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fecha_inicio",
+					"value": {
+						"value": "@pipeline().parameters.FECHA_TERMINO",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Establecer  fecha_inicio",
+				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fecha_termino",
+					"value": {
+						"value": "@pipeline().parameters.FECHA_INICIO",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "CARGAR TMP_DIM_PROFESIONAL_MEDICO_TC",
+				"description": "TMP_DIM_PROFESIONAL_MEDICO_TC",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "INSERT TMP_DIM_PROFESIONAL_MEDICO_TC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"additionalColumns": [
+							{
+								"name": "FECHA_ACTUALIZACION",
+								"value": {
+									"value": "@utcNow()",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "ETL_ID",
+								"value": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "ORIGEN",
+								"value": {
+									"value": "\"CT_CareProv\"",
+									"type": "Expression"
+								}
+							}
+						],
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"RUT_PROFESIONAL"
+							]
+						},
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "RUT_PROFESIONAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "RUT_PROFESIONAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NOMBRE_COMPLETO_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "NOMBRE_COMPLETO_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_MEDICO_REFERENCIA",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "TIPO_MEDICO_REFERENCIA",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CATEGORIA_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CATEGORIA_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_NACIMIENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FECHA_NACIMIENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESPECIALIDAD_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ESPECIALIDAD_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESPECIALIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "ESPECIALIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBESPECIALIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "SUBESPECIALIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_ESPECIALISTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_ESPECIALISTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_CIRUJANO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_CIRUJANO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_ANESTESISTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_ANESTESISTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_RADIOLOGO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_RADIOLOGO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CONSULTOR_OT",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CONSULTOR_OT",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DERECHOS_ATENCION_AMBULATORIA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DERECHOS_ATENCION_AMBULATORIA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DERECHOS_TRIAJE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DERECHOS_TRIAJE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DERECHOS_ADMISION_HOSPITAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DERECHOS_ADMISION_HOSPITAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HOSPITAL_ASOCIADO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "HOSPITAL_ASOCIADO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "UBICACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "UBICACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_RESPONSABLE",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "UNIDAD_RESPONSABLE",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_DIRECCION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "TIPO_DIRECCION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "DIRECCION_DETALLADA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DIRECCION_DETALLADA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DIRECCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DIRECCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_EXTERNO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TELEFONO_EXTERNO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_CASA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TELEFONO_CASA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TELEFONO_MOVIL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TELEFONO_MOVIL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FAX",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FAX",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FAX_CONFIDENCIAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FAX_CONFIDENCIAL",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CORREO_ELECTRONICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CORREO_ELECTRONICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "METODO_CONTACTO_PREFERIDO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "METODO_CONTACTO_PREFERIDO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MEJOR_HORARIO_CONTACTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "MEJOR_HORARIO_CONTACTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NUMERO_REGISTRO_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "NUMERO_REGISTRO_MEDICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NUMEROS_PRESCRIPCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "NUMEROS_PRESCRIPCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "APROBADO_POR_HIC",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "APROBADO_POR_HIC",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ENTIDAD_EMISORA_REGISTRO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "ENTIDAD_EMISORA_REGISTRO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_PROVEEDOR_PBS",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_PROVEEDOR_PBS",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_PROFESIONAL_MEDICO_TC"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "DIM_PROF_MEDICO_TC"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"FECHA_INICIO": {
+				"type": "string"
+			},
+			"FECHA_TERMINO": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"fecha_inicio": {
+				"type": "String"
+			},
+			"fecha_termino": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "TrakCare/SubFlujos"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-13T16:47:52Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

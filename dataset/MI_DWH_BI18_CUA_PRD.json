@@ -1,23 +1,22 @@
 {
-	"name": "O_LISTA_TABLAS_MIGRACION",
+	"name": "MI_DWH_BI18_CUA_PRD",
 	"properties": {
-		"description": "Contiene el nombre de las tablas que se migrarán en BI2.0",
 		"linkedServiceName": {
-			"referenceName": "O_DB_BI2",
+			"referenceName": "devtest_us2_asmi_data_001",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"NombreTabla": {
+			"Tabla_Destino": {
 				"type": "string"
 			}
 		},
 		"annotations": [],
-		"type": "SqlServerTable",
+		"type": "AzureSqlMITable",
 		"schema": [],
 		"typeProperties": {
 			"schema": "",
 			"table": {
-				"value": "@dataset().NombreTabla",
+				"value": "@dataset().Tabla_Destino",
 				"type": "Expression"
 			}
 		}

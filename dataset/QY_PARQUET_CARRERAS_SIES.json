@@ -1,0 +1,302 @@
+{
+	"name": "QY_PARQUET_CARRERAS_SIES",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "deveus2andesdatasta001",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "String"
+			},
+			"AzureDataLakeG2Endpoint": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Azure Data Lake G2"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "LK_CARRERAS_SIES.parquet",
+				"folderPath": "Tablas LK",
+				"fileSystem": "staging"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "C1",
+				"type": "UTF8"
+			},
+			{
+				"name": "C2",
+				"type": "UTF8"
+			},
+			{
+				"name": "C3",
+				"type": "UTF8"
+			},
+			{
+				"name": "C4",
+				"type": "UTF8"
+			},
+			{
+				"name": "C5",
+				"type": "UTF8"
+			},
+			{
+				"name": "C6",
+				"type": "UTF8"
+			},
+			{
+				"name": "C7",
+				"type": "UTF8"
+			},
+			{
+				"name": "C8",
+				"type": "UTF8"
+			},
+			{
+				"name": "C9",
+				"type": "UTF8"
+			},
+			{
+				"name": "C10",
+				"type": "UTF8"
+			},
+			{
+				"name": "C11",
+				"type": "UTF8"
+			},
+			{
+				"name": "C12",
+				"type": "UTF8"
+			},
+			{
+				"name": "C13",
+				"type": "UTF8"
+			},
+			{
+				"name": "C14",
+				"type": "UTF8"
+			},
+			{
+				"name": "C15",
+				"type": "UTF8"
+			},
+			{
+				"name": "C16",
+				"type": "UTF8"
+			},
+			{
+				"name": "C17",
+				"type": "UTF8"
+			},
+			{
+				"name": "C18",
+				"type": "UTF8"
+			},
+			{
+				"name": "C19",
+				"type": "UTF8"
+			},
+			{
+				"name": "C20",
+				"type": "UTF8"
+			},
+			{
+				"name": "C21",
+				"type": "UTF8"
+			},
+			{
+				"name": "C22",
+				"type": "UTF8"
+			},
+			{
+				"name": "C23",
+				"type": "UTF8"
+			},
+			{
+				"name": "C24",
+				"type": "UTF8"
+			},
+			{
+				"name": "C25",
+				"type": "UTF8"
+			},
+			{
+				"name": "C26",
+				"type": "UTF8"
+			},
+			{
+				"name": "C27",
+				"type": "UTF8"
+			},
+			{
+				"name": "C28",
+				"type": "UTF8"
+			},
+			{
+				"name": "C29",
+				"type": "UTF8"
+			},
+			{
+				"name": "C30",
+				"type": "UTF8"
+			},
+			{
+				"name": "C31",
+				"type": "UTF8"
+			},
+			{
+				"name": "C32",
+				"type": "UTF8"
+			},
+			{
+				"name": "C33",
+				"type": "UTF8"
+			},
+			{
+				"name": "C34",
+				"type": "UTF8"
+			},
+			{
+				"name": "C35",
+				"type": "UTF8"
+			},
+			{
+				"name": "C36",
+				"type": "UTF8"
+			},
+			{
+				"name": "C37",
+				"type": "UTF8"
+			},
+			{
+				"name": "C38",
+				"type": "UTF8"
+			},
+			{
+				"name": "C39",
+				"type": "UTF8"
+			},
+			{
+				"name": "C40",
+				"type": "UTF8"
+			},
+			{
+				"name": "C41",
+				"type": "UTF8"
+			},
+			{
+				"name": "C42",
+				"type": "UTF8"
+			},
+			{
+				"name": "C43",
+				"type": "UTF8"
+			},
+			{
+				"name": "C44",
+				"type": "UTF8"
+			},
+			{
+				"name": "C45",
+				"type": "UTF8"
+			},
+			{
+				"name": "C46",
+				"type": "UTF8"
+			},
+			{
+				"name": "C47",
+				"type": "UTF8"
+			},
+			{
+				"name": "C48",
+				"type": "UTF8"
+			},
+			{
+				"name": "C49",
+				"type": "UTF8"
+			},
+			{
+				"name": "C50",
+				"type": "UTF8"
+			},
+			{
+				"name": "C51",
+				"type": "UTF8"
+			},
+			{
+				"name": "C52",
+				"type": "UTF8"
+			},
+			{
+				"name": "C53",
+				"type": "UTF8"
+			},
+			{
+				"name": "C54",
+				"type": "UTF8"
+			},
+			{
+				"name": "C55",
+				"type": "UTF8"
+			},
+			{
+				"name": "C56",
+				"type": "UTF8"
+			},
+			{
+				"name": "C57",
+				"type": "UTF8"
+			},
+			{
+				"name": "C58",
+				"type": "UTF8"
+			},
+			{
+				"name": "C59",
+				"type": "UTF8"
+			},
+			{
+				"name": "C60",
+				"type": "UTF8"
+			},
+			{
+				"name": "C61",
+				"type": "UTF8"
+			},
+			{
+				"name": "C62",
+				"type": "UTF8"
+			},
+			{
+				"name": "C63",
+				"type": "UTF8"
+			},
+			{
+				"name": "C64",
+				"type": "UTF8"
+			},
+			{
+				"name": "C65",
+				"type": "UTF8"
+			},
+			{
+				"name": "C66",
+				"type": "UTF8"
+			},
+			{
+				"name": "C67",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

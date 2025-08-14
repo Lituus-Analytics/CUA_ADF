@@ -1,0 +1,58 @@
+{
+	"name": "LK_AUDITORIA_DELTA_TRIGGER",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_us2_asmi_data_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [
+			{
+				"name": "PIPELINE",
+				"type": "varchar"
+			},
+			{
+				"name": "CONCEPTO_ASOCIADO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_LOGICA",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CARGA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_EJECUCION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FECHA_DESDE_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_HASTA_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "REGISTROS_CARGADO_STG",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ES_ULTIMA_EJECUCION",
+				"type": "tinyint",
+				"precision": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "LK_AUDITORIA_DELTA_TRIGGER"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,38 @@
+{
+	"name": "Conector_TMP_claves",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_us2_asmi_data_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [
+			{
+				"name": "CLIENT",
+				"type": "varchar"
+			},
+			{
+				"name": "ADDRNUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "PERSNUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "DATE_FROM",
+				"type": "varchar"
+			},
+			{
+				"name": "CONSNUMBER",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "tmp_stg_claves_delete"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

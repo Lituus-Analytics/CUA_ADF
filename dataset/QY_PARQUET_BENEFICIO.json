@@ -1,0 +1,23 @@
+{
+	"name": "QY_PARQUET_BENEFICIO",
+	"properties": {
+		"description": "Query a la base de datos on premise Informix (UCSH) para obtener los datos asociados a beneficios. ",
+		"linkedServiceName": {
+			"referenceName": "Informix1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Informix"
+		},
+		"annotations": [
+			"Informix",
+			"Origen"
+		],
+		"type": "InformixTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "adticb"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

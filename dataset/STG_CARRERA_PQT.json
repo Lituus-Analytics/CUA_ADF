@@ -1,0 +1,221 @@
+{
+	"name": "STG_CARRERA_PQT",
+	"properties": {
+		"description": "Volcado de datos de Carreras desde Informix a un archivo parquet en Azure Data Lake 2 Gen",
+		"linkedServiceName": {
+			"referenceName": "deveus2andesdatasta001",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureDataLakeG2Endpoint": {
+				"type": "String",
+				"defaultValue": "https://ucshdatalake.dfs.core.windows.net/"
+			},
+			"AzureKeyVaultEndpoint": {
+				"type": "String",
+				"defaultValue": "https://ucsh-kv-datagovernance.vault.azure.net/"
+			}
+		},
+		"folder": {
+			"name": "Azure Data Lake G2"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "STG_CARRERA.parquet",
+				"folderPath": "Dimensiones",
+				"fileSystem": "staging"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "codigo_carrera_ucsh",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_carrera_demre",
+				"type": "INT32"
+			},
+			{
+				"name": "correlativo_demre",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_mencion_demre_ucsh",
+				"type": "UTF8"
+			},
+			{
+				"name": "mencion_demre_ucsh",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_carrera_sies",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_carrera_pes_sies",
+				"type": "INT32"
+			},
+			{
+				"name": "codigo_carrera_cned",
+				"type": "INT32"
+			},
+			{
+				"name": "codigo_carrera_cmed",
+				"type": "INT32"
+			},
+			{
+				"name": "carrera_nombre_corto",
+				"type": "UTF8"
+			},
+			{
+				"name": "carrera_nombre_largo",
+				"type": "UTF8"
+			},
+			{
+				"name": "carrera_nombre_largo_demre",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_institucion",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_sede",
+				"type": "UTF8"
+			},
+			{
+				"name": "sigla_institucion",
+				"type": "UTF8"
+			},
+			{
+				"name": "institucion",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_facultad",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_facultad_dgp",
+				"type": "UTF8"
+			},
+			{
+				"name": "facultad_nombre_largo",
+				"type": "UTF8"
+			},
+			{
+				"name": "facultad_nombre_corto",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_escuela",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_escuela_dgp",
+				"type": "UTF8"
+			},
+			{
+				"name": "escuela_nombre_largo",
+				"type": "UTF8"
+			},
+			{
+				"name": "escuela_nombre_corto",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_disponible_para_admision",
+				"type": "UTF8"
+			},
+			{
+				"name": "disponible_para_admision",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_disponible_para_admision_demre",
+				"type": "UTF8"
+			},
+			{
+				"name": "disponible_para_admision_demre",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_elegible_beca_vocacion_profesor",
+				"type": "UTF8"
+			},
+			{
+				"name": "elegible_beca_vocacion_profesor",
+				"type": "UTF8"
+			},
+			{
+				"name": "duracion_semestres",
+				"type": "INT32"
+			},
+			{
+				"name": "codigo_tipo_duracion",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_jornada",
+				"type": "UTF8"
+			},
+			{
+				"name": "tipo_jornada",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_tipo_educacion",
+				"type": "UTF8"
+			},
+			{
+				"name": "tipo_educacion",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_es_tecnico_profesional",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_tipo_programa",
+				"type": "UTF8"
+			},
+			{
+				"name": "tipo_programa",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_grado",
+				"type": "UTF8"
+			},
+			{
+				"name": "grado",
+				"type": "UTF8"
+			},
+			{
+				"name": "nivel_formacion_ucsh",
+				"type": "UTF8"
+			},
+			{
+				"name": "codigo_bonificacion",
+				"type": "UTF8"
+			},
+			{
+				"name": "bonificacion",
+				"type": "UTF8"
+			},
+			{
+				"name": "porcentaje_bonificacion",
+				"type": "UTF8"
+			},
+			{
+				"name": "origen",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,1058 @@
+{
+	"name": "BI30_DIM_EPISODIO_TC",
+	"properties": {
+		"activities": [
+			{
+				"name": "INSERT TMP_DIM_EPISODIO_TC",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "TRUNCATE  TMP_DIM_EPISODIO_TC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"query": {
+							"value": "select \nPA_Adm.PAADM_ADMNo\tCODIGO_EPISODIO,\n'HCU'\t\tCENTRO_HOSPITALARIO,\nPA_Adm.PAADM_Type\tDENOMINACION_CLASE_EPISODIO,\nnull\t\tTIPO_HOSPITALIZACION,\nPA_Adm.PAADM_AdmDate\tFECHA_INICIO,\nPA_Adm.PAADM_AdmTime\tHORA_INGRESO,\nnull\t\tCONVENIO,\nnull\t\tEVENTO,\nARC_ItemCat.ARCIC_Desc\tCATEGORIA_TRATAMIENTO,\nPAC_Room.ROOM_Desc\tHABITACION,\nPAC_AdmReason.REA_Desc\tMOTIVO_DEL_INGRESO,\nnull\t\tID_ASEGURADORA, \nnull\t\tTIPO_CONTRATO_EPISODIO,\nnull\t\tTIPO_AFILIADO_PACIENTE,\nPA_Adm.PAADM_CreateUser\tEPISODIO_CREADO_POR,\nPA_Adm.PAADM_CreateDate\tEPISODIO_CREADO_EL,\nnull\t\tSTATUS_FACTURACION,\ncase when PA_Adm.PAADM_VisitStatus ='C' then 'X' else '' END\tESTADO_ANULACION,\nPAC_AdmCancelReason.ADMCR_DateFrom\tFECHA_ANULACION,\nPAC_AdmCancelReason.ADMCR_CreatedUser_DR\tANULADO_POR,\nCASE PA_Adm.PAADM_Type\n    WHEN 'O' THEN 'Ambulatorio'\n    WHEN 'E' THEN 'Urgencia'\n    WHEN 'I' THEN 'Hopitalizado'\nEND TIPO_ADMISION,\nnull\t\tCLASE_HOSPITALIZACION,\nnull\t\tCENTRO_QUE_HOSPITALIZA,\nPAC_AdmReason.REA_Code\tMOTIVO_ADMISION,\nCASE WHEN PAADM_Urgent IS NOT NULL THEN 'X' ELSE '' END LEY_URGENCIA,\nnull \t\tCLASE_FACTURACION,\nCASE PA_Adm.PAADM_Type\n    WHEN 'O' THEN 2\n    WHEN 'E' THEN 3\n    WHEN 'I' THEN 1\nEND CLASE_EPISODIO,\nCASE PA_Adm.PAADM_Type\n    WHEN 'O' THEN 'Ambulatorio'\n    WHEN 'E' THEN 'Urgencia'\n    WHEN 'I' THEN 'Hopitalizado'\nEND TIPO_EPISODIO,\nnull\t\tFECHA_HOSPITALIZACION,\nnull\t\tHORA_HOSPITALIZACION,\ncast((CONVERT(int,CONVERT(char(8),GETDATE(),112))-CONVERT(char(8), PA_PatMas.PAPMI_DOB,112))/10000  as int)\t\tEDAD_ATENCION,\n(cast((CONVERT(int,CONVERT(char(8),GETDATE(),112))-CONVERT(char(8),PA_PatMas.PAPMI_DOB,112))/10000  as int)) || ' Años'\t\tDETALLE_EDAD_ATENCION,\nnull\t\tTIPO_CONTRATO_EXTERNO\nfrom PA_Adm\ninner join PA_PatMas on PA_Adm.PAADM_PAPMI_DR = PA_PatMas.PAPMI_RowId\nleft join ARC_ItemCat on PA_Adm.PAADM_OESubCat_DR  =  ARC_ItemCat.ARCIC_RowId\nleft join PAC_Room on PA_Adm.PAADM_CurrentRoom_DR = PAC_Room.ROOM_RowID\nleft join PAC_AdmReason on PA_Adm.PAADM_AdmReason_DR = PAC_AdmReason.REA_RowId\nleft join PAC_AdmCancelReason on PA_Adm.PAADM_CancelReason_DR  = PAC_AdmCancelReason.ADMCR_RowId\n\n\nwhere\n(PA_Adm.PAADM_CreateDate >= '@{variables('fecha_inicio')}' and PA_Adm.PAADM_CreateDate <= '@{variables('fecha_termino')}' )\nor  (PA_Adm.PAADM_UpdateDate  >= '@{variables('fecha_inicio')}' and PA_Adm.PAADM_UpdateDate  <= '@{variables('fecha_termino')}' )\n",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"preCopyScript": "TRUNCATE TABLE TMP_DIM_EPISODIO_TC",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CODIGO_EPISODIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_HOSPITALARIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_HOSPITALARIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CLASE_EPISODIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CLASE_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_HOSPITALIZACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_INICIO",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_INICIO",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "HORA_INGRESO",
+									"type": "TimeSpan"
+								},
+								"sink": {
+									"name": "HORA_INGRESO",
+									"type": "TimeSpan",
+									"physicalType": "time"
+								}
+							},
+							{
+								"source": {
+									"name": "CONVENIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CONVENIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EVENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EVENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CATEGORIA_TRATAMIENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CATEGORIA_TRATAMIENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HABITACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MOTIVO_DEL_INGRESO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MOTIVO_DEL_INGRESO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ID_ASEGURADORA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_ASEGURADORA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_CONTRATO_EPISODIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_CONTRATO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_AFILIADO_PACIENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_AFILIADO_PACIENTE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EPISODIO_CREADO_POR",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "EPISODIO_CREADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "EPISODIO_CREADO_EL",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "EPISODIO_CREADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "STATUS_FACTURACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "STATUS_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESTADO_ANULACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ESTADO_ANULACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ANULACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ANULACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "ANULADO_POR",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "ANULADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_ADMISION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_ADMISION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_HOSPITALIZACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_QUE_HOSPITALIZA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CENTRO_QUE_HOSPITALIZA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MOTIVO_ADMISION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MOTIVO_ADMISION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "LEY_URGENCIA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LEY_URGENCIA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_FACTURACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_EPISODIO",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CLASE_EPISODIO",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_EPISODIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_HOSPITALIZACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FECHA_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HORA_HOSPITALIZACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HORA_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EDAD_ATENCION",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "EDAD_ATENCION",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "DETALLE_EDAD_ATENCION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DETALLE_EDAD_ATENCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_CONTRATO_EXTERNO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_CONTRATO_EXTERNO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "PA_Adm",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_EPISODIO_TC"
+						}
+					}
+				]
+			},
+			{
+				"name": "TRUNCATE  TMP_DIM_EPISODIO_TC",
+				"description": "TRUNCATE TABLE TMP_DIM_EPISODIO_TC",
+				"type": "Script",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "Establecer fecha_termino",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Establecer  fecha_inicio",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "devtest_us2_asmi_data_001",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE TABLE TMP_DIM_EPISODIO_TC"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Establecer fecha_termino",
+				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fecha_termino",
+					"value": {
+						"value": "@pipeline().parameters.FECHA_TERMINO",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Establecer  fecha_inicio",
+				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fecha_inicio",
+					"value": {
+						"value": "@pipeline().parameters.FECHA_INICIO",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "CARGAR DIM_EPISODIO_TC",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "INSERT TMP_DIM_EPISODIO_TC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"additionalColumns": [
+							{
+								"name": "FECHA_ACTUALIZACION",
+								"value": {
+									"value": "@{utcNow()}",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "ETL_ID",
+								"value": {
+									"value": "@{pipeline().RunId}",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "ORIGEN",
+								"value": {
+									"value": "\"PA_Adm\"",
+									"type": "Expression"
+								}
+							}
+						],
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"CODIGO_EPISODIO"
+							]
+						},
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CODIGO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CODIGO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_HOSPITALARIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CENTRO_HOSPITALARIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CLASE_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DENOMINACION_CLASE_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_INICIO",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "FECHA_INICIO",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "HORA_INGRESO",
+									"type": "TimeSpan",
+									"physicalType": "time"
+								},
+								"sink": {
+									"name": "HORA_INGRESO",
+									"type": "TimeSpan",
+									"physicalType": "time"
+								}
+							},
+							{
+								"source": {
+									"name": "CONVENIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CONVENIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EVENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "EVENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CATEGORIA_TRATAMIENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CATEGORIA_TRATAMIENTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HABITACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "HABITACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MOTIVO_DEL_INGRESO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "MOTIVO_DEL_INGRESO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ID_ASEGURADORA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ID_ASEGURADORA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_CONTRATO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_CONTRATO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_AFILIADO_PACIENTE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_AFILIADO_PACIENTE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EPISODIO_CREADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "EPISODIO_CREADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "EPISODIO_CREADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "EPISODIO_CREADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "STATUS_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "STATUS_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ESTADO_ANULACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ESTADO_ANULACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ANULACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "FECHA_ANULACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "ANULADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "ANULADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_ADMISION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_ADMISION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CLASE_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CENTRO_QUE_HOSPITALIZA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CENTRO_QUE_HOSPITALIZA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MOTIVO_ADMISION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "MOTIVO_ADMISION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "LEY_URGENCIA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "LEY_URGENCIA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CLASE_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_EPISODIO",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "CLASE_EPISODIO",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_EPISODIO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FECHA_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HORA_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "HORA_HOSPITALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EDAD_ATENCION",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "EDAD_ATENCION",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "DETALLE_EDAD_ATENCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DETALLE_EDAD_ATENCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_CONTRATO_EXTERNO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_CONTRATO_EXTERNO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_EPISODIO_TC"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "DIM_EPISODIO_TC"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"FECHA_INICIO": {
+				"type": "string",
+				"defaultValue": "2025-07-25"
+			},
+			"FECHA_TERMINO": {
+				"type": "string",
+				"defaultValue": "2025-08-01"
+			}
+		},
+		"variables": {
+			"fecha_inicio": {
+				"type": "String"
+			},
+			"fecha_termino": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "TrakCare/SubFlujos"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-13T16:27:28Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

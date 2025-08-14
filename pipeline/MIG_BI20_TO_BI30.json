@@ -23,11 +23,11 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "O_LISTA_TABLAS_MIGRACION",
+						"referenceName": "LISTA_TABLAS_MIGRACION",
 						"type": "DatasetReference",
 						"parameters": {
 							"NombreTabla": {
-								"value": "@string(join(pipeline().parameters.ListaTablas, ','))\n",
+								"value": "@pipeline().parameters.ListaTablas",
 								"type": "Expression"
 							}
 						}
@@ -37,6 +37,8 @@
 			{
 				"name": "Cargar_tablas",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Tablas_migracion",
@@ -57,14 +59,7 @@
 							"name": "Copiar_data_tablas",
 							"description": "Copia los datos de las tablas definido en ListaTablas para la migración de BI2 a BI3",
 							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "Lookup1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -76,25 +71,15 @@
 							"typeProperties": {
 								"source": {
 									"type": "SqlServerSource",
-									"sqlReaderQuery": {
-										"value": "@concat('SELECT * FROM ', item())\n",
-										"type": "Expression"
-									},
+									"sqlReaderQuery": "SELECT TOP 10 * FROM ",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
 								"sink": {
 									"type": "SqlMISink",
-									"writeBehavior": "upsert",
-									"upsertSettings": {
-										"useTempDB": false,
-										"keys": {
-											"value": "@split(activity('Lookup1').output.firstRow.ColumnList, ',')\n",
-											"type": "Expression"
-										},
-										"interimSchemaName": ""
-									},
-									"sqlWriterUseTableLock": false
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"tableOption": "autoCreate"
 								},
 								"enableStaging": false,
 								"translator": {
@@ -108,7 +93,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"referenceName": "LISTA_TABLAS_MIGRACION",
 									"type": "DatasetReference",
 									"parameters": {
 										"NombreTabla": {
@@ -123,48 +108,38 @@
 									"referenceName": "D_MI_MIGRACION_TABLAS",
 									"type": "DatasetReference",
 									"parameters": {
-										"Tabla_Destino": {
-											"value": "@item()",
-											"type": "Expression"
-										}
+										"Tabla_Destino": "@item()"
 									}
 								}
 							]
-						},
-						{
-							"name": "Lookup1",
-							"type": "Lookup",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "SqlMISource",
-									"sqlReaderQuery": {
-										"value": "@concat(\n  'SELECT STRING_AGG(c.name, '','') AS ColumnList FROM sys.indexes i ',\n  'INNER JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id ',\n  'INNER JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id ',\n  'INNER JOIN sys.tables t ON i.object_id = t.object_id ',\n  'INNER JOIN sys.schemas s ON t.schema_id = s.schema_id ',\n  'WHERE t.name = ''', item(), ''' AND s.name = ''dbo'' ',\n  'AND (i.is_primary_key = 1 OR i.is_unique = 1)'\n)\n",
-										"type": "Expression"
-									},
-									"partitionOption": "None"
-								},
-								"dataset": {
-									"referenceName": "D_MI_MIGRACION_TABLAS",
-									"type": "DatasetReference",
-									"parameters": {
-										"Tabla_Destino": {
-											"value": "@item()",
-											"type": "Expression"
-										}
-									}
-								}
-							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "O_DB_BI2",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "INSERT INTO TABLAS_MIGRACION (NombreTabla)\nVALUES\n('CUA_ABASTECIMIENTO'),\n('CUA_AGENDAMIENTO'),\n('CUA_CAT_TRATAMIENTO'),\n('CUA_HIST_CUENTA_PAC'),\n('CUA_LITUUS_PAB_AGENDAMIENTO'),\n('CUA_LITUUS_PAB_DATOS_EXTRA_CX'),\n('CUA_LITUUS_PAB_DETALLE_DOCUMENTO'),\n('CUA_LITUUS_PAB_DETALLE_PRESTACIONES_CIRUGIA'),\n('CUA_LITUUS_PAB_EQUIPO_MEDICO'),\n('CUA_LITUUS_PAB_ID_ORDEN_MEDICA'),\n('CUA_LITUUS_PAB_IDENTIFICAR_PROTOCOLO_OPERATORIO'),\n('CUA_LITUUS_PAB_PRESTACIONES_AGENDADAS'),\n('CUA_LITUUS_PAB_PROTOCOLO_OPERATORIO'),\n('CUA_LITUUS_PAB_TIEMPOS_QUIRURGICOS'),\n('CUA_LITUUS_TPO_PTA_DOCTOR'),\n('CUA_LITUUS_TPO_PTA_DOCTOR_2'),\n('CUA_REPORTE_CLINICAS_CHILE'),\n('CUA_REPORTE_PRESTACIONES_PLANIFICADAS'),\n('DIM_DIAGNOSTICO'),\n('DIM_DOC_FICHA_MATERNA'),\n('DIM_EMPRESA'),\n('DIM_EPISODIO'),\n('DIM_FACTURA'),\n('DIM_FECHA'),\n('DIM_ORDEN_CLINICA'),\n('DIM_PACIENTE'),\n('DIM_PACIENTE_RFM'),\n('DIM_PRESTACION'),\n('DIM_PROF_MEDICO'),\n('DIM_UBI_GEOGRAFICA'),\n('DIM_UNIDAD'),\n('EPISODIO_HU'),\n('FACT_ACTIVIDAD'),\n('FACT_ALTAS'),\n('ML_AUDITORIA_SEGMENTACION'),\n('PANEL_ENSAYOS_CLINICOS'),\n('PARETO_TIPO_CONTRATO'),\n('PMD_ALTA_URGENCIA'),\n('REL_EPISODIO_DOCUMENTO'),\n('REL_ORDEN_CLINICA_PRESTACION'),\n('REL_PRESTACION_PRECIO'),\n('REL_PROF_MEDICO_ESPECIALIDAD');\n"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			}
 		],
@@ -174,7 +149,97 @@
 				"defaultValue": [
 					"ADR2",
 					"ADR6",
-					"ADRC"
+					"ADRC",
+					"BUT000",
+					"BUT000_STG",
+					"BUT020",
+					"BUT100",
+					"C502",
+					"CSKB",
+					"CSKS",
+					"CSKT",
+					"CSKU",
+					"CUA_LITUUS_PAB_AGENDAMIENTO",
+					"CUA_LITUUS_PAB_DATOS_EXTRA_CX",
+					"CUA_LITUUS_PAB_DETALLE_DOCUMENTO",
+					"CUA_LITUUS_PAB_DETALLE_PRESTACIONES_CIRUGIA",
+					"CUA_LITUUS_PAB_EQUIPO_MEDICO",
+					"CUA_LITUUS_PAB_ID_ORDEN_MEDICA",
+					"CUA_LITUUS_PAB_IDENTIFICAR_PROTOCOLO_OPERATORIO",
+					"CUA_LITUUS_PAB_PRESTACIONES_AGENDADAS",
+					"CUA_LITUUS_PAB_PROTOCOLO_OPERATORIO",
+					"CUA_LITUUS_PAB_TIEMPOS_QUIRURGICOS",
+					"CUA_LITUUS_TPO_PTA_DOCTOR",
+					"DIM_DIAGNOSTICO",
+					"DIM_DOC_FICHA_MATERNA",
+					"DIM_EMPRESA",
+					"DIM_EPISODIO",
+					"DIM_FACTURA",
+					"DIM_FECHA",
+					"DIM_ORDEN_CLINICA",
+					"DIM_PACIENTE",
+					"DIM_PACIENTE_RFM",
+					"DIM_PRESTACION",
+					"DIM_PROF_MEDICO",
+					"DIM_UBI_GEOGRAFICA",
+					"DIM_UNIDAD",
+					"FACT_ACTIVIDAD",
+					"HISTORIA_DOTACION_CAMAS",
+					"HRP1001",
+					"HRP6080",
+					"MARM",
+					"ML_AUDITORIA_SEGMENTACION",
+					"N1CORDER",
+					"N1LSTEAM",
+					"NBEW_STG",
+					"NBUP",
+					"NCIR",
+					"NDIA",
+					"NDOC",
+					"NEORIS_C0000000",
+					"NEORIS_C0000009",
+					"NEORIS_H0000000",
+					"NEORIS_H0000002",
+					"NFAL",
+					"NFPZ_STG",
+					"NINS",
+					"NKDI",
+					"NLLZ",
+					"NMATV",
+					"NOEK",
+					"NPEF",
+					"NPNT",
+					"NPNT_STG",
+					"NPRS",
+					"NTPK",
+					"NTPK_STG",
+					"NTPT",
+					"NTPZ",
+					"NTSP",
+					"REL_EPISODIO_DOCUMENTO",
+					"REL_ORDEN_CLINICA_PRESTACION",
+					"REL_PRESTACION_PRECIO",
+					"REL_PROF_MEDICO_ESPECIALIDAD",
+					"REPORTE_ACTIVIDAD_MENSUAL",
+					"SKAT",
+					"TB_IM_EPISODIO_IMAGEN",
+					"TMP_H0000000",
+					"TMP_NBEW",
+					"TMP_NBEW_ALT",
+					"TMP_NDOC",
+					"TMP_NLEI_PASO_1",
+					"TMP_PA0001",
+					"TMP_TBL_900",
+					"TMP_VBRK_VBRP",
+					"VBRK",
+					"VBRK_STG",
+					"ZISH_TPRES3_S2_D",
+					"ZMED_HALTA_00000",
+					"ZMED_HALTA_00000_STG",
+					"ZMED_HALTA_00001",
+					"ZMED_PROPER_0000",
+					"ZVBRP",
+					"ZVBRP_STG"
 				]
 			}
 		},
@@ -182,7 +247,7 @@
 			"name": "MIG_BI20_TO_BI30"
 		},
 		"annotations": [],
-		"lastPublishTime": "2025-07-31T22:19:02Z"
+		"lastPublishTime": "2025-08-13T19:24:36Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

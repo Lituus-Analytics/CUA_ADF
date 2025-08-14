@@ -1,0 +1,98 @@
+{
+	"name": "MIG_BI20_TO_BI30_O",
+	"properties": {
+		"activities": [
+			{
+				"name": "Carga Fechas",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "MIG_BI20_TO_BI30_FECHA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Carga FULL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga Fechas",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "MIG_BI20_TO_BI30_FULL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Carga No Fecha",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga FULL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "MIG_BI20_TO_BI30_SIN_FECHA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Fact_Actividad",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga No Fecha",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "MIG_BI20_TO_BI30_FECHA_FACT_ACTIVIDAD",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "MIG_BI20_TO_BI30"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-13T18:51:28Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

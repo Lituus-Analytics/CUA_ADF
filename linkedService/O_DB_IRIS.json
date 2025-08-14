@@ -2,7 +2,9 @@
 	"name": "O_DB_IRIS",
 	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
-		"annotations": [],
+		"annotations": [
+			"TRAKCARE"
+		],
 		"type": "Odbc",
 		"typeProperties": {
 			"connectionString": {
@@ -19,6 +21,6 @@
 			"referenceName": "IR-CUAZGATEVM1",
 			"type": "IntegrationRuntimeReference"
 		},
-		"description": "Servicio vinculado a la BD DWH_BI18_CUA_PRD (BI 2.0)"
+		"description": "Conexión con base de datos Iris TrakCare"
 	}
 }

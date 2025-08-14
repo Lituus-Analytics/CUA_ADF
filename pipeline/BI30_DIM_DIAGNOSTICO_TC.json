@@ -1,0 +1,245 @@
+{
+	"name": "BI30_DIM_DIAGNOSTICO_TC",
+	"properties": {
+		"activities": [
+			{
+				"name": "INSERT TMP",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"query": "SELECT DISTINCT\n    dg.MRCID_Code AS CODIGO_DIAGNOSTICO,\n    dg.MRCID_Desc AS GLOSA_DIAGNOSTICO,\n    dg.MRCID_LongDescription  AS Descripcion_Larga,\n    dt.DTYP_Code AS CODIGO_TIPO_DIAGNOSTICO,\n    dt.DTYP_Desc AS TIPO_DIAGNOSTICO,\n    dg.MRCID_AlternateDesc AS CATALOGO_DIAGNOSTICO,\n    md.MRDIA_DocCode_DR as Medico,\n    md.MRDIA_UpdateDate as FECHA_ACUTALIZACION,\n    md.MRDIA_UpdateTime  as HORA_ACUTALIZACION,\n    md.MRDIA_UpdateUser_DR as ACTUALIZADO_PRO,\n    md.MRDIA_DATE AS FECHA_CREACION,\n    md.MRDIA_UserCreated_DR as CREADO_POR\nFROM\n    MR_Diagnos md\nINNER JOIN\n    MRC_ICDDx dg ON md.MRDIA_ICDCode_DR = dg.MRCID_Rowid\nLEFT JOIN\n    MRC_DiagnosType dt ON md.MRDIA_DiagnosisType_DR = dt.DTYP_Rowid;",
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "PA_PATMAS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_DIAGNOSTICO_TC"
+						}
+					}
+				]
+			},
+			{
+				"name": "INSERT Final",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "INSERT TMP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"additionalColumns": [
+							{
+								"name": "FECHA_ACTUALIZACION",
+								"value": {
+									"value": "@utcNow()",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "ETL_ID",
+								"value": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "ORIGEN",
+								"value": {
+									"value": "\"MR_Diagnos\"",
+									"type": "Expression"
+								}
+							}
+						],
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": false,
+							"keys": [
+								"CODIGO_DIAGNOSTICO"
+							]
+						},
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CODIGO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CODIGO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GLOSA_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "GLOSA_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_TIPO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CODIGO_TIPO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Medico",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CODIGO_MEDICO_DIAGNOSTICO",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FECHA_ACTUALIZACION",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							},
+							{
+								"source": {
+									"name": "ORIGEN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORIGEN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ETL_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ETL_ID",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_DIAGNOSTICO_TC"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "DIM_DIAGNOSTICO_TC"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "TrakCare/SubFlujos"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-13T19:17:45Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

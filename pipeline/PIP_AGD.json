@@ -311,7 +311,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "OdbcTable1",
+						"referenceName": "PA_PATMAS",
 						"type": "DatasetReference"
 					}
 				],
@@ -354,7 +354,7 @@
 			"name": "Agendamiento"
 		},
 		"annotations": [],
-		"lastPublishTime": "2025-07-30T22:25:52Z"
+		"lastPublishTime": "2025-08-11T22:07:41Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

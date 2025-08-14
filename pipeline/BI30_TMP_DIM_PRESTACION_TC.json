@@ -1,0 +1,1661 @@
+{
+	"name": "BI30_TMP_DIM_PRESTACION_TC",
+	"properties": {
+		"activities": [
+			{
+				"name": "TRUNCATE TMP_DIM_PRESTACION_TC",
+				"description": "TRUNCATE TABLE TMP_DIM_PRESTACION_TC",
+				"type": "Script",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "Establecer fecha_termino",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Establecer  fecha_inicio",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "devtest_us2_asmi_data_001",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE TABLE TMP_DIM_PRESTACION_TC"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Establecer fecha_termino",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FECHA_TERMINO",
+					"value": {
+						"value": "@pipeline().parameters.FECHA_TERMINO",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Establecer  fecha_inicio",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FECHA_INICIO",
+					"value": {
+						"value": "@pipeline().parameters.FECHA_INICIO",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "TMP_DIM_PRESTACION_TC",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "TRUNCATE TMP_DIM_PRESTACION_TC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"query": {
+							"value": "Select \na.ARCIM_Code\tCODIGO_PRESTACION\t,\na.ARCIM_Desc\tNOMBRE_PRESTACION\t,\na.ARCIM_ShortDesc\tDESCRIPCION_CORTA\t,\na.ARCIM_EffDate\tFECHA_INI_VIG_PRESTACION\t,\na.ARCIM_EffDateTo\tFECHA_FIN_VIG_PRESTACION\t,\na.ARCIM_Type_Calc\tTIPO_PRESTACION\t,\na.ARCIM_ItemCat_DR\tcodigo_CATEGORIA_PRESTACION\t,\na.ARCIM_ServiceGroup_DR\tCodigo_GRUPO_PRESTACION\t,\na.ARCIM_ServCat_DR\tCODIGO_SUBGRUPO1_PRESTACION\t,\na.ARCIM_InsSubCat_DR\tCODIGO_SUBGRUPO2_PRESTACION\t,\na.ARCIM_ServiceCharge_DR\tCODIGO_CLASIFICACION_SERVICIO\t,\na.ARCIM_UOM_DR\tCODIGO_UNIDAD_MEDIDA\t,\na.ARCIM_BillingUOM_DR\tCODIGO_UNIDAD_FACTURACION\t,\na.ARCIM_ChgPostFlg\tES_FACTURABLE\t,\na.ARCIM_OrderOnItsOwn\tES_SOLICITABLE\t,\na.ARCIM_VisibleInOrderList\tES_VISIBLE_EN_ORDENES\t,\na.ARCIM_SubMasFlg\tES_ADMINISTRATIVA\t,\na.ARCIM_ProfileFlg\tES_GESTIONABLE\t,\na.ARCIM_PHCDF_DR\tES_MEDICA\t,\na.ARCIM_BillOnAdmnstrInpat\tFACTURACION_HOSP\t,\na.ARCIM_BillOnAdmnstrOutpat\tFACTURACION_AMB\t,\na.ARCIM_CurVers_DR\tCLAVE_COMPRESION\t,\na.ARCIM_Sensitive\tES_SENSIBLE\t,\na.ARCIM_StdAmt\tPRECIO_ESTANDAR\t,\na.ARCIM_ChgMinAmt\tPRECIO_MINIMO\t,\na.ARCIM_ChgMaxAmt\tPRECIO_MAXIMO\t,\na.ARCIM_ChgCost\tCOSTO_ESTANDAR\t,\na.ARCIM_ChargePartial\tPRECIO_DIVERGENTE\t,\na.ARCIM_Minutes\tTIEMPO_ESTIMADO_MIN\t,\na.ARCIM_Type1\tTIPO_POSICION\t,\na.ARCIM_Type2\tTIPO_CLASE_COSTO\t,\na.ARCIM_DMDLevel\tCLASE_COSTO\t,\na.ARCIM_GLPostToOrderDept\tCUENTA_PROVISIONES\t,\na.ARCIM_InsCoDesc\tDENOMINACION_CUENTA_PROVISIONES\t,\na.ARCIM_DoseType\tUNIDAD_DE_MEDIDA\t,\na.ARCIM_Formulary\tCATALOGO_PRESTACION\t,\na.ARCIM_Row_Calc\tCLASE_REMUNERACION\t,\na.ARCIM_CreatedUser_DR\tCREADO_POR\t,\na.ARCIM_CreatedDate\tCREADO_EL\t,\na.ARCIM_UpdatedUser_DR\tMODIFICADO_POR\t,\na.ARCIM_UpdatedDate\tMODIFICADO_EL\t,\na.ARCIM_CurVerFlg\tFLAG_BORRADO_PRESTACION\t,\no.OEORI_PrescType\tTIPO_PRESCRIPCION\t,\no.OEORI_ItemStat_DR\tCODIGO_ESTADO_ITEM\t,\no.OEORI_Doctor_DR\tCODIGO_DOCTOR\t,\no.OEORI_Priority_DR\tCODIGO_PRIORIDAD\t,\no.OEORI_PhQtyOrd\tCANTIDAD_ORDENADA\t,\no.OEORI_BillDesc\tDESCRIPCION_FACTURACION\t,\no.OEORI_UnitCost\tCOSTO_UNITARIO\t,\no.OEORI_Qty\tCANTIDAD\t,\no.OEORI_Billed\tFACTURADO_FLAG\t,\no.OEORI_Price\tPRECIO\t,\no.OEORI_Date\tFECHA_ORDEN\t,\no.OEORI_RefundQty\tCANTIDAD_REEMBOLSADA\t,\no.OEORI_RefundType\tTIPO_REEMBOLSO\t,\no.OEORI_ConsultDep_DR\tDEPARTAMENTO_CONSULTA_SK\t,\no.OEORI_UserAdd\tCodigo_USUARIO_CREACION\t,\no.OEORI_UserUpdate\tCODIGO_USUARIO_MODIFICACION\t,\no.OEORI_CollectedBy\tCOLECTADO_POR\t,\no.OEORI_DateExecuted\tFECHA_EJECUCION\t,\no.OEORI_TimeExecuted\tHORA_EJECUCION\t,\no.OEORI_UserExecuted\tUSUARIO_EJECUCION\t\nfrom ARC_ItmMast a\nleft join OE_OrdItem o on A.ARCIM_RowId = O.OEORI_ItmMast_DR\nwhere\n(a.ARCIM_CreatedDate >= '@{variables('fecha_inicio')}' and  a.ARCIM_CreatedDate <= '@{variables('fecha_termino')}' )\nor  (a.ARCIM_UpdatedDate  >= '@{variables('fecha_inicio')}' and a.ARCIM_UpdatedDate  <= '@{variables('fecha_termino')}' )",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"preCopyScript": "TRUNCATE TABLE TMP_DIM_PRESTACION_TC",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CODIGO_PRESTACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NOMBRE_PRESTACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NOMBRE_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRIPCION_CORTA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRIPCION_CORTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_INI_VIG_PRESTACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_INI_VIG_PRESTACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_FIN_VIG_PRESTACION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_FIN_VIG_PRESTACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_PRESTACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_CATEGORIA_PRESTACION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "codigo_CATEGORIA_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "Codigo_GRUPO_PRESTACION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "Codigo_GRUPO_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_SUBGRUPO1_PRESTACION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "CODIGO_SUBGRUPO1_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_SUBGRUPO2_PRESTACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_SUBGRUPO2_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CLASIFICACION_SERVICIO",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "CODIGO_CLASIFICACION_SERVICIO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDIDA",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDIDA",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_FACTURACION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_FACTURACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_FACTURABLE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_FACTURABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_SOLICITABLE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_SOLICITABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_VISIBLE_EN_ORDENES",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_VISIBLE_EN_ORDENES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_ADMINISTRATIVA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_ADMINISTRATIVA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_GESTIONABLE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_GESTIONABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_MEDICA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_MEDICA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FACTURACION_HOSP",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FACTURACION_HOSP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FACTURACION_AMB",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FACTURACION_AMB",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLAVE_COMPRESION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLAVE_COMPRESION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_SENSIBLE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ES_SENSIBLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO_ESTANDAR",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "PRECIO_ESTANDAR",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO_MINIMO",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "PRECIO_MINIMO",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO_MAXIMO",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "PRECIO_MAXIMO",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "COSTO_ESTANDAR",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "COSTO_ESTANDAR",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO_DIVERGENTE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PRECIO_DIVERGENTE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIEMPO_ESTIMADO_MIN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIEMPO_ESTIMADO_MIN",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_POSICION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_POSICION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_CLASE_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_CLASE_COSTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_COSTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_COSTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CUENTA_PROVISIONES",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CUENTA_PROVISIONES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CUENTA_PROVISIONES",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DENOMINACION_CUENTA_PROVISIONES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_DE_MEDIDA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDAD_DE_MEDIDA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CATALOGO_PRESTACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CATALOGO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_REMUNERACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASE_REMUNERACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CREADO_POR",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "CREADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CREADO_EL",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "CREADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "MODIFICADO_POR",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "MODIFICADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "MODIFICADO_EL",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "MODIFICADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "FLAG_BORRADO_PRESTACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FLAG_BORRADO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_PRESCRIPCION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_PRESCRIPCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_ESTADO_ITEM",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "CODIGO_ESTADO_ITEM",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_DOCTOR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODIGO_DOCTOR",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_PRIORIDAD",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "CODIGO_PRIORIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CANTIDAD_ORDENADA",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "CANTIDAD_ORDENADA",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRIPCION_FACTURACION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRIPCION_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "COSTO_UNITARIO",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "COSTO_UNITARIO",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "CANTIDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CANTIDAD",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FACTURADO_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FACTURADO_FLAG",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "PRECIO",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ORDEN",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_ORDEN",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "CANTIDAD_REEMBOLSADA",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "CANTIDAD_REEMBOLSADA",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_REEMBOLSO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_REEMBOLSO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DEPARTAMENTO_CONSULTA_SK",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "DEPARTAMENTO_CONSULTA_SK",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "Codigo_USUARIO_CREACION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "Codigo_USUARIO_CREACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_USUARIO_MODIFICACION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "CODIGO_USUARIO_MODIFICACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "COLECTADO_POR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COLECTADO_POR",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_EJECUCION",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "FECHA_EJECUCION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "HORA_EJECUCION",
+									"type": "TimeSpan"
+								},
+								"sink": {
+									"name": "HORA_EJECUCION",
+									"type": "TimeSpan",
+									"physicalType": "time"
+								}
+							},
+							{
+								"source": {
+									"name": "USUARIO_EJECUCION",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "USUARIO_EJECUCION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ARC_ItmMast",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_PRESTACION_TC"
+						}
+					}
+				]
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "TMP_DIM_PRESTACION_TC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"CODIGO_PRESTACION"
+							]
+						},
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CODIGO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CODIGO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NOMBRE_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "NOMBRE_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRIPCION_CORTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DESCRIPCION_CORTA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_INI_VIG_PRESTACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "FECHA_INI_VIG_PRESTACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_FIN_VIG_PRESTACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "FECHA_FIN_VIG_PRESTACION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_CATEGORIA_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "codigo_CATEGORIA_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "Codigo_GRUPO_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "Codigo_GRUPO_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_SUBGRUPO1_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "CODIGO_SUBGRUPO1_PRESTACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_SUBGRUPO2_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CODIGO_SUBGRUPO2_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_CLASIFICACION_SERVICIO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "CODIGO_CLASIFICACION_SERVICIO",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_MEDIDA",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_MEDIDA",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_UNIDAD_FACTURACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "CODIGO_UNIDAD_FACTURACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_FACTURABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_FACTURABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_SOLICITABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_SOLICITABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_VISIBLE_EN_ORDENES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_VISIBLE_EN_ORDENES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_ADMINISTRATIVA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_ADMINISTRATIVA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_GESTIONABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_GESTIONABLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_MEDICA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_MEDICA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FACTURACION_HOSP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FACTURACION_HOSP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FACTURACION_AMB",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FACTURACION_AMB",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLAVE_COMPRESION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CLAVE_COMPRESION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ES_SENSIBLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "ES_SENSIBLE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO_ESTANDAR",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "PRECIO_ESTANDAR",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO_MINIMO",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "PRECIO_MINIMO",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO_MAXIMO",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "PRECIO_MAXIMO",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "COSTO_ESTANDAR",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "COSTO_ESTANDAR",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO_DIVERGENTE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "PRECIO_DIVERGENTE",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIEMPO_ESTIMADO_MIN",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIEMPO_ESTIMADO_MIN",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_POSICION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_POSICION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_CLASE_COSTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_CLASE_COSTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_COSTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CLASE_COSTO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CUENTA_PROVISIONES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CUENTA_PROVISIONES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACION_CUENTA_PROVISIONES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DENOMINACION_CUENTA_PROVISIONES",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDAD_DE_MEDIDA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "UNIDAD_DE_MEDIDA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CATALOGO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CATALOGO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CLASE_REMUNERACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CLASE_REMUNERACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CREADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "CREADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CREADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "CREADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "MODIFICADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "MODIFICADO_POR",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "MODIFICADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "MODIFICADO_EL",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "FLAG_BORRADO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FLAG_BORRADO_PRESTACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_PRESCRIPCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_PRESCRIPCION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_ESTADO_ITEM",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "CODIGO_ESTADO_ITEM",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_DOCTOR",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CODIGO_DOCTOR",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_PRIORIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "CODIGO_PRIORIDAD",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CANTIDAD_ORDENADA",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "CANTIDAD_ORDENADA",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRIPCION_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DESCRIPCION_FACTURACION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "COSTO_UNITARIO",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "COSTO_UNITARIO",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "CANTIDAD",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CANTIDAD",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FACTURADO_FLAG",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FACTURADO_FLAG",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PRECIO",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "PRECIO",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_ORDEN",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "FECHA_ORDEN",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "CANTIDAD_REEMBOLSADA",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "CANTIDAD_REEMBOLSADA",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_REEMBOLSO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "TIPO_REEMBOLSO",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DEPARTAMENTO_CONSULTA_SK",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "DEPARTAMENTO_CONSULTA_SK",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "Codigo_USUARIO_CREACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "Codigo_USUARIO_CREACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CODIGO_USUARIO_MODIFICACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "CODIGO_USUARIO_MODIFICACION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "COLECTADO_POR",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "COLECTADO_POR",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_EJECUCION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								},
+								"sink": {
+									"name": "FECHA_EJECUCION",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "HORA_EJECUCION",
+									"type": "TimeSpan",
+									"physicalType": "time"
+								},
+								"sink": {
+									"name": "HORA_EJECUCION",
+									"type": "TimeSpan",
+									"physicalType": "time"
+								}
+							},
+							{
+								"source": {
+									"name": "USUARIO_EJECUCION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								},
+								"sink": {
+									"name": "USUARIO_EJECUCION",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_PRESTACION_TC"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "DIM_PRESTACION_TC"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"FECHA_INICIO": {
+				"type": "string"
+			},
+			"FECHA_TERMINO": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"FECHA_INICIO": {
+				"type": "String"
+			},
+			"FECHA_TERMINO": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "TrakCare/SubFlujos"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-13T16:27:44Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

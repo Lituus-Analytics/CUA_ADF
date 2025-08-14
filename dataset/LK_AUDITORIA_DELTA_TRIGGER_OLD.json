@@ -1,0 +1,71 @@
+{
+	"name": "LK_AUDITORIA_DELTA_TRIGGER_OLD",
+	"properties": {
+		"description": "Tabla de apoyo para determinar si se debe seguir un flujo delta, first o simplemente no procesar registros en un paso siguiente.\n\nAyuda a identificar cual fue la última fecha procesada con éxito usando el método de triggers en el sistema origen (CDC)",
+		"linkedServiceName": {
+			"referenceName": "devtest_eus2_synws_02",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Enterprise Data Warehouse"
+		},
+		"annotations": [
+			"Azure SQL DB",
+			"Lookup",
+			"Auditoría"
+		],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "PIPELINE",
+				"type": "varchar"
+			},
+			{
+				"name": "CONCEPTO_ASOCIADO",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_LOGICA",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_CARGA",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_EJECUCION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FECHA_DESDE_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_HASTA_TEXTO",
+				"type": "varchar"
+			},
+			{
+				"name": "REGISTROS_CARGADOS_STG",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ES_ULTIMA_EJECUCION",
+				"type": "tinyint",
+				"precision": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "LK_AUDITORIA_DELTA_TRIGGER"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

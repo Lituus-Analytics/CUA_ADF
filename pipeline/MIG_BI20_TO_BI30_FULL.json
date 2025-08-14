@@ -1,0 +1,204 @@
+{
+	"name": "MIG_BI20_TO_BI30_FULL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Cargar_tablas",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.ListaTablas",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Carga",
+							"description": "Si el count y fecha del origen es diferente al destino realiza la carga, de lo contrario no la realiza y",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Obtener Count y Fecha Origen",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Obtener Count y Fecha Destino",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('Obtener Count y Fecha Origen').output.firstRow[''], activity('Obtener Count y Fecha Destino').output.firstRow[''])\n",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Carga FULL",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"preCopyScript": {
+													"value": "@concat('TRUNCATE TABLE ', item())\n",
+													"type": "Expression"
+												},
+												"writeBehavior": "insert",
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": "@item()"
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": "@item()"
+												}
+											}
+										]
+									}
+								]
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Origen",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat('SELECT CONVERT(VARCHAR, COUNT(1)) FROM ', item())\n",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"type": "DatasetReference",
+									"parameters": {
+										"NombreTabla": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Destino",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": {
+										"value": "@concat('SELECT CONVERT(VARCHAR, COUNT(1)) FROM ', item())\n",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "@item()"
+									}
+								},
+								"firstRowOnly": true
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"ListaTablas": {
+				"type": "array",
+				"defaultValue": [
+					"CUA_LITUUS_PAB_DETALLE_DOCUMENTO",
+					"CUA_LITUUS_PAB_PROTOCOLO_OPERATORIO",
+					"CUA_LITUUS_TPO_PTA_DOCTOR",
+					"DIM_DOC_FICHA_MATERNA",
+					"DIM_PACIENTE_RFM",
+					"HISTORIA_DOTACION_CAMAS",
+					"ML_AUDITORIA_SEGMENTACION",
+					"REL_PROF_MEDICO_ESPECIALIDAD",
+					"CUA_CAT_TRATAMIENTO",
+					"EPISODIO_HU",
+					"PANEL_ENSAYOS_CLINICOS",
+					"PARETO_TIPO_CONTRATO",
+					"CUA_LITUUS_TPO_PTA_DOCTOR_2",
+					"PMD_ALTA_URGENCIA"
+				]
+			}
+		},
+		"variables": {
+			"COMPRACION_HASH": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "MIG_BI20_TO_BI30/Subflows"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-08T13:39:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

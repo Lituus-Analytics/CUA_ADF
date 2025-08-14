@@ -1,0 +1,308 @@
+{
+	"name": "EXCEL_CARRERAS_SIES",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "deveus2andesdatasta001",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureDataLakeG2Endpoint": {
+				"type": "String",
+				"defaultValue": "https://ucshdatalake.dfs.core.windows.net/"
+			},
+			"AzureKeyVaultEndpoint": {
+				"type": "String",
+				"defaultValue": "https://ucsh-kv-datagovernance.vault.azure.net/"
+			}
+		},
+		"folder": {
+			"name": "Azure Data Lake G2"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "OFERTA_ACADEMICA_SIES.csv",
+				"folderPath": "Tablas LK",
+				"fileSystem": "staging"
+			},
+			"columnDelimiter": ";",
+			"encodingName": "WINDOWS-1252",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "A�o  ",
+				"type": "String"
+			},
+			{
+				"name": "C�digo �nico  ",
+				"type": "String"
+			},
+			{
+				"name": "Tipo Instituci�n 1  ",
+				"type": "String"
+			},
+			{
+				"name": "Tipo Instituci�n 2  ",
+				"type": "String"
+			},
+			{
+				"name": "Tipo Instituci�n 3  ",
+				"type": "String"
+			},
+			{
+				"name": "Regi�n Sede  ",
+				"type": "String"
+			},
+			{
+				"name": "Provincia Sede  ",
+				"type": "String"
+			},
+			{
+				"name": "Comuna Sede  ",
+				"type": "String"
+			},
+			{
+				"name": "�rea del conocimiento  ",
+				"type": "String"
+			},
+			{
+				"name": "Cine-F 97 �rea",
+				"type": "String"
+			},
+			{
+				"name": "Cine-F 97 Sub�rea",
+				"type": "String"
+			},
+			{
+				"name": "�rea Carrera Gen�rica",
+				"type": "String"
+			},
+			{
+				"name": "Cine-F 13 �rea",
+				"type": "String"
+			},
+			{
+				"name": "Cine-F 13 Sub�rea",
+				"type": "String"
+			},
+			{
+				"name": "Tipo de instituci�n  ",
+				"type": "String"
+			},
+			{
+				"name": "C�digo IES  ",
+				"type": "String"
+			},
+			{
+				"name": "Nombre IES  ",
+				"type": "String"
+			},
+			{
+				"name": "C�digo Sede  ",
+				"type": "String"
+			},
+			{
+				"name": "Nombre Sede  ",
+				"type": "String"
+			},
+			{
+				"name": "C�digo Carrera  ",
+				"type": "String"
+			},
+			{
+				"name": "Nombre Carrera  ",
+				"type": "String"
+			},
+			{
+				"name": "Modalidad  ",
+				"type": "String"
+			},
+			{
+				"name": "Jornada  ",
+				"type": "String"
+			},
+			{
+				"name": "Versi�n  ",
+				"type": "String"
+			},
+			{
+				"name": "Tipo Carrera  ",
+				"type": "String"
+			},
+			{
+				"name": "Plan Especial  ",
+				"type": "String"
+			},
+			{
+				"name": "Duraci�n Estudios  ",
+				"type": "String"
+			},
+			{
+				"name": "Duraci�n Titulaci�n  ",
+				"type": "String"
+			},
+			{
+				"name": "Duraci�n Total  ",
+				"type": "String"
+			},
+			{
+				"name": "R�gimen ",
+				"type": "String"
+			},
+			{
+				"name": "Duraci�n formal del R�gimen ",
+				"type": "String"
+			},
+			{
+				"name": "Nombre T�tulo  ",
+				"type": "String"
+			},
+			{
+				"name": "Grado Acad�mico  ",
+				"type": "String"
+			},
+			{
+				"name": "Nivel Global  ",
+				"type": "String"
+			},
+			{
+				"name": "Nivel Carrera  ",
+				"type": "String"
+			},
+			{
+				"name": "Demre",
+				"type": "String"
+			},
+			{
+				"name": "A�o Inicio  ",
+				"type": "String"
+			},
+			{
+				"name": "Acreditaci�n Carrera o Programa ",
+				"type": "String"
+			},
+			{
+				"name": "Elegibilidad Beca Pedagog�a  ",
+				"type": "String"
+			},
+			{
+				"name": "Pedagog�a Medicina Odontolog�a, Otro  ",
+				"type": "String"
+			},
+			{
+				"name": "Requisito Ingreso  ",
+				"type": "String"
+			},
+			{
+				"name": "Semestres reconocidos ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Actual  ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Dest Agricultura  ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Dest Ciencias  ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Dest C Soc Comerc Derecho  ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Dest Educaci�n  ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Dest Humanidades y Artes   ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Dest Ing Ind Const  ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Dest Salud y Serv Soc  ",
+				"type": "String"
+			},
+			{
+				"name": "�rea Dest Servicios  ",
+				"type": "String"
+			},
+			{
+				"name": "Ponderaci�n Notas  ",
+				"type": "String"
+			},
+			{
+				"name": "Ponderaci�n Ranking Notas  ",
+				"type": "String"
+			},
+			{
+				"name": "Ponderaci�n Lenguaje  ",
+				"type": "String"
+			},
+			{
+				"name": "Ponderaci�n Matem�ticas",
+				"type": "String"
+			},
+			{
+				"name": "Ponderaci�n Matem�ticas 2",
+				"type": "String"
+			},
+			{
+				"name": "Ponderaci�n Historia  ",
+				"type": "String"
+			},
+			{
+				"name": "Ponderaci�n Ciencias  ",
+				"type": "String"
+			},
+			{
+				"name": "Ponderaci�n Otros  ",
+				"type": "String"
+			},
+			{
+				"name": "Vacantes Semestre Uno  ",
+				"type": "String"
+			},
+			{
+				"name": "Vacantes Semestre Dos  ",
+				"type": "String"
+			},
+			{
+				"name": "Formato Valor",
+				"type": "String"
+			},
+			{
+				"name": "Matr�cula Anual  ",
+				"type": "String"
+			},
+			{
+				"name": "Costo Titulaci�n  ",
+				"type": "String"
+			},
+			{
+				"name": "Costo Certificado Diploma  ",
+				"type": "String"
+			},
+			{
+				"name": "Arancel Anual  ",
+				"type": "String"
+			},
+			{
+				"name": "Vigencia  ",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

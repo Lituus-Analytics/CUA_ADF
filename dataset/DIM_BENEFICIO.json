@@ -1,0 +1,163 @@
+{
+	"name": "DIM_BENEFICIO",
+	"properties": {
+		"description": "Dimensión SCD1 que almacena todos los posibles beneficios a los que puede optar un postulante/alumno",
+		"linkedServiceName": {
+			"referenceName": "devtest_eus2_synws_02",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Enterprise Data Warehouse"
+		},
+		"annotations": [
+			"Azure SQL DB",
+			"Dimensión"
+		],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "BENEFICIO_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPCION_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_TIPO_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "TIPO_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_GRUPO_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "GRUPO_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "CODIGO_ORIGEN_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "ORIGEN_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_MOTIVO_ASIGNACION_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "MOTIVO_ASIGNACION_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_ACCESO_ASIGNAR_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "ACCESO_ASIGNAR_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_VIGENCIA_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "VIGENCIA_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_CREACION_BENEFICIO",
+				"type": "date"
+			},
+			{
+				"name": "CODIGO_APLICACION_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "APLICACION_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_TIPO_PROGRAMA_ASOCIADO_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "TIPO_PROGRAMA_ASOCIADO_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_REFERENCIA_APLICAR_BENEFICIO",
+				"type": "date"
+			},
+			{
+				"name": "CODIGO_COBERTURA_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "COBERTURA_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_NIVEL_APLICACION",
+				"type": "char"
+			},
+			{
+				"name": "NIVEL_APLICACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_TIPO_GRADO_BENEFICIO",
+				"type": "char"
+			},
+			{
+				"name": "TIPO_GRADO_BENEFICIO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_HASH",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_CREACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_BENEFICIO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,389 @@
+{
+	"name": "MIG_BI20_TO_BI30_FECHA",
+	"properties": {
+		"activities": [
+			{
+				"name": "Cargar_tablas",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.ListaTablas",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Carga",
+							"description": "Si el count y fecha del origen es diferente al destino realiza la carga, de lo contrario no la realiza y",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Obtener Count y Fecha Origen",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Obtener Count y Fecha Destino",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('Obtener Count y Fecha Origen').output.firstRow[''], activity('Obtener Count y Fecha Destino').output.firstRow[''])\n",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Copiar_data_tablas",
+										"description": "Copia los datos de las tablas definido en ListaTablas para la migración de BI2 a BI3",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Obtener Columnas",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n    'SELECT * FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"writeBehavior": "upsert",
+												"upsertSettings": {
+													"useTempDB": false,
+													"keys": {
+														"value": "@split(activity('Obtener Columnas').output.firstRow.ColumnList, ',')\n",
+														"type": "Expression"
+													},
+													"interimSchemaName": ""
+												},
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "Obtener Columnas",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlMISource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n  'SELECT STRING_AGG(c.name, '','') AS ColumnList FROM sys.indexes i ',\n  'INNER JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id ',\n  'INNER JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id ',\n  'INNER JOIN sys.tables t ON i.object_id = t.object_id ',\n  'INNER JOIN sys.schemas s ON t.schema_id = s.schema_id ',\n  'WHERE t.name = ''', item(), ''' AND s.name = ''dbo'' ',\n  'AND (i.is_primary_key = 1 OR i.is_unique = 1)'\n)\n",
+													"type": "Expression"
+												},
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										}
+									},
+									{
+										"name": "Obtener Columnas sin pk",
+										"type": "Lookup",
+										"dependsOn": [
+											{
+												"activity": "Copiar_data_tablas",
+												"dependencyConditions": [
+													"Failed"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n    'SELECT STUFF((SELECT '','' + c.name FROM sys.columns c ',\n    'INNER JOIN sys.tables t ON c.object_id = t.object_id ',\n    'INNER JOIN sys.schemas s ON t.schema_id = s.schema_id ',\n    'WHERE t.name = ''', item(), ''' AND s.name = ''dbo'' FOR XML PATH('''')), 1, 1, '''') AS ColumnList'\n)",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										}
+									},
+									{
+										"name": "Copiar_data_tablas_copy1",
+										"description": "Copia los datos de las tablas definido en ListaTablas para la migración de BI2 a BI3",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Obtener Columnas sin pk",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat('SELECT * FROM ', item())\n",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"preCopyScript": {
+													"value": "@concat('TRUNCATE TABLE dbo.', item())",
+													"type": "Expression"
+												},
+												"writeBehavior": "upsert",
+												"upsertSettings": {
+													"useTempDB": false,
+													"keys": {
+														"value": "@split(activity('Obtener Columnas sin pk').output.firstRow.ColumnList, ',')\n",
+														"type": "Expression"
+													},
+													"interimSchemaName": ""
+												},
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Origen",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'SELECT CONVERT(VARCHAR, COUNT(1)) + '' '' + CONVERT(VARCHAR, MAX(fecha_actualizacion), 23) FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"type": "DatasetReference",
+									"parameters": {
+										"NombreTabla": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Destino",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'SELECT CONVERT(VARCHAR, COUNT(1)) + '' '' + CONVERT(VARCHAR, MAX(fecha_actualizacion), 23) FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "@item()"
+									}
+								},
+								"firstRowOnly": true
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"ListaTablas": {
+				"type": "array",
+				"defaultValue": [
+					"DIM_DIAGNOSTICO",
+					"DIM_EMPRESA",
+					"DIM_EPISODIO",
+					"DIM_FACTURA",
+					"DIM_FECHA",
+					"DIM_ORDEN_CLINICA",
+					"DIM_PACIENTE",
+					"DIM_PRESTACION",
+					"DIM_PROF_MEDICO",
+					"DIM_UBI_GEOGRAFICA",
+					"DIM_UNIDAD",
+					"REL_EPISODIO_DOCUMENTO",
+					"REL_ORDEN_CLINICA_PRESTACION"
+				]
+			},
+			"fecha_inicio": {
+				"type": "string",
+				"defaultValue": "2025-01-01"
+			},
+			"fecha_fin": {
+				"type": "string",
+				"defaultValue": "2025-12-31"
+			}
+		},
+		"variables": {
+			"COMPRACION_HASH": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "MIG_BI20_TO_BI30/Subflows"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-08T13:39:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,22 @@
+{
+	"name": "Parquet_Fact_Actividad_MI",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "deveus2andesdatasta001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "FACT_ACTIVIDAD",
+				"folderPath": "1 Lituus",
+				"fileSystem": "landing"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

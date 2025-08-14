@@ -1,0 +1,388 @@
+{
+	"name": "DIM_PACIENTE_DELTA",
+	"properties": {
+		"activities": [
+			{
+				"name": "TKC TO MI",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set FECHA_HASTA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource",
+						"additionalColumns": [
+							{
+								"name": "FECHA_ACTUALIZACION",
+								"value": {
+									"value": "@utcNow()",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "ETL_ID",
+								"value": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "ORIGEN",
+								"value": {
+									"value": "TRAKCARE",
+									"type": "Expression"
+								}
+							}
+						],
+						"query": {
+							"value": "SELECT\n  PAPMI_RowId AS ID_CORRELATIVO_TRAKCARE,\n  PM.PAPMI_No AS CODIGO_PACIENTE,\n  PM.PAPMI_Name2 AS NOMBRES_PACIENTE,\n  PM.PAPMI_Name AS APELLIDO_PATERNO_PACIENTE,\n  PM.PAPMI_Name3 AS APELLIDO_MATERNO_PACIENTE,\n  TO_CHAR(PP.PAPER_Dob, 'YYYY-MM-DD') AS FECHA_NACIMIENTO,\n  CAST(SX.CTSEX_RowId AS VARCHAR) AS ID_SEXO,\n  SX.CTSEX_Desc AS SEXO,\n  SX.CTSEX_Gender AS GENERO,\n  SX.CTSEX_HL7Code AS GENERO_HL7,\n  PP.PAPER_AgeYr AS EDAD,\n  CAST(PM.PAPMI_IndigStat_DR AS VARCHAR) AS GRUPO_ETNICO,\n  CAST(PP.PAPER_Religion_DR AS VARCHAR) AS RELIGION,\n  PP.PAPER_DonatedOrgansOnDeath AS ES_DONANTE,\n  CAST(PP.PAPER_BloodGroup_DR AS VARCHAR) AS GRUPO_SANGUINEO,\n  PM.PAPMI_Allergy AS ALERGIAS,\n  CAST(PP.PAPER_PatType_DR AS VARCHAR) AS TIPO_DOCUMENTO,\n  PP.PAPER_ID AS NRO_DOCUMENTO,\n  CAST(PM.PAPMI_PatCategory_DR AS VARCHAR) AS CATEGORIA_PACIENTE,\n  PP.PAPER_TelH AS TELEFONO_DOMICILIO,\n  PP.PAPER_MobPhone AS TELEFONO_CELULAR,\n  PP.PAPER_TelO AS TELEFONO_OFICINA,\n  PP.PAPER_Email AS CORREO_ELECTRONICO,\n  CAST(PP.PAPER_Marital_DR AS VARCHAR) AS ESTADO_CIVIL,\n  CAST(PP.PAPER_Country_Birth_DR AS VARCHAR) AS PAIS_NACIMIENTO,\n  CAST(N.CTNAT_RowId AS VARCHAR) AS ID_NACIONALIDAD,\n  N.CTNAT_Desc AS NACIONALIDAD,\n  PM.PAPMI_Deceased AS FALLECIDO,\n  TO_CHAR(PM.PAPMI_Deceased_Date, 'YYYY-MM-DD') AS FECHA_FALLECIMIENTO,\n  PM.PAPMI_Active AS ESTADO_ANULACION,\n  TO_CHAR(PP.PAPER_UpdateDate, 'YYYY-MM-DD') AS FECHA_ANULACION,\n  PP.PAPER_ReversedBy AS ANULADO_POR,\n  PP.PAPER_StName AS CALLE,\n  CAST(P.PROV_RowId AS VARCHAR) AS ID_COMUNA,\n  P.PROV_Desc AS COMUNA,\n  CAST(R.CTRG_RowId AS VARCHAR) AS ID_REGION,\n  R.CTRG_Desc AS REGION,\n  CAST(C.CTCOU_RowId AS VARCHAR) AS ID_PAIS,\n  C.CTCOU_Desc AS PAIS,\n  PAPER_UpdateDate AS FECHA_ACTUALIZACION_TRAKCARE,\n  PAPER_UpdateTime AS HORA_ACTUALIZACION_TRAKCARE,\n  PAPER_UserUpdate AS ACTUALIZADO_POR,\n  PAPER_DateAdded AS FECHA_CREACION_TRAKCARE\nFROM \n  PA_PatMas PM\nINNER JOIN PA_Person PP ON PM.PAPMI_RowId = PP.PAPER_RowId\nLEFT JOIN CT_Sex SX ON SX.CTSEX_RowId = PP.PAPER_Sex_DR\nLEFT JOIN CT_Region R ON R.CTRG_RowId = PM.PAPMI_CT_Region_DR\nLEFT JOIN CT_Province P ON P.PROV_RowId = PM.PAPMI_CT_Province_DR\nLEFT JOIN CT_Country C ON C.CTCOU_RowId = R.CTRG_Country_DR\nLEFT JOIN CT_Nation N ON N.CTNAT_RowId = PP.PAPER_Nation_DR\n@{variables('QUERY_WHERE')}",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "SqlMISink",
+						"preCopyScript": "truncate table TMP_DIM_PACIENTE_TC",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "PA_PATMAS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MI_DWH_BI18_CUA_PRD",
+						"type": "DatasetReference",
+						"parameters": {
+							"Tabla_Destino": "TMP_DIM_PACIENTE_TC"
+						}
+					}
+				]
+			},
+			{
+				"name": "Lookup Ultima Fecha Procesada",
+				"description": "Obtención de la fecha asociada a la última ejecución de Beneficios con éxito.\nSi no han sido procesado los pacientes previamente, se realizará una carga full o first, en caso contrario, se filtrará desde la última fecha procesada con éxito generando una carga delta",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"sqlReaderQuery": {
+							"value": "SELECT \n\t FECHA_HASTA_TEXTO \nFROM LK_AUDITORIA_DELTA_TRIGGER\nWHERE \n\tPIPELINE\t\t\t= '@{pipeline().Pipeline}'\nAND CONCEPTO_ASOCIADO\t= 'DIM_PACIENTE'\nAND ES_ULTIMA_EJECUCION = 1",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "LK_AUDITORIA_DELTA_TRIGGER",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Dynamic Query - Where",
+				"description": "Si la carga es First se realizará la query sin usar la tabla auditoría, en caso contrario, la carga será de tipo delta (solo novedades).\nPara este ETL en concreto, dado que Informix mantiene tablas de auditorías con los cambios realizados al maestro de beneficios (novedades), se agregará al final de la query un where que retorne todos los registros modificados desde la última ejecución del ETL, siempre y cuando la ejecución sea Delta.",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup Ultima Fecha Procesada",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "QUERY_WHERE",
+					"value": {
+						"value": "@if(equals(activity('Lookup Ultima Fecha Procesada').output.count, 0),\n    '',\n    concat(\n        'where PP.PAPER_DateAdded >= '''\n        ,formatDateTime(activity('Lookup Ultima Fecha Procesada').output.value[0].FECHA_HASTA_TEXTO, 'yyyy-MM-dd'),\n        ''' or PP.PAPER_UpdateDate >= ''',\n        formatDateTime(utcnow(), 'yyyy-MM-dd'),\n        ''''\n    )\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set TIPO_CARGA",
+				"description": "Se determina si la carga será de tipo Full (Primera vez) o Delta. Este variable se usará para guardar un registro en la tabla de auditoría, en el campo TIPO_CARGA.",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Dynamic Query - Where",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "TIPO_CARGA",
+					"value": {
+						"value": "@if(equals(activity('Lookup Ultima Fecha Procesada').output.count,0),'Full', 'Delta')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set FECHA_DESDE",
+				"description": "Se determina si la carga será de tipo Full (Primera vez) o Delta. Este variable se usará para guardar un registro en la tabla de auditoría con la FECHA_DESDE, la cual se usó para obtener los registros.\nEn caso de que sea una carga Full o First, se ignorará esta variable para los filtros, pero se registrará como NO APLICA en la tabla auditoría",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set TIPO_LOGICA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FECHA_DESDE",
+					"value": {
+						"value": "@if(equals(activity('Lookup Ultima Fecha Procesada').output.count,0),'NO APLICA', \n    if(equals(activity('Lookup Ultima Fecha Procesada').output.value[0].FECHA_HASTA_TEXTO,'NO APLICA'), convertFromUtc(utcnow(), 'Pacific SA Standard Time', 'yyyy/MM/dd') , activity('Lookup Ultima Fecha Procesada').output.value[0].FECHA_HASTA_TEXTO)\n)\n\n\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set FECHA_HASTA",
+				"description": "Se determina si la carga será de tipo Full (Primera vez) o Delta. Este variable se usará para guardar un registro en la tabla de auditoría con la FECHA_HASTA, la cual se usa para indicar hasta que día se consideró como filtro para obtener los registros.\nEn caso de que sea una carga Full o First, se ignorará esta variable para los filtros, pero se registrará como NO APLICA en la tabla auditoría",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set FECHA_DESDE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FECHA_HASTA",
+					"value": {
+						"value": "@convertFromUtc(utcnow(), 'Pacific SA Standard Time', 'yyyy/MM/dd')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Hay cambios",
+				"description": "Hay cambios, si y solo si, la query realizada en el objeto \"Copy data IFX to Parquet\" encontró registros según los criterios de extracción, en caso contrario, no es necesario seguir procesando ya que no hay novedades.",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "TKC TO MI",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('TKC TO MI').output.rowsRead,0)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "UPDATE_ULTIMA_EJECUCION_OK",
+							"description": "Se actualiza la última ejecución exitosa previa a la ejecución de este pipeline, al valor 0.  Luego se inserta un nuevo registro indicando una nueva ejecución exitosa y actualizando a la vez la fecha ejecución hasta.\nLa idea es identificar fácilmente cual fue la última ejecución exitosa.",
+							"type": "Script",
+							"dependsOn": [
+								{
+									"activity": "Data flow1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "devtest_us2_asmi_data_001",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "NonQuery",
+										"text": {
+											"value": "UPDATE LK_AUDITORIA_DELTA_TRIGGER SET ES_ULTIMA_EJECUCION=0 \nWHERE ES_ULTIMA_EJECUCION=1 AND PIPELINE='@{pipeline().Pipeline}' AND CONCEPTO_ASOCIADO='DIM_PACIENTE';\n\n\nINSERT INTO LK_AUDITORIA_DELTA_TRIGGER VALUES \n('@{pipeline().Pipeline}','DIM_PACIENTE', '@{variables('TIPO_LOGICA')}', '@{variables('TIPO_CARGA')}', '@{convertFromUtc(utcnow(), 'Pacific SA Standard Time', 'yyyy-MM-dd HH:mm:ss')}', '@{variables('FECHA_DESDE')}', \n'@{variables('FECHA_HASTA')}', @{activity('TKC TO MI').output.rowsRead}, 1);",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "Data flow1",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "TKC_DIM_PACIENTE",
+									"type": "DataFlowReference"
+								},
+								"integrationRuntime": {
+									"referenceName": "MPVE-AutoResolveIntegrationRuntime",
+									"type": "IntegrationRuntimeReference"
+								},
+								"traceLevel": "Fine"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Set TIPO_LOGICA",
+				"description": "Se determina si la carga será de tipo Full (Primera vez) o Delta. Este variable se usará para guardar un registro en la tabla de auditoría, en el campo TIPO_CARGA.",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set TIPO_CARGA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "TIPO_LOGICA",
+					"value": {
+						"value": "@if(equals(activity('Lookup Ultima Fecha Procesada').output.count,0),'Full', 'Delta PA_PatMas')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Truntace TMP",
+				"description": "Limpieza tabla Temporal",
+				"type": "Script",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "Hay cambios",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "devtest_us2_asmi_data_001",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE table TMP_DIM_PACIENTE_TC"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"variables": {
+			"QUERY_WHERE": {
+				"type": "String"
+			},
+			"TIPO_CARGA": {
+				"type": "String"
+			},
+			"FECHA_DESDE": {
+				"type": "String"
+			},
+			"FECHA_HASTA": {
+				"type": "String"
+			},
+			"TIPO_LOGICA": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "TrakCare/Delta"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-14T20:16:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -9,11 +9,8 @@
 			"server": "devtest-eus2-asmi-data-001.13034f0130dc.database.windows.net",
 			"database": "DWH_BI18_CUA_PRD",
 			"encrypt": "mandatory",
-			"trustServerCertificate": true,
-			"authenticationType": "SystemAssignedManagedIdentity",
-			"alwaysEncryptedSettings": {
-				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
-			}
+			"trustServerCertificate": false,
+			"authenticationType": "SystemAssignedManagedIdentity"
 		},
 		"connectVia": {
 			"referenceName": "MPVE-AutoResolveIntegrationRuntime",

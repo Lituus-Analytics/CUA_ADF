@@ -1,0 +1,626 @@
+{
+	"name": "MIG_BI20_TO_BI30_HASH",
+	"properties": {
+		"activities": [
+			{
+				"name": "Cargar_tablas",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.ListaTablas",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(variables('COMPRACION_HASH'), 'Sí')",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Copiar_data_tablas_copy1_copy1",
+										"description": "Copia los datos de las tablas definido en ListaTablas para la migración de BI2 a BI3",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Script1_copy1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n  'SELECT ',\n  join(split(activity('Lookup1').output.firstRow.ColumnList, ','), ', '),\n  ' FROM ',\n  item()\n)\n",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"writeBehavior": "insert",
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "Conector_TMP_claves",
+												"type": "DatasetReference"
+											}
+										]
+									},
+									{
+										"name": "Script1_copy1",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "Copiar_data_tablas",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "devtest_us2_asmi_data_001",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": {
+														"value": "@concat(\n  'CREATE TABLE tmp_stg_claves_delete (',\n  replace(\n    replace(\n      activity('Lookup1').output.firstRow.ColumnList,\n      ' ',\n      ''\n    ),\n    ',',\n    ' VARCHAR(MAX), '\n  ),\n  ' VARCHAR(MAX))'\n)\n\n",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									},
+									{
+										"name": "Script2_copy1",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "Copiar_data_tablas_copy1_copy1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "devtest_us2_asmi_data_001",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": {
+														"value": "@if(\n  equals(item(), 'ADR2'),\n  concat(\n    'DELETE tgt FROM ', item(), ' tgt WHERE NOT EXISTS (SELECT 1 FROM tmp_stg_claves_delete tmp WHERE tmp.CLIENT = tgt.CLIENT AND tmp.PERSNUMBER = tgt.PERSNUMBER AND tmp.ADDRNUMBER = tgt.ADDRNUMBER AND tmp.DATE_FROM = tgt.DATE_FROM AND tmp.CONSNUMBER = tgt.CONSNUMBER)'\n  ),\n  if(\n    equals(item(), 'ADR6'),\n    concat(\n      'DELETE tgt FROM ', item(), ' tgt WHERE NOT EXISTS (SELECT 1 FROM tmp_stg_claves_delete tmp WHERE tmp.CLIENT = tgt.CLIENT AND tmp.PERSNUMBER = tgt.PERSNUMBER AND tmp.ADDRNUMBER = tgt.ADDRNUMBER AND tmp.DATE_FROM = tgt.DATE_FROM AND tmp.CONSNUMBER = tgt.CONSNUMBER)'\n    ),\n    concat(\n      'DELETE tgt FROM ', item(), ' tgt WHERE NOT EXISTS (SELECT 1 FROM tmp_stg_claves_delete tmp WHERE tmp.',\n      trim(first(split(activity('Lookup1').output.firstRow.ColumnList, ','))),\n      ' = tgt.',\n      trim(first(split(activity('Lookup1').output.firstRow.ColumnList, ','))),\n      ')'\n    )\n  )\n)\n",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									},
+									{
+										"name": "Copiar_data_tablas",
+										"description": "Copia los datos de las tablas definido en ListaTablas para la migración de BI2 a BI3",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Lookup1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat('SELECT * FROM ', item())\n",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"preCopyScript": "drop table tmp_stg_claves_delete",
+												"writeBehavior": "upsert",
+												"upsertSettings": {
+													"useTempDB": false,
+													"keys": {
+														"value": "@split(activity('Lookup1').output.firstRow.ColumnList, ',')\n",
+														"type": "Expression"
+													},
+													"interimSchemaName": ""
+												},
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "Lookup1",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlMISource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n  'SELECT STRING_AGG(c.name, '','') AS ColumnList FROM sys.indexes i ',\n  'INNER JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id ',\n  'INNER JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id ',\n  'INNER JOIN sys.tables t ON i.object_id = t.object_id ',\n  'INNER JOIN sys.schemas s ON t.schema_id = s.schema_id ',\n  'WHERE t.name = ''', item(), ''' AND s.name = ''dbo'' ',\n  'AND (i.is_primary_key = 1 OR i.is_unique = 1)'\n)\n",
+													"type": "Expression"
+												},
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "Lookup4",
+							"type": "Lookup",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "SELECT\n  STUFF((\n    SELECT ',' + QUOTENAME(COLUMN_NAME)\n    FROM INFORMATION_SCHEMA.COLUMNS\n    WHERE TABLE_NAME = '@{item()}'\n    ORDER BY ORDINAL_POSITION\n    FOR XML PATH('')\n  ), 1, 1, '') AS ColumnList",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"type": "DatasetReference",
+									"parameters": {
+										"NombreTabla": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"firstRowOnly": false
+							}
+						},
+						{
+							"name": "Obtener Hash Origen",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Lookup4",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "SELECT\n    HASHBYTES('MD5', CONCAT(\n        ISNULL(CAST([ID_CITACION] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([EPISODIO] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([FECHA] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([HORA] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([ASIGN_ENFERMERIA] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([HABIT] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([DURACION] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([CREADO_EL] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([MOTIVO_ANULACION] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([ANULADO] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([ANULADO_POR] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([ANULADO_EL] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([CREADO_POR] AS VARCHAR(MAX)), '')\n    )) AS FilaHash,\n    'O' AS Origen_Destino\nFROM CUA_LITUUS_PAB_AGENDAMIENTO;",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "SqlMISink",
+									"preCopyScript": "truncate table TMP_HashTemporal",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "FilaHash",
+												"type": "Byte[]",
+												"physicalType": "varbinary"
+											},
+											"sink": {
+												"name": "ConcatenatedHashes",
+												"physicalType": "varbinary"
+											}
+										},
+										{
+											"source": {
+												"name": "Origen_Destino",
+												"type": "String",
+												"physicalType": "varchar"
+											},
+											"sink": {
+												"name": "Origen_Destino",
+												"type": "String",
+												"physicalType": "nvarchar"
+											}
+										}
+									],
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"type": "DatasetReference",
+									"parameters": {
+										"NombreTabla": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "TMP_HashTemporal"
+									}
+								}
+							]
+						},
+						{
+							"name": "Obtener Hash Destino",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Obtener Hash Origen",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": {
+										"value": "SELECT\n    HASHBYTES('MD5', CONCAT(\n        ISNULL(CAST([ID_CITACION] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([EPISODIO] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([FECHA] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([HORA] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([ASIGN_ENFERMERIA] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([HABIT] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([DURACION] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([CREADO_EL] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([MOTIVO_ANULACION] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([ANULADO] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([ANULADO_POR] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([ANULADO_EL] AS VARCHAR(MAX)), ''),\n        ISNULL(CAST([CREADO_POR] AS VARCHAR(MAX)), '')\n    )) AS FilaHash,\n    'D' AS Origen_Destino\nFROM CUA_LITUUS_PAB_AGENDAMIENTO;",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "SqlMISink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "FilaHash",
+												"type": "Byte[]",
+												"physicalType": "varbinary"
+											},
+											"sink": {
+												"name": "ConcatenatedHashes",
+												"type": "String",
+												"physicalType": "nvarchar"
+											}
+										},
+										{
+											"source": {
+												"name": "Origen_Destino",
+												"type": "String",
+												"physicalType": "varchar"
+											},
+											"sink": {
+												"name": "Origen_Destino",
+												"type": "String",
+												"physicalType": "char"
+											}
+										}
+									],
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "TMP_HashTemporal"
+									}
+								}
+							]
+						},
+						{
+							"name": "Lookup7",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Obtener Hash Destino",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": "SELECT\n    CASE\n        WHEN MAX(CASE WHEN Origen_Destino = 'O' THEN ConcatenatedHashes END) = \n             MAX(CASE WHEN Origen_Destino = 'D' THEN ConcatenatedHashes END)\n        THEN 'Sí'\n        ELSE 'No'\n    END AS ResultadoComparacion\nFROM [dbo].[TMP_HashTemporal]",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "TMP_HashTemporal"
+									}
+								}
+							}
+						},
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Lookup7",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "COMPRACION_HASH",
+								"value": {
+									"value": "@activity('Lookup7').output.firstRow.ResultadoComparacion\n",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "If Condition2",
+							"type": "IfCondition",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(variables('COMPRACION_HASH'), 'Sí')",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Data flow1",
+										"type": "ExecuteDataFlow",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"compute": {
+												"coreCount": 8,
+												"computeType": "General"
+											},
+											"traceLevel": "Fine"
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"ListaTablas": {
+				"type": "array",
+				"defaultValue": [
+					"CUA_LITUUS_PAB_AGENDAMIENTO"
+				]
+			}
+		},
+		"variables": {
+			"COMPRACION_HASH": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "MIG_BI20_TO_BI30/Subflows"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-08T13:39:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

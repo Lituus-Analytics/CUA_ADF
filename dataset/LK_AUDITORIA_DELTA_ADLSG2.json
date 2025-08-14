@@ -1,0 +1,49 @@
+{
+	"name": "LK_AUDITORIA_DELTA_ADLSG2",
+	"properties": {
+		"description": "Tabla de apoyo para determinar si una tabla debe seguir un flujo delta, first o simplemente no procesar registros en un paso siguiente",
+		"linkedServiceName": {
+			"referenceName": "devtest_eus2_synws_02",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Enterprise Data Warehouse"
+		},
+		"annotations": [
+			"Azure SQL DB",
+			"Lookup",
+			"Auditoría"
+		],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CONCEPTO_ASOCIADO",
+				"type": "varchar"
+			},
+			{
+				"name": "PIPELINE",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_HASH_ACTUAL",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "LK_AUDITORIA_DELTA_ADLSG2"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,17 @@
+{
+	"name": "PA_PATMAS",
+	"properties": {
+		"description": "TABLA .....",
+		"linkedServiceName": {
+			"referenceName": "IRIS_ODBC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "OdbcTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "PA_PatMas"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

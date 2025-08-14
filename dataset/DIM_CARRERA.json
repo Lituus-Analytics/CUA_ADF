@@ -1,0 +1,246 @@
+{
+	"name": "DIM_CARRERA",
+	"properties": {
+		"description": "Dimensión SCD1 que almacena el maestro de programas/carreras para pregrado, postgrado y educación continua",
+		"linkedServiceName": {
+			"referenceName": "devtest_eus2_synws_02",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Enterprise Data Warehouse"
+		},
+		"annotations": [
+			"Azure SQL DB",
+			"Dimensión"
+		],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CARRERA_SK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_CARRERA_UCSH",
+				"type": "char"
+			},
+			{
+				"name": "CODIGO_CARRERA_DEMRE",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CORRELATIVO_DEMRE",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CODIGO_MENCION_DEMRE_UCSH",
+				"type": "varchar"
+			},
+			{
+				"name": "MENCION_DEMRE_UCSH",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_CARRERA_SIES",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_CARRERA_PES_SIES",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_CARRERA_CNED",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CODIGO_CARRERA_CMED",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CARRERA_NOMBRE_CORTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CARRERA_NOMBRE_LARGO",
+				"type": "varchar"
+			},
+			{
+				"name": "CARRERA_NOMBRE_LARGO_DEMRE",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_INSTITUCION",
+				"type": "char"
+			},
+			{
+				"name": "CODIGO_SEDE",
+				"type": "char"
+			},
+			{
+				"name": "SIGLA_INSTITUCION",
+				"type": "varchar"
+			},
+			{
+				"name": "INSTITUCION",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_FACULTAD",
+				"type": "char"
+			},
+			{
+				"name": "CODIGO_FACULTAD_DGP",
+				"type": "char"
+			},
+			{
+				"name": "FACULTAD_NOMBRE_LARGO",
+				"type": "varchar"
+			},
+			{
+				"name": "FACULTAD_NOMBRE_CORTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_ESCUELA",
+				"type": "char"
+			},
+			{
+				"name": "CODIGO_ESCUELA_DGP",
+				"type": "varchar"
+			},
+			{
+				"name": "ESCUELA_NOMBRE_LARGO",
+				"type": "varchar"
+			},
+			{
+				"name": "ESCUELA_NOMBRE_CORTO",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_DESHABILITADA_PARA_ADMISION",
+				"type": "char"
+			},
+			{
+				"name": "DISPONIBLE_PARA_ADMISION",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_DESHABILITADA_PARA_ADMISION_DEMRE",
+				"type": "char"
+			},
+			{
+				"name": "DISPONIBLE_PARA_ADMISION_DEMRE",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_ELEGIBLE_BECA_VOCACION_PROFESOR",
+				"type": "char"
+			},
+			{
+				"name": "ELEGIBLE_BECA_VOCACION_PROFESOR",
+				"type": "varchar"
+			},
+			{
+				"name": "DURACION_SEMESTRES",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CODIGO_TIPO_DURACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_JORNADA",
+				"type": "char"
+			},
+			{
+				"name": "TIPO_JORNADA",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_TIPO_EDUCACION",
+				"type": "varchar"
+			},
+			{
+				"name": "TIPO_EDUCACION",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_ES_TECNICO_PROFESIONAL",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_TIPO_PROGRAMA",
+				"type": "char"
+			},
+			{
+				"name": "TIPO_PROGRAMA",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_GRADO",
+				"type": "char"
+			},
+			{
+				"name": "GRADO",
+				"type": "varchar"
+			},
+			{
+				"name": "NIVEL_FORMACION_UCSH",
+				"type": "varchar"
+			},
+			{
+				"name": "CODIGO_BONIFICACION",
+				"type": "varchar"
+			},
+			{
+				"name": "BONIFICACION",
+				"type": "varchar"
+			},
+			{
+				"name": "PORCENTAJE_BONIFICACION",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "CODIGO_HASH",
+				"type": "varchar"
+			},
+			{
+				"name": "FECHA_CREACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FECHA_ACTUALIZACION",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ORIGEN",
+				"type": "varchar"
+			},
+			{
+				"name": "ETL_ID",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_CARRERA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

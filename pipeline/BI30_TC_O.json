@@ -1,0 +1,121 @@
+{
+	"name": "BI30_TC_O",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM_PACIENTE_TC",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BI30_DIM_PACIENTE_TC",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIM_PROF_MEDICO_TC",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIM_PACIENTE_TC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BI30_DIM_PROF_MEDICO_TC",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIM_DIAGNOSTICO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIM_PROF_MEDICO_TC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BI30_DIM_DIAGNOSTICO_TC",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIM_EPISODIO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIM_DIAGNOSTICO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BI30_DIM_EPISODIO_TC",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIM_PRESTACION_TC",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIM_EPISODIO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BI30_TMP_DIM_PRESTACION_TC",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "TrakCare"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-08T13:36:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

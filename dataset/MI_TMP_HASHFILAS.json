@@ -1,0 +1,16 @@
+{
+	"name": "MI_TMP_HASHFILAS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "devtest_us2_asmi_data_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [],
+		"typeProperties": {
+			"table": "TMP_HASHFILAS"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

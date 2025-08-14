@@ -1,0 +1,34 @@
+{
+	"name": "STG_BENEFICIO_PQT",
+	"properties": {
+		"description": "Volcado de datos de Beneficios desde Informix a un archivo parquet en Azure Data Lake 2 Gen",
+		"linkedServiceName": {
+			"referenceName": "deveus2andesdatasta001",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "String"
+			},
+			"AzureDataLakeG2Endpoint": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Azure Data Lake G2"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "STG_BENEFICIO.parquet",
+				"folderPath": "Dimensiones",
+				"fileSystem": "staging"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

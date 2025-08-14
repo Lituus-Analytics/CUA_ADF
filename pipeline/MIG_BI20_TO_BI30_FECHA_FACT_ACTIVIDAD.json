@@ -1,0 +1,1346 @@
+{
+	"name": "MIG_BI20_TO_BI30_FECHA_FACT_ACTIVIDAD",
+	"properties": {
+		"activities": [
+			{
+				"name": "Cargar_tablas",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.ListaTablas",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Carga",
+							"description": "Si el count y fecha del origen es diferente al destino realiza la carga, de lo contrario no la realiza y",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Obtener Count y Fecha Origen",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Obtener Count y Fecha Destino",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('Obtener Count y Fecha Origen').output.firstRow[''], activity('Obtener Count y Fecha Destino').output.firstRow[''])\n",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Obtener Columnas sin pk 2",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n    'SELECT STUFF((SELECT '','' + c.name FROM sys.columns c ',\n    'INNER JOIN sys.tables t ON c.object_id = t.object_id ',\n    'INNER JOIN sys.schemas s ON t.schema_id = s.schema_id ',\n    'WHERE t.name = ''', item(), ''' AND s.name = ''dbo'' AND (c.name LIKE ''%_SK'' OR c.name = ''NRO_ACTUAL_PRESTACION'') FOR XML PATH('''')), 1, 1, '''') AS ColumnList'\n)",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										}
+									},
+									{
+										"name": "Copiar_data_tablas",
+										"description": "Copia los datos de las tablas definido en ListaTablas para la migración de BI2 a BI3",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Obtener Columnas sin pk 2",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "@concat(\n    'SELECT * FROM fact_actividad WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)\n",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"writeBehavior": "upsert",
+												"upsertSettings": {
+													"useTempDB": false,
+													"keys": {
+														"value": "@split(activity('Obtener Columnas sin pk 2').output.firstRow.ColumnList, ',')\n",
+														"type": "Expression"
+													},
+													"interimSchemaName": ""
+												},
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "O_LISTA_TABLAS_MIGRACION",
+												"type": "DatasetReference",
+												"parameters": {
+													"NombreTabla": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Origen",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'SELECT CONVERT(VARCHAR, COUNT(1)) + '' '' + CONVERT(VARCHAR, MAX(fecha_actualizacion)) FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"type": "DatasetReference",
+									"parameters": {
+										"NombreTabla": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Destino",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'SELECT CONVERT(VARCHAR, COUNT(1)) + '' '' + CONVERT(VARCHAR, MAX(fecha_actualizacion)) FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "@item()"
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Origen 2",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Carga",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'SELECT CONVERT(VARCHAR, COUNT(1)) + '' '' + CONVERT(VARCHAR, MAX(fecha_actualizacion)) FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "O_LISTA_TABLAS_MIGRACION",
+									"type": "DatasetReference",
+									"parameters": {
+										"NombreTabla": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "Obtener Count y Fecha Destino 2",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Carga",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlMISource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'SELECT CONVERT(VARCHAR, COUNT(1)) + '' '' + CONVERT(VARCHAR, MAX(fecha_actualizacion)) FROM ',\n    item(),\n    ' WHERE fecha_actualizacion BETWEEN ''',\n    pipeline().parameters.fecha_inicio,\n    ''' AND ''',\n    pipeline().parameters.fecha_fin,\n    ''''\n)",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "MI_DWH_BI18_CUA_PRD",
+									"type": "DatasetReference",
+									"parameters": {
+										"Tabla_Destino": "@item()"
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Obtener Count y Fecha Origen 2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Obtener Count y Fecha Destino 2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greater(activity('Obtener Count y Fecha Destino 2').output.firstRow[''], activity('Obtener Count y Fecha Origen 2').output.firstRow[''])\n",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Obtener hash Origen",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": {
+													"value": "SELECT\n    CONVERT(VARCHAR(32), HASHBYTES('MD5', CONCAT(\n        ISNULL(CAST(FECHA_INGRESO_EPISODIO_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(EPISODIO_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(PACIENTE_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UBI_GEOGRAFICA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(PRESTACION_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(EMPRESA_PRES_CLINICA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FACTURA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FECHA_FACTURACION_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(EMPRESA_PRES_FACTURADA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(PROF_MEDICO_TRATANTE_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(DIAGNOSTICO_INGRESO_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(DIAGNOSTICO_EGRESO_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_SOLI_PRESTACION_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_CARGA_PRESTACION_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_HRA_CARGA_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_PRESTACION_CARGADA_POR AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_CANTIDAD_PRESTACIONES AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_TIPO_DE_RECARGO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_PRECIO_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_PRECIO_BASICO_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_FACTOR_MULTIPLICADOR AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_PRECIO_BASICO_PRES_FACT AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_PRECIO_SUBTOTAL_PRES_FACT AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_PRECIO_NETO_PRES AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_FACTOR_MULTIPLICADOR AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_CANT_PRES_FACT AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_PORCENTAJE_COBERTURA_PRES AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_RECARGO_HORARIO_PRES AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FACTURA_ACTIVA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(MEDICO_QUE_DIAGNOSTICA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(TIPO_DESCUENTO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(TIPO_MOVIMIENTO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CLASE_MOVIMIENTO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(TIPO_CONTRATO_CONVENIDO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CONTEO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CORRELATIVO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CLASE_ALTA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FECHA_ALTA_MEDICA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(HORA_ALTA_MEDICA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ESTADO_ALTA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FECHA_ACTUALIZACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ORIGEN AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ETL_ID AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ANULADO_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(MARCA_CONTABILIZACION_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(NRO_ACTUAL_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(NRO_MOVIMIENTO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CODIGO_EPISODIO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CODIGO_FACTURA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ORDEN_CLINICA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(KEY_FACTACT_EPIDOC AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FECHA_ALTA_ADMINISTRATIVA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(HORA_ALTA_ADMINISTRATIVA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(TIPO_MOV_EPISODIO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_ENF_SOL AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_MED_SOL AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_GESTORA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CECO_UN_ENF_SOL AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(DESCRIPCION_CECO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_MEDIDA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FACTOR_CONVERSION_UN AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CAMA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(HABITACION_BOX AS VARCHAR(MAX)), '')\n    )), 2) AS FilaHash\nFROM FACT_ACTIVIDAD\nWHERE fecha_actualizacion BETWEEN '@{pipeline().parameters.fecha_inicio}' AND '@{pipeline().parameters.fecha_fin}'",
+													"type": "Expression"
+												},
+												"queryTimeout": "04:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"preCopyScript": "truncate table TMP_HASHFILAS",
+												"writeBehavior": "insert",
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "FilaHash",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "FilaHash",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													}
+												],
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "O_FACT_ACTIVIDAD",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": "TMP_HASHFILAS"
+												}
+											}
+										]
+									},
+									{
+										"name": "Obtener Hash Destino",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlMISource",
+												"sqlReaderQuery": {
+													"value": "SELECT *,\n    CONVERT(VARCHAR(32), HASHBYTES('MD5', CONCAT(\n        ISNULL(CAST(FECHA_INGRESO_EPISODIO_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(EPISODIO_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(PACIENTE_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UBI_GEOGRAFICA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(PRESTACION_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(EMPRESA_PRES_CLINICA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FACTURA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FECHA_FACTURACION_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(EMPRESA_PRES_FACTURADA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(PROF_MEDICO_TRATANTE_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(DIAGNOSTICO_INGRESO_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(DIAGNOSTICO_EGRESO_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_SOLI_PRESTACION_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_CARGA_PRESTACION_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_HRA_CARGA_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_PRESTACION_CARGADA_POR AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_CANTIDAD_PRESTACIONES AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_TIPO_DE_RECARGO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_PRECIO_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_PRECIO_BASICO_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(C_FACTOR_MULTIPLICADOR AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_PRECIO_BASICO_PRES_FACT AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_PRECIO_SUBTOTAL_PRES_FACT AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_PRECIO_NETO_PRES AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_FACTOR_MULTIPLICADOR AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_CANT_PRES_FACT AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_PORCENTAJE_COBERTURA_PRES AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(F_RECARGO_HORARIO_PRES AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FACTURA_ACTIVA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(MEDICO_QUE_DIAGNOSTICA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(TIPO_DESCUENTO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(TIPO_MOVIMIENTO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CLASE_MOVIMIENTO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(TIPO_CONTRATO_CONVENIDO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CONTEO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CORRELATIVO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CLASE_ALTA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FECHA_ALTA_MEDICA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(HORA_ALTA_MEDICA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ESTADO_ALTA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FECHA_ACTUALIZACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ORIGEN AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ETL_ID AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ANULADO_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(MARCA_CONTABILIZACION_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(NRO_ACTUAL_PRESTACION AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(NRO_MOVIMIENTO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CODIGO_EPISODIO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CODIGO_FACTURA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(ORDEN_CLINICA_SK AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(KEY_FACTACT_EPIDOC AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FECHA_ALTA_ADMINISTRATIVA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(HORA_ALTA_ADMINISTRATIVA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(TIPO_MOV_EPISODIO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_ENF_SOL AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_MED_SOL AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_GESTORA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CECO_UN_ENF_SOL AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(DESCRIPCION_CECO AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(UNIDAD_MEDIDA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(FACTOR_CONVERSION_UN AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(CAMA AS VARCHAR(MAX)), ''),\n        ISNULL(CAST(HABITACION_BOX AS VARCHAR(MAX)), '')\n    )), 2) AS FilaHash\nFROM FACT_ACTIVIDAD\nWHERE fecha_actualizacion BETWEEN '@{pipeline().parameters.fecha_inicio}' AND '@{pipeline().parameters.fecha_fin}'",
+													"type": "Expression"
+												},
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "SqlMISink",
+												"preCopyScript": "truncate table TMP_HASHFILAS_DESTINO",
+												"writeBehavior": "insert",
+												"sqlWriterUseTableLock": false,
+												"tableOption": "autoCreate"
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "FECHA_INGRESO_EPISODIO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "FECHA_INGRESO_EPISODIO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "EPISODIO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "EPISODIO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "PACIENTE_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "PACIENTE_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "UBI_GEOGRAFICA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "UBI_GEOGRAFICA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "PRESTACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "PRESTACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "EMPRESA_PRES_CLINICA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "EMPRESA_PRES_CLINICA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "FACTURA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "FACTURA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "FECHA_FACTURACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "FECHA_FACTURACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "EMPRESA_PRES_FACTURADA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "EMPRESA_PRES_FACTURADA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "PROF_MEDICO_TRATANTE_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "PROF_MEDICO_TRATANTE_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "DIAGNOSTICO_INGRESO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "DIAGNOSTICO_INGRESO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "DIAGNOSTICO_EGRESO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "DIAGNOSTICO_EGRESO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "UNIDAD_SOLI_PRESTACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "UNIDAD_SOLI_PRESTACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "UNIDAD_CARGA_PRESTACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "UNIDAD_CARGA_PRESTACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "UNIDAD_ADMISION_EPISODIO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "UNIDAD_ADMISION_EPISODIO_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "FECHA_CARGA_PRESTACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "FECHA_CARGA_PRESTACION_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "C_HRA_CARGA_PRESTACION",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "C_HRA_CARGA_PRESTACION",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "C_PRESTACION_CARGADA_POR",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "C_PRESTACION_CARGADA_POR",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "C_CANTIDAD_PRESTACIONES",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 0,
+															"precision": 5
+														},
+														"sink": {
+															"name": "C_CANTIDAD_PRESTACIONES",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "C_TIPO_DE_RECARGO",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "C_TIPO_DE_RECARGO",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "C_PRECIO_PRESTACION",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 2,
+															"precision": 18
+														},
+														"sink": {
+															"name": "C_PRECIO_PRESTACION",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "C_PRECIO_BASICO_PRESTACION",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 0,
+															"precision": 18
+														},
+														"sink": {
+															"name": "C_PRECIO_BASICO_PRESTACION",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "C_FACTOR_MULTIPLICADOR",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 3,
+															"precision": 6
+														},
+														"sink": {
+															"name": "C_FACTOR_MULTIPLICADOR",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "F_PRECIO_BASICO_PRES_FACT",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 2,
+															"precision": 18
+														},
+														"sink": {
+															"name": "F_PRECIO_BASICO_PRES_FACT",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "F_PRECIO_SUBTOTAL_PRES_FACT",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 2,
+															"precision": 18
+														},
+														"sink": {
+															"name": "F_PRECIO_SUBTOTAL_PRES_FACT",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "F_PRECIO_NETO_PRES",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 2,
+															"precision": 18
+														},
+														"sink": {
+															"name": "F_PRECIO_NETO_PRES",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "F_FACTOR_MULTIPLICADOR",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 3,
+															"precision": 6
+														},
+														"sink": {
+															"name": "F_FACTOR_MULTIPLICADOR",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "F_CANT_PRES_FACT",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 0,
+															"precision": 18
+														},
+														"sink": {
+															"name": "F_CANT_PRES_FACT",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "F_PORCENTAJE_COBERTURA_PRES",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 0,
+															"precision": 18
+														},
+														"sink": {
+															"name": "F_PORCENTAJE_COBERTURA_PRES",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "F_RECARGO_HORARIO_PRES",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "F_RECARGO_HORARIO_PRES",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "FACTURA_ACTIVA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "FACTURA_ACTIVA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "MEDICO_QUE_DIAGNOSTICA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "MEDICO_QUE_DIAGNOSTICA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "TIPO_DESCUENTO",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "TIPO_DESCUENTO",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "TIPO_MOVIMIENTO",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "TIPO_MOVIMIENTO",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "CLASE_MOVIMIENTO",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "CLASE_MOVIMIENTO",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "TIPO_CONTRATO_CONVENIDO",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "TIPO_CONTRATO_CONVENIDO",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "CONTEO",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 0,
+															"precision": 1
+														},
+														"sink": {
+															"name": "CONTEO",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "CORRELATIVO",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 0,
+															"precision": 18
+														},
+														"sink": {
+															"name": "CORRELATIVO",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "CLASE_ALTA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "CLASE_ALTA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "FECHA_ALTA_MEDICA",
+															"type": "DateTime",
+															"physicalType": "datetime"
+														},
+														"sink": {
+															"name": "FECHA_ALTA_MEDICA",
+															"type": "DateTime",
+															"physicalType": "datetime2"
+														}
+													},
+													{
+														"source": {
+															"name": "HORA_ALTA_MEDICA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "HORA_ALTA_MEDICA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "ESTADO_ALTA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "ESTADO_ALTA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "FECHA_ACTUALIZACION",
+															"type": "DateTime",
+															"physicalType": "datetime"
+														},
+														"sink": {
+															"name": "FECHA_ACTUALIZACION",
+															"type": "DateTime",
+															"physicalType": "datetime2"
+														}
+													},
+													{
+														"source": {
+															"name": "ORIGEN",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "ORIGEN",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "ETL_ID",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "ETL_ID",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "ANULADO_PRESTACION",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "ANULADO_PRESTACION",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "MARCA_CONTABILIZACION_PRESTACION",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "MARCA_CONTABILIZACION_PRESTACION",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "NRO_ACTUAL_PRESTACION",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "NRO_ACTUAL_PRESTACION",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "NRO_MOVIMIENTO",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "NRO_MOVIMIENTO",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "CODIGO_EPISODIO",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "CODIGO_EPISODIO",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "CODIGO_FACTURA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "CODIGO_FACTURA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "ORDEN_CLINICA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														},
+														"sink": {
+															"name": "ORDEN_CLINICA_SK",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "KEY_FACTACT_EPIDOC",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "KEY_FACTACT_EPIDOC",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "FECHA_ALTA_ADMINISTRATIVA",
+															"type": "DateTime",
+															"physicalType": "datetime"
+														},
+														"sink": {
+															"name": "FECHA_ALTA_ADMINISTRATIVA",
+															"type": "DateTime",
+															"physicalType": "datetime2"
+														}
+													},
+													{
+														"source": {
+															"name": "HORA_ALTA_ADMINISTRATIVA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "HORA_ALTA_ADMINISTRATIVA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "TIPO_MOV_EPISODIO",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "TIPO_MOV_EPISODIO",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "UNIDAD_ENF_SOL",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "UNIDAD_ENF_SOL",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "UNIDAD_MED_SOL",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "UNIDAD_MED_SOL",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "UNIDAD_GESTORA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "UNIDAD_GESTORA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "CECO_UN_ENF_SOL",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "CECO_UN_ENF_SOL",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "DESCRIPCION_CECO",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "DESCRIPCION_CECO",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "UNIDAD_MEDIDA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "UNIDAD_MEDIDA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "FACTOR_CONVERSION_UN",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 4,
+															"precision": 10
+														},
+														"sink": {
+															"name": "FACTOR_CONVERSION_UN",
+															"type": "Decimal",
+															"physicalType": "decimal"
+														}
+													},
+													{
+														"source": {
+															"name": "CAMA",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "CAMA",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "HABITACION_BOX",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "HABITACION_BOX",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "FilaHash",
+															"type": "String",
+															"physicalType": "varchar"
+														},
+														"sink": {
+															"name": "FilaHash",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													}
+												],
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": "FACT_ACTIVIDAD"
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "MI_DWH_BI18_CUA_PRD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Tabla_Destino": "TMP_HASHFILAS_DESTINO"
+												}
+											}
+										]
+									},
+									{
+										"name": "Eliminar datos adicionales del destino",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "Obtener hash Origen",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											},
+											{
+												"activity": "Obtener Hash Destino",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "devtest_us2_asmi_data_001",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": "DELETE FA\nFROM FACT_ACTIVIDAD FA\nJOIN (\n    SELECT \n        d.FECHA_INGRESO_EPISODIO_SK, d.EPISODIO_SK, d.PACIENTE_SK, d.UBI_GEOGRAFICA_SK, \n        d.PRESTACION_SK, d.EMPRESA_PRES_CLINICA_SK, d.FACTURA_SK, d.FECHA_FACTURACION_SK, \n        d.EMPRESA_PRES_FACTURADA_SK, d.PROF_MEDICO_TRATANTE_SK, d.DIAGNOSTICO_INGRESO_SK, \n        d.DIAGNOSTICO_EGRESO_SK, d.UNIDAD_SOLI_PRESTACION_SK, d.UNIDAD_CARGA_PRESTACION_SK, \n        d.UNIDAD_ADMISION_EPISODIO_SK, d.FECHA_CARGA_PRESTACION_SK, d.ORDEN_CLINICA_SK, \n        d.NRO_ACTUAL_PRESTACION\n    FROM TMP_HASHFILAS_DESTINO d\n    LEFT JOIN TMP_HASHFILAS t ON d.FilaHash = t.FilaHash\n    WHERE t.FilaHash IS NULL\n) AS sub\nON FA.FECHA_INGRESO_EPISODIO_SK = sub.FECHA_INGRESO_EPISODIO_SK\n   AND FA.EPISODIO_SK = sub.EPISODIO_SK\n   AND FA.PACIENTE_SK = sub.PACIENTE_SK\n   AND FA.UBI_GEOGRAFICA_SK = sub.UBI_GEOGRAFICA_SK\n   AND FA.PRESTACION_SK = sub.PRESTACION_SK\n   AND FA.EMPRESA_PRES_CLINICA_SK = sub.EMPRESA_PRES_CLINICA_SK\n   AND FA.FACTURA_SK = sub.FACTURA_SK\n   AND FA.FECHA_FACTURACION_SK = sub.FECHA_FACTURACION_SK\n   AND FA.EMPRESA_PRES_FACTURADA_SK = sub.EMPRESA_PRES_FACTURADA_SK\n   AND FA.PROF_MEDICO_TRATANTE_SK = sub.PROF_MEDICO_TRATANTE_SK\n   AND FA.DIAGNOSTICO_INGRESO_SK = sub.DIAGNOSTICO_INGRESO_SK\n   AND FA.DIAGNOSTICO_EGRESO_SK = sub.DIAGNOSTICO_EGRESO_SK\n   AND FA.UNIDAD_SOLI_PRESTACION_SK = sub.UNIDAD_SOLI_PRESTACION_SK\n   AND FA.UNIDAD_CARGA_PRESTACION_SK = sub.UNIDAD_CARGA_PRESTACION_SK\n   AND FA.UNIDAD_ADMISION_EPISODIO_SK = sub.UNIDAD_ADMISION_EPISODIO_SK\n   AND FA.FECHA_CARGA_PRESTACION_SK = sub.FECHA_CARGA_PRESTACION_SK\n   AND FA.ORDEN_CLINICA_SK = sub.ORDEN_CLINICA_SK\n   AND FA.NRO_ACTUAL_PRESTACION = sub.NRO_ACTUAL_PRESTACION;\n"
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"ListaTablas": {
+				"type": "array",
+				"defaultValue": [
+					"FACT_ACTIVIDAD"
+				]
+			},
+			"fecha_inicio": {
+				"type": "string",
+				"defaultValue": "2025-01-01"
+			},
+			"fecha_fin": {
+				"type": "string",
+				"defaultValue": "2025-12-31"
+			}
+		},
+		"variables": {
+			"COMPRACION_HASH": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "MIG_BI20_TO_BI30/Subflows"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-08T13:39:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

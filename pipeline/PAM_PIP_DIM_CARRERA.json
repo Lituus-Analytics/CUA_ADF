@@ -1,0 +1,1861 @@
+{
+	"name": "PAM_PIP_DIM_CARRERA",
+	"properties": {
+		"description": "Proceso ETL encargado de obtener los datos asociados al maestro de programa/carrera incluyendo homologación DEMRE y SIES",
+		"activities": [
+			{
+				"name": "Get Actual MD5 STG Parquet",
+				"description": "Obtiene el último MD5 generado para todo el contenido del archivo carrera, en base al resultado del objeto \"Copy data: IFX to Parquet\"",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "IFX to Parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "STG_CARRERA_PQT",
+						"type": "DatasetReference",
+						"parameters": {
+							"AzureDataLakeG2Endpoint": {
+								"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+								"type": "Expression"
+							},
+							"AzureKeyVaultEndpoint": {
+								"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"contentMD5"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "ParquetReadSettings"
+					}
+				}
+			},
+			{
+				"name": "IFX to Parquet",
+				"description": "Extracción de datos asociados a carrera, desde la base de datos Informix (on premise) hacia Azure Data Lake 2 Gen en formato Parquet",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Lookup Last MD5 Procesado",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "InformixSource",
+						"query": {
+							"value": "/* Del sp ifx_tipo_admisionpru se toma la idea de agregar la mención/especialidad para aborar el caso de los códigos que se duplican\n * entre el maestro de carreras UCSH vs homologación DEMRE\n * \n * Del sp ifx_carga_pes3 se determina como obtener el código denominado pes que equivaldría a un sies \n*/\nwith STG_CARRERA AS -- Se desactiva este CTE para permitir el caso de una carrera con más de una mención \n(\nselect DISTINCT\n\tcarrera.carr_codi \t\tas CODIGO_CARRERA_UCSH,\n\tCOALESCE(carr_demre.cadm_codi,-1)\tas CODIGO_CARRERA_DEMRE,\n\t--Estrategia del máximo ID en DEMRE\n\t--row_number() over (partition by carr_codi order by cadm_codi desc) as correlativo_demre, -- En caso de querer eliminar duplicados por join Demre. Cod carr: 251 y 282\n\t--Estrategia de registro vigencia\n\t--La carrera 282 estaba inscrita con dos códigos demre y se deshabilito uno,  campo cadm_diad (S)\n\t--case \n\t--\t\twhen carr_demre.cadm_codi is null then 0 \n\t--\t\telse row_number() over (partition by carr_demre.cadm_carr order by carr_demre.cadm_diad asc, carr_demre.cadm_codi desc) \n\t--end as correlativo_demre,\n\tTRIM(coalesce(carr_demre.cadm_espe,'000')) \t\tas codigo_mencion_demre_ucsh,\n\tTRIM(coalesce(carr_mencion.espe_desc,'PLAN COMUN')) \tas mencion_demre_ucsh,\n\tcase when carr_mencion_ucsh.espe_codi is null then TRIM(coalesce(carr_demre.cadm_espe,'000')) \n\t\t else carr_mencion_ucsh.espe_codi end as codigo_mencion_ucsh,\n\tcase when carr_mencion_ucsh.espe_codi is null then TRIM(coalesce(carr_mencion.espe_desc,'PLAN COMUN')) \n\t\t else carr_mencion_ucsh.espe_desc end as mencion_ucsh,\n\t---- Ajuste para las menciones ucsh\n\tTRIM(coalesce(carr_sies,'?')) as CODIGO_CARRERA_SIES,\n\tcoalesce(pes_sies.cod_pes,-1) as CODIGO_CARRERA_PES_SIES, -- Código SIES a la medida según Jorge Jimenes. El área envia los códigos y los guardan en la tabla vers_ies.\n\tcoalesce(carr_cned,0)\tas CODIGO_CARRERA_CNED, -- Código asignado por Consejo nacional de educación (CNED)\n\tcoalesce(carr_cmed,0)\tas CODIGO_CARRERA_CMED, -- Código de carrera del ministerio de educación (MINEDUC);\n\tTRIM(carrera.carr_desc) \t\tas CARRERA_NOMBRE_CORTO,\n\tTRIM(carrera.carr_desl) \t\tas CARRERA_NOMBRE_LARGO,\n\tTRIM(coalesce(carr_demre.cadm_desl,'?'))\tas CARRERA_NOMBRE_LARGO_DEMRE,\n\t---- Inicio Jerarquía ----\n\t-- \n\tTRIM(carrera.carr_inst) \t\tas CODIGO_INSTITUCION,\n\tTRIM(carrera.carr_sede) \t\tas CODIGO_SEDE,\t\t\t\t-- No es necesario un decode se corresponde con cod_institucion unívocamente\n\tTRIM(institucion.inst_sigl)\tas SIGLA_INSTITUCION,\n\tTRIM(institucion.inst_desc) \tas INSTITUCION,\n\t--\n\tTRIM(coalesce(escuela.escu_facu,'?')) \t\t\t\t\tas CODIGO_FACULTAD, \t\t\n\tTRIM(coalesce(facultad.facu_dgp,'?') )\t\t\t\t\tas CODIGO_FACULTAD_DGP,\t\t\n\tTRIM(coalesce(facultad.facu_desc,'Sin información')) \t\tas FACULTAD_NOMBRE_LARGO,\n\tTRIM(coalesce(LTRIM(REPLACE(replace(replace(replace(facultad.facu_desc, 'FACULTAD',''),'DE ', '') , ' (CES)',''),'CIENCIAS LA', '')), 'Sin información'))  as FACULTAD_NOMBRE_CORTO,\n\t--\n\tTRIM(coalesce(carrera.carr_escu,'?')) \t\tas CODIGO_ESCUELA,\n\tTRIM(coalesce(escuela.escu_facu,'?')) \t\tas CODIGO_ESCUELA_DGP, \t\t-- DGP: Dirección de Gestión de Personal\n\tTRIM(coalesce(escuela.escu_desc ,'Sin información'))\t\tas ESCUELA_NOMBRE_LARGO,\n\tTRIM(LTRIM(coalesce(REPLACE(REPLACE(REPLACE(escuela.escu_desc,'ESCUELA',''), 'DE ',''), ' (CES)'),'Sin información'))) as ESCUELA_NOMBRE_CORTO,\n\t---- Fin Jerarquía ----\n\t-- Datos de la carrera perse\n\t-- carr_upl: No se utiliza campo carr_ulpl por modificación del modelo por los cambios de  planes. \n\t-- Se puede recuperar el plan de la tabla aaidpl (identifica planes de estudio por carrera) para admisión.\n\t-- La tabla aaidpl puede aportar {idpl_dura\tAS\tDURACION_SEMESTRES, idpl_tcre\tAS \tTOTAL_CREDITOS}, sin embargo, puede tener más de un plan vigente \n\t-- Se descarta el campo y la obtención de los datos a través de la tabla por no ser unívoca, de ser necesario el campo se debe modelar en la fact, no en la dimensión.\t\t\t\n\tTRIM(carrera.carr_diad) as CODIGO_DISPONIBLE_PARA_ADMISION, --IGUAL A DIM_CARRERA.CODIGO_DESHABILITADA_PARA_ADMISION\n\tTRIM(decode(carrera.carr_diad, 'S', 'Deshabilitada', 'N', 'Disponible', carrera.carr_diad || ':Por definir')) as DISPONIBLE_PARA_ADMISION,\n\tTRIM(coalesce(carr_demre.cadm_diad ,'?')) as CODIGO_DISPONIBLE_PARA_ADMISION_DEMRE, --IGUAL A DIM_CARRERA.CODIGO_DESHABILITADA_PARA_ADMISION_DEMRE\n\tTRIM(decode(carr_demre.cadm_diad, 'S', 'Deshabilitada', 'N', 'Disponible', coalesce(carr_demre.cadm_diad,'?')  || ': Sin información')) as DISPONIBLE_PARA_ADMISION_DEMRE, \n\t--\n\t--El campo identifica si la carrera es elegible (Solo para pedagogías):                                                                   \n\t-- S: Elegile; N: No elegible ;L:  Cumple con LEY 20.903\n\tTRIM(case when carrera.carr_eleg = ' ' then '?' else coalesce(carrera.carr_eleg,'?') end) as CODIGO_ELEGIBLE_BECA_VOCACION_PROFESOR,\n\tTRIM(decode(carrera.carr_eleg, ' ', '?', 'N', 'No elegible', 'S', 'Elegible', 'L', 'Cumple con LEY 20.903', 'Sin información')) as ELEGIBLE_BECA_VOCACION_PROFESOR,\n\t--\n\tcoalesce(carrera.carr_dura,0) \t\t\t\t\t\t\t\t\t\tas DURACION_SEMESTRES,\n\tTRIM(carrera.carr_anua) \t\t\t\t\t\t\t\t\t\tas CODIGO_TIPO_DURACION, --M - Mensual;S - Semestral;T - Trimestral\n\tTRIM(coalesce(trim(parametro_tip_dur.codi_desc),'Sin Información')) as TIPO_DURACION,\n\t--carrera.carr_anua || ': Pendiente as TIPO_DURACION\n\t--coalesce(parametro_tip_dur.codi_desc,'Sin información')\tas TIPO_DURACION,\n\tTRIM(substring( carrera.carr_codi from 3 for 1)) \t\tas CODIGO_JORNADA,\n\t-- TI indica que lo que corresponde a postgrado y extensión (formación continua) no se utiliza (Tipo jornada)\n\t-- ya que son programas abiertos. Pueden ser diurno o vespertino depende de la oferta académica.\n\tTRIM(\n\tcase \n\t\t--when carrera.carr_grad in ('PR', 'PO') and substring( carrera.carr_codi from 3 for 1)='1' then 'Diurna'\n \t\t--when carrera.carr_grad in ('PR', 'PO') and substring( carrera.carr_codi from 3 for 1)='2' then 'Vespertina'\n\t\twhen carrera.carr_grad ='PR' and substring( carrera.carr_codi from 3 for 1)='1' then 'Diurna'\n \t\twhen carrera.carr_grad ='PR' and substring( carrera.carr_codi from 3 for 1)='2' then 'Vespertina'\n \t\telse 'Sin información'\n \tend) as TIPO_JORNADA,\n\t--\n\tTRIM(coalesce(carrera.carr_tipo,'?')) \t\t\t\t\tas CODIGO_TIPO_EDUCACION,\n\tTRIM(coalesce(parametros.codi_desc,'Sin información'))\tas TIPO_EDUCACION,\n\tTRIM(coalesce(carrera.carr_tepr,'?')) \t\t\t\t\tas CODIGO_ES_TECNICO_PROFESIONAL, -- TI indicó que no se usa\n\t--decode(coalesce(carrera.carr_tepr,'?'), 'P', 'Profesional', 'T','Técnico', trim(coalesce(carr_tepr,'Nulo')) || ': Por definir') \tas ES_TECNICO_PROFESIONAL, --TI indicó que no se usa\n\tTRIM(carrera.carr_tpro) \t\t\tas CODIGO_TIPO_PROGRAMA,\n\tTRIM(tipo_programa.tpro_desc)  \tas TIPO_PROGRAMA,\t\t\n\t--tipo_programa.tpro_grad\t\tas TPRO_GRADO, tiene valores distintos a los de carrera validar si usamos el campo de est tabla o directo de la carrera\n\tTRIM(carrera.carr_grad) \t\t\tas CODIGO_GRADO,\n\tTRIM(grado_acadec.grad_desc) \t\tas GRADO,\n\tTRIM(coalesce(carr_nfor,'?'))\t\t  \t\t\tas NIVEL_FORMACION_UCSH,\n\t--\n\tTRIM(COALESCE(carrera.carr_recu,'?')) \t\t\t\tas CODIGO_BONIFICACION, --1-SENCE - 75 (%); 2- CPEIP      80 (%) ; 0-SIN BONIFI\n\tTRIM(decode(carrera.carr_recu,1,'SENCE: 75%', 2, 'CPEIP: 80%', 0, 'SIN BONIFICACION', 'Nulo: Sin Información')) AS BONIFICACION,\n\tTRIM(COALESCE(carrera.carr_cobo,'0'))  as PORCENTAJE_BONIFICACION,\n\t--coalesce(carr_ceco,'?')\tas CODIGO_CENTRO_COSTO,\n\t--'Pendiente'\t\t  \t\tas CENTRO_COSTO,\n\t'ADCARR;ADTPRO;ADGRAD;ADINST;ADCODI;ADESCU;ADFACU;ADCADM;AAESPE;VERS_IES' as ORIGEN\nFROM \t\tADCARR\tAS carrera\nINNER JOIN \tADTPRO \tas tipo_programa \t\ton (carrera.carr_tpro\t= tipo_programa.tpro_codi)\nINNER JOIN \tADGRAD \tas grado_acadec \t\ton (carrera.carr_grad\t= grado_acadec.grad_codi)\nINNER JOIN \tADINST \tas institucion\t\t\ton (carrera.carr_inst  \t= institucion.inst_codi) \nLEFT JOIN  \tADCODI \tas parametros \t\t\ton (carr_tipo \t\t\t= parametros.codi_codi  and parametros.codi_id='carr_tipo')\nLEFT JOIN  \tADCODI \tas parametro_tip_dur\ton (carr_tipo \t\t\t= parametro_tip_dur.codi_codi  and parametro_tip_dur.codi_id='carr_anua')\nLEFT JOIN \tADESCU \tas escuela \t\t\t\ton (carrera.carr_escu\t= escuela.escu_codi)\nLEFT JOIN \tADFACU \tas facultad\t\t\t\ton (escuela.escu_facu\t= facultad.facu_codi)\n--LEFT JOIN \tADCADM \tas carr_demre\t\t\ton (carrera.carr_codi\t= carr_demre.cadm_carr)\nLEFT JOIN \t(\n\tselect cadm_codi,cadm_desl ,cadm_carr,cadm_espe,cadm_diad from ADCADM\n\tunion select -1,'PEDAGOGÍA EN EDUCACIÓN ARTÍSTICA','251','000','?'\n) \tas carr_demre\t\t\ton (carrera.carr_codi\t= carr_demre.cadm_carr)\nLEFT join   AAESPE  as carr_mencion \t\ton (carr_demre.cadm_espe= carr_mencion.espe_codi)\n--LEFT JOIN AAIDP   AS ult_plan_vig\t\t\ton Se determinó como un join innecesario;\nLEFT JOIN (select carr_codi, max(carr_pes) as cod_pes from vers_ies where carr_pes is not null group by carr_codi) as pes_sies\ton (carrera.carr_codi=pes_sies.carr_codi) \nleft join (\n\tselect distinct\n\tcase when espe_codi <> '000' then '000' else '000' end as espe_codi,\n\tcase when espe_desc <> 'PLAN COMUN' then 'PLAN COMUN' else 'PLAN COMUN' end as espe_desc,\n\tespe_carr\n\tfrom AAESPE\n\tunion\n\tselect distinct espe_codi,espe_desc,espe_carr from AAESPE\t\n)\t\t\t\t\tas carr_mencion_ucsh\ton carr_mencion_ucsh.espe_carr = substring(carrera.carr_codi from 1 for 2) and TRIM(coalesce(carr_demre.cadm_espe,'000')) = '000'\n)\nselect\ncase \n\twhen CODIGO_CARRERA_DEMRE < -1 then 0\n\telse row_number() over (partition by CODIGO_CARRERA_UCSH order by codigo_mencion_ucsh asc) \nend as correlativo_demre,*\nfrom STG_CARRERA where (codigo_mencion_demre_ucsh = '000' and codigo_mencion_demre_ucsh != codigo_mencion_ucsh \n\t\t\t\tand codigo_mencion_ucsh  not in (\n\t\t\t\t\t\tselect distinct carr_demre.cadm_espe \n\t\t\t\t\t\tfrom adcarr as carrera LEFT join ADCADM as carr_demre on (carrera.carr_codi = carr_demre.cadm_carr) \n\t\t\t\t\t\twhere coalesce(carr_demre.cadm_espe,'000') <> '000')\n\t\t\t\t\t\t) or (codigo_mencion_demre_ucsh = codigo_mencion_ucsh)\nORDER BY 2 asc, 1 asc",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": true,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "correlativo_demre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "correlativo_demre",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_carrera_ucsh",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_carrera_ucsh",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_carrera_demre",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "codigo_carrera_demre",
+									"type": "Int32",
+									"physicalType": "INT_32"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_mencion_demre_ucsh",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_mencion_demre_ucsh",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "mencion_demre_ucsh",
+									"type": "String"
+								},
+								"sink": {
+									"name": "mencion_demre_ucsh",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_mencion_ucsh",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_mencion_ucsh",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "mencion_ucsh",
+									"type": "String"
+								},
+								"sink": {
+									"name": "mencion_ucsh",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_carrera_sies",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_carrera_sies",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_carrera_pes_sies",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "codigo_carrera_pes_sies",
+									"type": "Int32",
+									"physicalType": "INT_32"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_carrera_cned",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "codigo_carrera_cned",
+									"type": "Int32",
+									"physicalType": "INT_32"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_carrera_cmed",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "codigo_carrera_cmed",
+									"type": "Int32",
+									"physicalType": "INT_32"
+								}
+							},
+							{
+								"source": {
+									"name": "carrera_nombre_corto",
+									"type": "String"
+								},
+								"sink": {
+									"name": "carrera_nombre_corto",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "carrera_nombre_largo",
+									"type": "String"
+								},
+								"sink": {
+									"name": "carrera_nombre_largo",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "carrera_nombre_largo_demre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "carrera_nombre_largo_demre",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_institucion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_institucion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_sede",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_sede",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "sigla_institucion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "sigla_institucion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "institucion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "institucion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_facultad",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_facultad",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_facultad_dgp",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_facultad_dgp",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "facultad_nombre_largo",
+									"type": "String"
+								},
+								"sink": {
+									"name": "facultad_nombre_largo",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "facultad_nombre_corto",
+									"type": "String"
+								},
+								"sink": {
+									"name": "facultad_nombre_corto",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_escuela",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_escuela",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_escuela_dgp",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_escuela_dgp",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "escuela_nombre_largo",
+									"type": "String"
+								},
+								"sink": {
+									"name": "escuela_nombre_largo",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "escuela_nombre_corto",
+									"type": "String"
+								},
+								"sink": {
+									"name": "escuela_nombre_corto",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_disponible_para_admision",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_disponible_para_admision",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "disponible_para_admision",
+									"type": "String"
+								},
+								"sink": {
+									"name": "disponible_para_admision",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_disponible_para_admision_demre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_disponible_para_admision_demre",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "disponible_para_admision_demre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "disponible_para_admision_demre",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_elegible_beca_vocacion_profesor",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_elegible_beca_vocacion_profesor",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "elegible_beca_vocacion_profesor",
+									"type": "String"
+								},
+								"sink": {
+									"name": "elegible_beca_vocacion_profesor",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "duracion_semestres",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "duracion_semestres",
+									"type": "Int32",
+									"physicalType": "INT_32"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_tipo_duracion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_tipo_duracion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "tipo_duracion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "tipo_duracion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_jornada",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_jornada",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "tipo_jornada",
+									"type": "String"
+								},
+								"sink": {
+									"name": "tipo_jornada",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_tipo_educacion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_tipo_educacion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "tipo_educacion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "tipo_educacion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_es_tecnico_profesional",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_es_tecnico_profesional",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_tipo_programa",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_tipo_programa",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "tipo_programa",
+									"type": "String"
+								},
+								"sink": {
+									"name": "tipo_programa",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_grado",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_grado",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "grado",
+									"type": "String"
+								},
+								"sink": {
+									"name": "grado",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "nivel_formacion_ucsh",
+									"type": "String"
+								},
+								"sink": {
+									"name": "nivel_formacion_ucsh",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "codigo_bonificacion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "codigo_bonificacion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "bonificacion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "bonificacion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "porcentaje_bonificacion",
+									"type": "String"
+								},
+								"sink": {
+									"name": "porcentaje_bonificacion",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "origen",
+									"type": "String"
+								},
+								"sink": {
+									"name": "origen",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "QY_PARQUET_CARRERA",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "STG_CARRERA_PQT",
+						"type": "DatasetReference",
+						"parameters": {
+							"AzureDataLakeG2Endpoint": {
+								"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+								"type": "Expression"
+							},
+							"AzureKeyVaultEndpoint": {
+								"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Lookup Last MD5 Procesado",
+				"description": "Obtención del ultimo código hash (MD5) generado por Azure Data Lake 2 Gen, para el archivo Parquet el cual tiene datos de carrera",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT \n\tISNULL(MAX(PIPELINE),'?') \t\t\tAS PIPELINE,\n\tISNULL(MAX(CONCEPTO_ASOCIADO),'?') \tAS CONCEPTO_ASOCIADO,\n\tISNULL(MAX(ANTEPENULTIMO_CODIGO_HASH),'?') AS ANTEPENULTIMO_CODIGO_HASH,\n\tISNULL(MAX(FECHA_ANTEPENULTIMO_CODIGO_HASH),'1900.01.01') AS FECHA_ANTEPENULTIMO_CODIGO_HASH,\n\tISNULL(MAX(PENULTIMO_CODIGO_HASH),'?') AS PENULTIMO_CODIGO_HASH,\n\tISNULL(MAX(FECHA_PENULTIMO_CODIGO_HASH),'1900.01.01') AS FECHA_PENULTIMO_CODIGO_HASH,\n\tISNULL(MAX(CODIGO_HASH_ACTUAL),'?') AS CODIGO_HASH_ACTUAL,\n\tISNULL(MAX(FECHA_CODIGO_HASH_ACTUAL),'1900.01.01') AS FECHA_CODIGO_HASH_ACTUAL\nFROM LK_AUDITORIA_DELTA_ADLSG2\nWHERE \n\tPIPELINE='@{pipeline().Pipeline}'\nAND CONCEPTO_ASOCIADO='DIM_CARRERA'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "LK_AUDITORIA_DELTA_ADLSG2",
+						"type": "DatasetReference",
+						"parameters": {
+							"AzureKeyVaultEndpoint": {
+								"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": true
+				}
+			},
+			{
+				"name": "No hay cambios",
+				"description": "Si el MD5 es igual al que se había almacenado previo a la ejecución del Pipeline, significa que no hubo cambios en los datos y por ende no es necesario actualizar la dimensión carrera. En caso contrario (False), los datos han cambiado y se actualizarán mediante la ejecución del dataflow respectivo.",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Actual MD5 STG Parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "No hay cambios SIES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@AND(\nequals(activity('Get Actual MD5 STG Parquet').output.contentMD5,  activity('Lookup Last MD5 Procesado').output.firstRow.CODIGO_HASH_ACTUAL)\n,\nequals(activity('Get Actual MD5 STG Parquet SIES').output.contentMD5,  activity('Lookup Last MD5 Procesado SIES').output.firstRow.CODIGO_HASH_ACTUAL)\n)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "UPDATE_HASH",
+							"description": "Una vez procesado con éxito los cambios en la DIM_CARRERA, se procede actualizar en 2 pasos el nuevo hash (MD5).\nPrimero se borra la última ejecución/registro y luego se vuelve a insertar pero con el nuevo MD5. La finalidad es contar con solo un registro por dimensión, no será necesario llevar la historia de ejecución per se, puesto que se puede obtener desde el apartado Monitoring de Data Factory.",
+							"type": "Script",
+							"dependsOn": [
+								{
+									"activity": "PAM_DF_D_CARRERA",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "devtest_eus2_synws_02",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "NonQuery",
+										"text": {
+											"value": "DELETE FROM LK_AUDITORIA_DELTA_ADLSG2 \nWHERE \n\tPIPELINE='@{pipeline().Pipeline}'\nAND CONCEPTO_ASOCIADO='DIM_CARRERA'\t;\n\nINSERT INTO LK_AUDITORIA_DELTA_ADLSG2 VALUES ('@{pipeline().Pipeline}','DIM_CARRERA', '@{activity('Lookup Last MD5 Procesado').output.firstRow.PENULTIMO_CODIGO_HASH}','@{activity('Lookup Last MD5 Procesado').output.firstRow.FECHA_PENULTIMO_CODIGO_HASH}','@{activity('Lookup Last MD5 Procesado').output.firstRow.CODIGO_HASH_ACTUAL}','@{activity('Lookup Last MD5 Procesado').output.firstRow.FECHA_CODIGO_HASH_ACTUAL}','@{activity('Get Actual MD5 STG Parquet').output.contentMD5}','@{convertFromUtc(utcnow(), 'Pacific SA Standard Time', 'yyyy-MM-dd HH:mm:ss')}')",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "PAM_DF_D_CARRERA",
+							"description": "Dataflow encargado de cargar y/o actualizar los registros de la DIM_CARRERA en el Data Warehouse disponible en Azure SQL DB",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "PAM_DF_D_CARRERA",
+									"type": "DataFlowReference",
+									"parameters": {
+										"pipeline_run_id": {
+											"value": "'@{pipeline().RunId}'",
+											"type": "Expression"
+										}
+									},
+									"datasetParameters": {
+										"StgCarreraParquet": {
+											"AzureDataLakeG2Endpoint": {
+												"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+												"type": "Expression"
+											},
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											}
+										},
+										"QYDimCarrera": {
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											}
+										},
+										"LKCARRERASIES": {
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Get Actual MD5 STG Parquet SIES",
+				"description": "Obtiene el último MD5 generado para todo el contenido del archivo carrera, en base al resultado del objeto \"Copy data: IFX to Parquet\"",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "IFX to Parquet SIES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "QY_PARQUET_CARRERAS_SIES",
+						"type": "DatasetReference",
+						"parameters": {
+							"AzureKeyVaultEndpoint": {
+								"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+								"type": "Expression"
+							},
+							"AzureDataLakeG2Endpoint": {
+								"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"contentMD5"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "ParquetReadSettings"
+					}
+				}
+			},
+			{
+				"name": "Lookup Last MD5 Procesado SIES",
+				"description": "Obtención del ultimo código hash (MD5) generado por Azure Data Lake 2 Gen, para el archivo Parquet el cual tiene datos de carrera",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT \n\tISNULL(MAX(PIPELINE),'?') \t\t\tAS PIPELINE,\n\tISNULL(MAX(CONCEPTO_ASOCIADO),'?') \tAS CONCEPTO_ASOCIADO,\n\tISNULL(MAX(ANTEPENULTIMO_CODIGO_HASH),'?') AS ANTEPENULTIMO_CODIGO_HASH,\n\tISNULL(MAX(FECHA_ANTEPENULTIMO_CODIGO_HASH),'1900.01.01') AS FECHA_ANTEPENULTIMO_CODIGO_HASH,\n\tISNULL(MAX(PENULTIMO_CODIGO_HASH),'?') AS PENULTIMO_CODIGO_HASH,\n\tISNULL(MAX(FECHA_PENULTIMO_CODIGO_HASH),'1900.01.01') AS FECHA_PENULTIMO_CODIGO_HASH,\n\tISNULL(MAX(CODIGO_HASH_ACTUAL),'?') AS CODIGO_HASH_ACTUAL,\n\tISNULL(MAX(FECHA_CODIGO_HASH_ACTUAL),'1900.01.01') AS FECHA_CODIGO_HASH_ACTUAL\nFROM LK_AUDITORIA_DELTA_ADLSG2\nWHERE \n\tPIPELINE='@{pipeline().Pipeline}'\nAND CONCEPTO_ASOCIADO='LK_CARRERAS_SIES'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "LK_AUDITORIA_DELTA_ADLSG2",
+						"type": "DatasetReference",
+						"parameters": {
+							"AzureKeyVaultEndpoint": {
+								"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": true
+				}
+			},
+			{
+				"name": "IFX to Parquet SIES",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Lookup Last MD5 Procesado SIES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": true,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Año  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C1",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Código Único  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C2",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Tipo Institución 1  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C3",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Tipo Institución 2  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C4",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Tipo Institución 3  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C5",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Región Sede  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C6",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Provincia Sede  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C7",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Comuna Sede  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C8",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área del conocimiento  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C9",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Cine-F 97 Área",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C10",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Cine-F 97 Subárea",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C11",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Carrera Genérica",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C12",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Cine-F 13 Área",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C13",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Cine-F 13 Subárea",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C14",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Tipo de institución  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C15",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Código IES  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C16",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Nombre IES  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C17",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Código Sede  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C18",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Nombre Sede  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C19",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Código Carrera  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C20",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Nombre Carrera  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C21",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Modalidad  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C22",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Jornada  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C23",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Versión  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C24",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Tipo Carrera  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C25",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan Especial  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C26",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Duración Estudios  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C27",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Duración Titulación  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C28",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Duración Total  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C29",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Régimen ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C30",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Duración formal del Régimen ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C31",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Nombre Título  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C32",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Grado Académico  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C33",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Nivel Global  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C34",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Nivel Carrera  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C35",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Demre",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C36",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Año Inicio  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C37",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Acreditación Carrera o Programa ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C38",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Elegibilidad Beca Pedagogía  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C39",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Pedagogía Medicina Odontología, Otro  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C40",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Requisito Ingreso  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C41",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Semestres reconocidos ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C42",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Actual  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C43",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Dest Agricultura  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C44 ",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Dest Ciencias  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C45",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Dest C Soc Comerc Derecho  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C46",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Dest Educación  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C47",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Dest Humanidades y Artes   ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C48",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Dest Ing Ind Const  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C49",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Dest Salud y Serv Soc  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C50",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Área Dest Servicios  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C51",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Ponderación Notas  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C52",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Ponderación Ranking Notas  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C53",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Ponderación Lenguaje  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C54",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Ponderación Matemáticas",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C55",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Ponderación Matemáticas 2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C56",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Ponderación Historia  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C57",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Ponderación Ciencias  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C58",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Ponderación Otros  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C59",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Vacantes Semestre Uno  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C60",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Vacantes Semestre Dos  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C61",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Formato Valor",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C62",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Matrícula Anual  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C63",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Costo Titulación  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C64",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Costo Certificado Diploma  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C65",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Arancel Anual  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C66",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Vigencia  ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "C67",
+									"physicalType": "UTF8"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "EXCEL_CARRERAS_SIES",
+						"type": "DatasetReference",
+						"parameters": {
+							"AzureDataLakeG2Endpoint": {
+								"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+								"type": "Expression"
+							},
+							"AzureKeyVaultEndpoint": {
+								"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "QY_PARQUET_CARRERAS_SIES",
+						"type": "DatasetReference",
+						"parameters": {
+							"AzureKeyVaultEndpoint": {
+								"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+								"type": "Expression"
+							},
+							"AzureDataLakeG2Endpoint": {
+								"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "No hay cambios SIES",
+				"description": "Si el MD5 es igual al que se había almacenado previo a la ejecución del Pipeline, significa que no hubo cambios en los datos y por ende no es necesario actualizar la dimensión carrera. En caso contrario (False), los datos han cambiado y se actualizarán mediante la ejecución del dataflow respectivo.",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Actual MD5 STG Parquet SIES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(activity('Get Actual MD5 STG Parquet SIES').output.contentMD5,  activity('Lookup Last MD5 Procesado SIES').output.firstRow.CODIGO_HASH_ACTUAL)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Excel to SQL Server SIES",
+							"description": "Carga de datos Oferta Académica SIES",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "PAM_DF_LK_CARRERAS_SIES",
+									"type": "DataFlowReference",
+									"datasetParameters": {
+										"CSVArchivoSIES": {
+											"AzureDataLakeG2Endpoint": {
+												"value": "@pipeline().parameters.AzureDataLakeG2Endpoint",
+												"type": "Expression"
+											},
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											}
+										},
+										"LKCARRERASSIESOrigen": {
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											}
+										},
+										"LKCARRERASSIES": {
+											"AzureKeyVaultEndpoint": {
+												"value": "@pipeline().parameters.AzureKeyVaultEndpoint",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						},
+						{
+							"name": "UPDATE_HASH SIES",
+							"description": "Una vez procesado con éxito los cambios en la DIM_CARRERA, se procede actualizar en 2 pasos el nuevo hash (MD5).\nPrimero se borra la última ejecución/registro y luego se vuelve a insertar pero con el nuevo MD5. La finalidad es contar con solo un registro por dimensión, no será necesario llevar la historia de ejecución per se, puesto que se puede obtener desde el apartado Monitoring de Data Factory.",
+							"type": "Script",
+							"dependsOn": [
+								{
+									"activity": "Excel to SQL Server SIES",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "devtest_eus2_synws_02",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "NonQuery",
+										"text": {
+											"value": "UPDATE TAB_DESTINO\nSET  TAB_DESTINO.CORRELATIVO_CARRERA = TAB_ORIGEN.CORRELATIVO\nFROM (\n    SELECT ANIO,CODIGO_IES,CODIGO_CARRERA_SIES,\n    ROW_NUMBER() OVER (partition by CODIGO_IES,CODIGO_CARRERA_SIES ORDER BY ANIO desc) AS CORRELATIVO\n    FROM LK_CARRERAS_SIES\n) AS TAB_ORIGEN, \nLK_CARRERAS_SIES AS TAB_DESTINO\nWHERE \n    TAB_ORIGEN.ANIO                 = TAB_DESTINO.ANIO \nAND TAB_ORIGEN.CODIGO_IES           = TAB_DESTINO.CODIGO_IES\nAND TAB_ORIGEN.CODIGO_CARRERA_SIES  = TAB_DESTINO.CODIGO_CARRERA_SIES;\n\nDELETE FROM LK_AUDITORIA_DELTA_ADLSG2 \nWHERE \n\tPIPELINE='@{pipeline().Pipeline}'\nAND CONCEPTO_ASOCIADO='LK_CARRERAS_SIES'\t;\n\nINSERT INTO LK_AUDITORIA_DELTA_ADLSG2 VALUES ('@{pipeline().Pipeline}','LK_CARRERAS_SIES', '@{activity('Lookup Last MD5 Procesado SIES').output.firstRow.PENULTIMO_CODIGO_HASH}','@{activity('Lookup Last MD5 Procesado SIES').output.firstRow.FECHA_PENULTIMO_CODIGO_HASH}','@{activity('Lookup Last MD5 Procesado SIES').output.firstRow.CODIGO_HASH_ACTUAL}','@{activity('Lookup Last MD5 Procesado SIES').output.firstRow.FECHA_CODIGO_HASH_ACTUAL}','@{activity('Get Actual MD5 STG Parquet SIES').output.contentMD5}','@{convertFromUtc(utcnow(), 'Pacific SA Standard Time', 'yyyy-MM-dd HH:mm:ss')}')\n\n",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"AzureKeyVaultEndpoint": {
+				"type": "String",
+				"defaultValue": "https://ucsh-kv-datagovernance.vault.azure.net/"
+			},
+			"AzureDataLakeG2Endpoint": {
+				"type": "String",
+				"defaultValue": "https://ucshdatalake.dfs.core.windows.net/"
+			}
+		},
+		"folder": {
+			"name": "(PAM) Prospección, Admisión y Matrícula/Dimensiones"
+		},
+		"annotations": [
+			"Dimensión",
+			"Informix",
+			"Azure SQL DB",
+			"Parquet",
+			"SCD1"
+		],
+		"lastPublishTime": "2025-08-01T19:09:48Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
