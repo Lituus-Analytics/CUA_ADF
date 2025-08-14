@@ -1,0 +1,23 @@
+{
+	"name": "OD_DB_DATA_WAREHOUSE",
+	"properties": {
+		"description": "Conexión de origen y destino hacia el Data WareHouse alojada en Azure Managed Instance (devtest-eus2-asmi-data-001)",
+		"annotations": [
+			"DATA WAREHOUSE",
+			"MANAGE INSTANCE",
+			"BI 40"
+		],
+		"type": "AzureSqlMI",
+		"typeProperties": {
+			"server": "devtest-eus2-asmi-data-001.13034f0130dc.database.windows.net",
+			"database": "DATA_WAREHOUSE",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SystemAssignedManagedIdentity"
+		},
+		"connectVia": {
+			"referenceName": "MPVE-AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
