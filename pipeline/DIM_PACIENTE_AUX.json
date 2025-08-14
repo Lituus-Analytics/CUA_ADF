@@ -1,5 +1,5 @@
 {
-	"name": "DIM_PACIENTE",
+	"name": "DIM_PACIENTE_AUX",
 	"properties": {
 		"activities": [
 			{
@@ -504,7 +504,7 @@
 			}
 		],
 		"folder": {
-			"name": "TrakCare"
+			"name": "BI 3.0"
 		},
 		"annotations": [],
 		"lastPublishTime": "2025-07-30T22:19:26Z"
